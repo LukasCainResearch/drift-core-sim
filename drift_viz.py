@@ -1,3 +1,10 @@
+# DRIFT SYSTEMS INC. - CONFIDENTIAL & PROPRIETARY
+# 
+# This file is part of the Drift Core™ IP Portfolio.
+# Copyright (c) 2025 Drift Systems Inc. All Rights Reserved.
+# 
+# Usage is subject to the license terms found in the LICENSE file.
+# Unauthorized copying, distribution, or synthesis is strictly prohibited.
 import numpy as np
 from PIL import Image
 import time
