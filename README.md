@@ -30,16 +30,17 @@ This project uses a standard Makefile. To compile the generator:
 
 ```bash
 make
+
 Generate Stream
 Create a binary output file (e.g., 100MB) for testing:
-code
-Bash
+
 ./drift_gen 100000000 > output.bin
+
 Clean
 Remove binaries and object files:
-code
-Bash
+
 make clean
+
 Repository Structure
 dad_tool.cpp - High-performance stream generator (C++).
 dad_config.h - Configuration profiles (Standard vs. Casino).
