@@ -1,0 +1,35 @@
+# The file file_input_raw was rewound 10 times
+         sts_monobit|   1|    100000|     100|0.91437761|  PASSED  
+# The file file_input_raw was rewound 10 times
+            sts_runs|   2|    100000|     100|0.65058850|  PASSED  
+# The file file_input_raw was rewound 10 times
+          sts_serial|   1|    100000|     100|0.12471601|  PASSED  
+          sts_serial|   2|    100000|     100|0.86776538|  PASSED  
+          sts_serial|   3|    100000|     100|0.44918825|  PASSED  
+          sts_serial|   3|    100000|     100|0.41668827|  PASSED  
+          sts_serial|   4|    100000|     100|0.84536155|  PASSED  
+          sts_serial|   4|    100000|     100|0.75943198|  PASSED  
+          sts_serial|   5|    100000|     100|0.83632342|  PASSED  
+          sts_serial|   5|    100000|     100|0.29726616|  PASSED  
+          sts_serial|   6|    100000|     100|0.19818747|  PASSED  
+          sts_serial|   6|    100000|     100|0.60607507|  PASSED  
+          sts_serial|   7|    100000|     100|0.51372285|  PASSED  
+          sts_serial|   7|    100000|     100|0.31876941|  PASSED  
+          sts_serial|   8|    100000|     100|0.47743194|  PASSED  
+          sts_serial|   8|    100000|     100|0.46074067|  PASSED  
+          sts_serial|   9|    100000|     100|0.74108770|  PASSED  
+          sts_serial|   9|    100000|     100|0.93786408|  PASSED  
+          sts_serial|  10|    100000|     100|0.95558261|  PASSED  
+          sts_serial|  10|    100000|     100|0.65872670|  PASSED  
+          sts_serial|  11|    100000|     100|0.29473251|  PASSED  
+          sts_serial|  11|    100000|     100|0.18433129|  PASSED  
+          sts_serial|  12|    100000|     100|0.44747447|  PASSED  
+          sts_serial|  12|    100000|     100|0.53268523|  PASSED  
+          sts_serial|  13|    100000|     100|0.59310993|  PASSED  
+          sts_serial|  13|    100000|     100|0.60286037|  PASSED  
+          sts_serial|  14|    100000|     100|0.88095436|  PASSED  
+          sts_serial|  14|    100000|     100|0.16790876|  PASSED  
+          sts_serial|  15|    100000|     100|0.33115651|  PASSED  
+          sts_serial|  15|    100000|     100|0.99513255|   WEAK   
+          sts_serial|  16|    100000|     100|0.01059147|  PASSED  
+          sts_serial|  16|    100000|     100|0.00795975|  PASSED  
