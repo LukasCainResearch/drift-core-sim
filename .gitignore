@@ -1,0 +1,13 @@
+# Ignore Binaries and Object files
+*.o
+*.out
+*.app
+drift_gen
+dad_tool
+
+# Ignore Evidence Data (Too large for GitHub)
+*.bin
+*.dat
+
+# Ignore System Files
+.DS_Store
