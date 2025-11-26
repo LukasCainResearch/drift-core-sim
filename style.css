@@ -35,10 +35,13 @@ header {
 }
 
 .logo {
-    font-size: 1.5rem;
+    font-size: 1.8rem; /* Increased text size to match bigger logo */
     font-weight: 700;
-    margin-bottom: 60px;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.05em;
+    /* Remove margin-bottom if it was pushing content down too far */
+    margin-bottom: 40px; 
+    display: flex;
+    align-items: center; /* Vertically center the text with the icon */
 }
 
 .logo .thin { font-weight: 300; }
