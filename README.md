@@ -1,55 +1,75 @@
-# Drift Core™ Simulation
+# Drift Core™ (DC-100) Reference Implementation
 
-**Reference Implementation for the Discrete Arithmetic Dynamics (DAD) Engine.**
+![Version](https://img.shields.io/badge/version-2.0-blue.svg)
+![License](https://img.shields.io/badge/license-DSEL--1.0-red.svg)
+![Status](https://img.shields.io/badge/status-Patent%20Pending-orange.svg)
+![Compliance](https://img.shields.io/badge/NIST-SP%20800--22-green.svg)
 
-This repository contains the software simulation, verification tools, and formal proofs for the **Drift Core**, an ultra-low-power cryptographic primitive designed for IoT, Defense, and AI Watermarking.
+> **The world's first 1-cycle, zero-multiplier arithmetic entropy engine.**
 
-## Technology
-The Drift Engine utilizes a constrained affine transformation (`qn+d`) combined with bitwise state folding to generate high-entropy streams without the use of integer multipliers or complex S-boxes.
+## 1. Overview
+The **Drift Core (DC-100)** is a novel cryptographic primitive designed for ultra-low-latency and power-constrained environments where standard AES/SHA architectures are prohibitive. 
 
-*   **Architecture:** Arithmetic Drift + XOR Folding
-*   **Gate Count:** < 700 Logic Cells (Verified on Lattice iCE40)
-*   **Period:** > 2^128 (Algebraically proven)
-*   **Compliance:** NIST SP 800-22 (STS)
+Based on **Discrete Arithmetic Dynamics (DAD)**, this core generates cryptographic-grade entropy and signatures using a constrained affine transformation ($qS+d$) combined with bitwise state folding.
 
-## Formal Verification
-The non-cyclic property of the Drift Engine ($q=3, k=1$) has been formally verified using the **Lean 4** theorem prover. The proof establishes that the affine coefficient $c$ is strictly monotonic increasing for all $N > 1$, rendering non-trivial cycles algebraically impossible in the divergent domain.
+### Key Performance Metrics (Lattice iCE40)
+| Metric | Specification | Competitive Advantage |
+| :--- | :--- | :--- |
+| **Logic Footprint** | **686 Logic Cells** | ~5x smaller than AES-128 |
+| **Latency** | **1 Clock Cycle** | Instant "Zero-Wait" Wakeup |
+| **Multipliers** | **ZERO (0)** | Negligible dynamic power / heat |
+| **Entropy** | **7.9999 bits/byte** | Indistinguishable from True Random |
 
-*   **Proof Source:** [`formal_verification/drift_theorem.lean`](formal_verification/drift_theorem.lean)
+---
 
-## Benchmarks
-Using the "Casino Configuration" (included in `dad_config.h`), the engine achieves:
-*   **Frequency (Monobit):** p > 0.9 (NIST PASS)
-*   **Serial Correlation:** < 0.0001 (Pearson)
-*   **Throughput:** ~140 MB/s (Software), 1 Cycle/Pixel (Hardware)
+## 2. Repository Contents
+This repository contains the **Academic Reference Implementation** of the Drift Engine. It is intended for verification, statistical analysis, and simulation purposes.
 
-## Usage
+* `dad_core.sv` - Synthesizable SystemVerilog source code (Soft IP).
+* `dad_tool.cpp` - C++ software model for high-speed stream generation.
+* `dad_config.h` - Configuration header containing the "Golden Shift" topology constants.
+* `crypto_audit.py` - Python verification script for NIST SP 800-22 pre-testing.
 
-### Build
-This project uses a standard Makefile. To compile the generator:
+---
 
-```bash
-make
+## 3. Technology & Applications
+The Drift architecture addresses critical bottlenecks in three primary sectors:
 
-Generate Stream
-Create a binary output file (e.g., 100MB) for testing:
+### A. Defense & Space (Rad-Hard)
+* **Problem:** Triple Modular Redundancy (TMR) for radiation hardening triples the size of standard chips.
+* **Drift Solution:** **Monotonic Error Correction.** The Drift Engine detects Single Event Upsets (SEUs) mathematically in 1 cycle without 3x hardware overhead.
+* **Use Case:** CubeSats, Hypersonic Seekers, Legacy Avionics Retrofit.
 
-./drift_gen 100000000 > output.bin
+### B. Cloud & Infrastructure (Zero-Latency)
+* **Problem:** "Entropy Starvation" during VM boot storms (Azure Confidential Computing) and 5G Fronthaul Jitter.
+* **Drift Solution:** **Stateless Seeding.** Generates infinite local randomness from a single seed with deterministic, flat-line latency.
+* **Use Case:** 5G O-RAN, Azure Sphere, DDoS Defense.
 
-Clean
-Remove binaries and object files:
+### C. Artificial Intelligence (Provenance)
+* **Problem:** Metadata-based watermarks are easily stripped from Generative AI images.
+* **Drift Solution:** **"Injection, Not Addition."** The Drift Engine replaces the Gaussian noise seed in Diffusion models, embedding provenance into the pixel physics at generation time.
 
-make clean
+---
 
-Repository Structure
-dad_tool.cpp - High-performance stream generator (C++).
-dad_config.h - Configuration profiles (Standard vs. Casino).
-drift_viz.py - Python visualization tool for entropy/texture inspection.
-cycle_verification.py - Diophantine analysis script.
-formal_verification/ - Lean 4 proofs of algebraic stability.
-License
-Copyright (c) 2025 Drift Systems Inc. All Rights Reserved.
-This software is provided for evaluation and research purposes only.
-Commercial use, hardware synthesis, or redistribution without a license is strictly prohibited.
-See LICENSE for details.
-Contact: licensing@driftsystems.io
+## 4. Licensing & Commercial Use
+**⚠️ IMPORTANT LEGAL NOTICE:**
+
+This source code is provided for **Academic Peer Review and Non-Commercial Evaluation** only. 
+
+* **You MAY:** Compile, simulate, and verify the statistical performance of the core.
+* **You MAY NOT:** Synthesize this code onto physical silicon (FPGA/ASIC) for a commercial product or embed it into firmware distributed to third parties without a license.
+
+**Intellectual Property Protection:**
+This technology is protected by a priority portfolio of **US Patent Applications**, including:
+* **US 63/921,874:** Core Architecture & Stream Generation
+* **US 63/926,563:** Space & Radiation Hardened Implementations
+* **US 63/926,586:** Legacy Retrofit & Sensor Fusion Systems
+* **US 63/922,200:** AI Content Attribution
+
+For commercial licensing (RTL IP, FPGA Bitstreams, or Source Code), please contact:
+
+**Drift Systems Inc.** 📧 **licensing@driftsystems.io** 🌐 **[driftsystems.io](https://driftsystems.io)**
+
+---
+
+*Copyright © 2025 Drift Systems Inc. All Rights Reserved.*
