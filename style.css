@@ -1,10 +1,11 @@
-/* DRIFT SYSTEMS BRAND THEME */
+/* DRIFT SYSTEMS BRAND THEME (TRL-5 UPDATE) */
 :root {
     --navy: #0a0f1e;
     --dark: #050810;
     --cyan: #00f0ff;
     --white: #ffffff;
     --gray: #8892b0;
+    --border: #1e293b;
 }
 
 body {
@@ -28,23 +29,48 @@ h1, h2, h3, h4, h5 {
     padding: 0 20px;
 }
 
-/* HEADER */
+/* --- HEADER --- */
 header {
-    padding: 100px 0;
+    padding: 80px 0;
     background: radial-gradient(circle at top right, #1a2340 0%, var(--navy) 60%);
 }
 
-.logo {
-    font-size: 1.8rem; /* Increased text size to match bigger logo */
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    /* Remove margin-bottom if it was pushing content down too far */
-    margin-bottom: 40px; 
+/* Logo Fixes: Smaller & Aligned */
+.logo-row {
     display: flex;
-    align-items: center; /* Vertically center the text with the icon */
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 30px;
 }
 
-.logo .thin { font-weight: 300; }
+.logo-img {
+    height: 32px; /* Standard SaaS Header Size */
+    width: auto;
+}
+
+.logo-text {
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--white);
+}
+
+.logo-text .thin { font-weight: 300; }
+
+/* TRL Validation Badge */
+.status-badge {
+    display: inline-block;
+    background: rgba(0, 240, 255, 0.1);
+    border: 1px solid var(--cyan);
+    color: var(--cyan);
+    padding: 6px 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    letter-spacing: 0.05em;
+    font-weight: 700;
+}
 
 h1 {
     font-size: 3.5rem;
@@ -61,7 +87,7 @@ h1 {
     margin-bottom: 40px;
 }
 
-/* BUTTONS */
+/* --- BUTTONS --- */
 .btn {
     display: inline-block;
     padding: 12px 24px;
@@ -86,12 +112,44 @@ h1 {
 
 .btn:hover { opacity: 0.9; transform: translateY(-1px); }
 
-/* METRICS */
+/* --- LIVE STATUS BAR (NEW) --- */
+.live-status-bar {
+    background: var(--dark);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 0;
+}
+
+.status-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    text-align: center;
+}
+
+.status-item .label {
+    display: block;
+    font-size: 0.7rem;
+    color: #64748b;
+    letter-spacing: 0.1em;
+    margin-bottom: 5px;
+}
+
+.status-item .value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.0rem;
+    font-weight: 700;
+}
+
+.green { color: #10b981; }
+.cyan { color: var(--cyan); }
+.white { color: var(--white); }
+
+/* --- METRICS SECTION --- */
 .metrics {
     background-color: var(--dark);
     padding: 60px 0;
-    border-top: 1px solid #1e293b;
-    border-bottom: 1px solid #1e293b;
+    border-bottom: 1px solid var(--border);
 }
 
 .grid-3 {
@@ -121,7 +179,42 @@ h1 {
     color: var(--gray);
 }
 
-/* SECTIONS */
+/* --- VISUAL PROOF (GIF/VIDEO) --- */
+.hero-video {
+    max-width: 600px;
+    width: 100%;
+    margin: 60px auto 0 auto;
+    display: block;
+    border: 1px solid var(--border);
+    background: #000;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+}
+
+.hero-video img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.video-caption {
+    padding: 12px 15px;
+    text-align: left;
+    border-top: 1px solid var(--border);
+    background: #0a0f1e;
+    font-family: 'JetBrains Mono';
+    font-size: 0.75rem;
+    color: var(--cyan);
+    letter-spacing: 0.05em;
+}
+
+.blink {
+    animation: blinker 1.5s linear infinite;
+    color: #ef4444; /* Red for recording dot */
+    margin-right: 6px;
+}
+@keyframes blinker { 50% { opacity: 0; } }
+
+/* --- DEPLOYMENT VERTICALS --- */
 .dark-section { padding: 80px 0; }
 .grid-2 {
     display: grid;
@@ -132,33 +225,41 @@ h1 {
 
 .card {
     padding: 30px;
-    border: 1px solid #1e293b;
+    border: 1px solid var(--border);
     background: rgba(255,255,255,0.02);
+    transition: transform 0.2s;
 }
 
-.card h4 { color: var(--cyan); }
+.card:hover {
+    border-color: var(--gray);
+}
+
+.card h4 { color: var(--cyan); margin-bottom: 15px; }
 .card p { font-size: 0.95rem; color: var(--gray); }
 
+/* --- MANIFESTO --- */
 .manifesto {
     padding: 100px 0;
     background: var(--dark);
     text-align: center;
+    border-top: 1px solid var(--border);
 }
 
 .code-block {
     font-family: 'JetBrains Mono', monospace;
     background: #000;
-    padding: 20px;
+    padding: 20px 40px;
     display: inline-block;
     border: 1px solid var(--cyan);
     color: var(--cyan);
-    margin-top: 20px;
+    margin-top: 30px;
+    font-size: 1.1rem;
 }
 
-/* FOOTER */
+/* --- FOOTER --- */
 footer {
     padding: 60px 0;
-    border-top: 1px solid #1e293b;
+    border-top: 1px solid var(--border);
     font-size: 0.9rem;
     color: var(--gray);
 }
@@ -170,91 +271,27 @@ footer {
     margin-bottom: 40px;
 }
 
-.patent-list { list-style: none; padding: 0; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; }
-.patent-list li { margin-bottom: 5px; }
+.patent-list { 
+    list-style: none; 
+    padding: 0; 
+    font-family: 'JetBrains Mono', monospace; 
+    font-size: 0.8rem; 
+    color: #64748b;
+}
+.patent-list li { margin-bottom: 8px; }
 
-a { color: var(--cyan); text-decoration: none; }
+a { color: var(--cyan); text-decoration: none; transition: opacity 0.2s; }
+a:hover { opacity: 0.8; }
 .tiny { font-size: 0.7rem; opacity: 0.5; }
 
-/* MOBILE */
+/* --- MOBILE RESPONSIVE --- */
 @media (max-width: 768px) {
     h1 { font-size: 2.5rem; }
+    .hero-content { text-align: center; }
+    .logo-row { justify-content: center; }
     .footer-cols { grid-template-columns: 1fr; }
-    .btn { display: block; margin: 10px 0; text-align: center; }
+    .btn { display: block; margin: 10px 0 0 0; text-align: center; width: 100%; box-sizing: border-box; }
+    .secondary { margin-left: 0; }
+    .status-grid { grid-template-columns: 1fr; gap: 10px; }
+    .hero-video { margin-top: 40px; }
 }
-/* Add to style.css */
-
-.logo-row {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 20px;
-}
-.logo-img {
-    height: 50px;
-    width: auto;
-}
-
-/* The TRL Badge */
-.status-badge {
-    display: inline-block;
-    background: rgba(0, 240, 255, 0.1);
-    border: 1px solid #00f0ff;
-    color: #00f0ff;
-    padding: 5px 12px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.8rem;
-    border-radius: 4px;
-    margin-bottom: 15px;
-    letter-spacing: 0.05em;
-}
-
-/* The Live Status Bar */
-.live-status-bar {
-    background: #0a0f1e;
-    border-top: 1px solid #1e293b;
-    border-bottom: 1px solid #1e293b;
-    padding: 20px 0;
-    margin-bottom: 40px;
-}
-
-.status-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    text-align: center;
-}
-
-.status-item .label {
-    display: block;
-    font-size: 0.7rem;
-    color: #64748b;
-    letter-spacing: 0.1em;
-    margin-bottom: 5px;
-}
-
-.status-item .value {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 1.1rem;
-    font-weight: 700;
-}
-
-.green { color: #10b981; }
-.cyan { color: #00f0ff; }
-.white { color: #fff; }
-
-/* Video Caption */
-.video-caption {
-    padding: 12px 10px;
-    text-align: left;
-    border-top: 1px solid #1e293b;
-    background: #050810;
-    font-family: 'JetBrains Mono';
-    font-size: 0.75rem;
-    color: #00f0ff;
-}
-.blink {
-    animation: blinker 1.5s linear infinite;
-    color: red;
-}
-@keyframes blinker { 50% { opacity: 0; } }
