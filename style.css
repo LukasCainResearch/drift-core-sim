@@ -182,3 +182,79 @@ a { color: var(--cyan); text-decoration: none; }
     .footer-cols { grid-template-columns: 1fr; }
     .btn { display: block; margin: 10px 0; text-align: center; }
 }
+/* Add to style.css */
+
+.logo-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+.logo-img {
+    height: 50px;
+    width: auto;
+}
+
+/* The TRL Badge */
+.status-badge {
+    display: inline-block;
+    background: rgba(0, 240, 255, 0.1);
+    border: 1px solid #00f0ff;
+    color: #00f0ff;
+    padding: 5px 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    letter-spacing: 0.05em;
+}
+
+/* The Live Status Bar */
+.live-status-bar {
+    background: #0a0f1e;
+    border-top: 1px solid #1e293b;
+    border-bottom: 1px solid #1e293b;
+    padding: 20px 0;
+    margin-bottom: 40px;
+}
+
+.status-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    text-align: center;
+}
+
+.status-item .label {
+    display: block;
+    font-size: 0.7rem;
+    color: #64748b;
+    letter-spacing: 0.1em;
+    margin-bottom: 5px;
+}
+
+.status-item .value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.green { color: #10b981; }
+.cyan { color: #00f0ff; }
+.white { color: #fff; }
+
+/* Video Caption */
+.video-caption {
+    padding: 12px 10px;
+    text-align: left;
+    border-top: 1px solid #1e293b;
+    background: #050810;
+    font-family: 'JetBrains Mono';
+    font-size: 0.75rem;
+    color: #00f0ff;
+}
+.blink {
+    animation: blinker 1.5s linear infinite;
+    color: red;
+}
+@keyframes blinker { 50% { opacity: 0; } }
