@@ -3,46 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drift Systems | Low-Power Entropy</title>
+    <title>Drift Systems | TRL-5 Validated Entropy</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💠</text></svg>">
-    <!-- Font: Inter/Roboto -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <!-- HERO SECTION -->
     <header>
         <div class="container">
-            <div class="logo" style="display: flex; align-items: center; gap: 15px;">
-    <!-- The Big Icon -->
-    <img src="logo.png" alt="Drift Systems" style="height: 70px; width: auto; filter: drop-shadow(0 0 1px rgba(255,255,255,0.8));"> 
-    
-    <!-- The Text (Optional - Remove this block if you want ONLY the logo) -->
-    <span>
-        DRIFT<span class="thin">SYSTEMS</span>
-    </span>
-</div>
+            <div class="logo-row">
+                <img src="logo.png" alt="Drift Systems" class="logo-img"> 
+                <span class="logo-text">DRIFT<span class="thin">SYSTEMS</span></span>
+            </div>
+
             <div class="hero-content">
+                <div class="status-badge">TRL-5 VALIDATED (NOV 2025)</div>
+                
                 <h1>THE STANDARD FOR <br>LOW-POWER ENTROPY.</h1>
                 <p class="subtitle">Cryptographic-grade non-linearity at linear-grade speed. <br>Native silicon architecture for IoT, Defense, and AI.</p>
                 
                 <div class="cta-group">
-                    <a href="https://github.com/LukasCainResearch/drift-core-sim" class="btn primary">View Technical Reference</a>
+                    <a href="Drift_TRL5_Brief.pdf" target="_blank" class="btn primary">Download TRL-5 Brief</a>
                     <a href="mailto:licensing@driftsystems.io" class="btn secondary">Contact Engineering</a>
                 </div>
             </div>
         </div>
     </header>
+
+    <section class="live-status-bar">
+        <div class="container">
+            <div class="status-grid">
+                <div class="status-item">
+                    <span class="label">CURRENT STATUS</span>
+                    <span class="value green">● OPERATIONAL</span>
+                </div>
+                <div class="status-item">
+                    <span class="label">SOAK TEST (LIVE)</span>
+                    <span class="value white">> 8.8 BILLION CYCLES</span>
+                </div>
+                <div class="status-item">
+                    <span class="label">DIVERGENCE</span>
+                    <span class="value cyan">0.00% (LOCKED)</span>
+                </div>
             </div>
         </div>
-    </header>
+    </section>
 
-    <!-- METRICS GRID -->
     <section class="metrics">
         <div class="container grid-3">
             <div class="metric-card">
-                <h2>&lt; 686</h2>
+                <h2>686</h2>
                 <p>LOGIC CELLS</p>
                 <span class="sub">Verified Lattice iCE40</span>
             </div>
@@ -56,27 +67,23 @@
                 <p>CORRELATION</p>
                 <span class="sub">NIST SP 800-22 Compliant</span>
             </div>
-           </div>
-         <!-- LIVE VIDEO DEMO (Centered) -->
-<div class="hero-video" style="margin: 50px auto 0 auto; width: fit-content; display: block; border: 1px solid #1e293b; padding: 5px; background: #050810; box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
-    <img src="drift_core_interactive_demo.gif" alt="Live FPGA Entropy Demo" style="max-width: 100%; height: auto; border-radius: 2px; display: block;">
-    <div style="padding: 12px 10px; text-align: left; border-top: 1px solid #1e293b;">
-        <p style="font-size: 0.75rem; color: #00f0ff; margin: 0; font-family: 'JetBrains Mono'; letter-spacing: 0.05em;">
-            <span style="color: #fff;">● LIVE SILICON:</span> Reset Trigger Test (Gowin GW2A)
-        </p>
-    </div>
-</div>
-
+        </div>
+        
+        <div class="hero-video">
+            <img src="drift_core_interactive_demo.gif" alt="Live FPGA Entropy Demo">
+            <div class="video-caption">
+                <span class="blink">●</span> LIVE SILICON: Reset Trigger Test (Gowin GW2A)
+            </div>
+        </div>
     </section>
 
-    <!-- APPLICATIONS -->
     <section class="dark-section">
         <div class="container">
             <h3>DEPLOYMENT VERTICALS</h3>
             <div class="grid-2">
                 <div class="card">
                     <h4>DEFENSE & AEROSPACE</h4>
-                    <p><strong>Swarm-Sync™</strong> provides GPS-independent synchronization and unjammable frequency hopping for autonomous systems.</p>
+                    <p><strong>Swarm-Sync™</strong> provides GPS-independent synchronization and unjammable frequency hopping (Drift-Hop™) for autonomous systems.</p>
                 </div>
                 <div class="card">
                     <h4>GENERATIVE AI</h4>
@@ -94,7 +101,6 @@
         </div>
     </section>
 
-    <!-- MANIFESTO -->
     <section class="manifesto">
         <div class="container text-center">
             <h3>DISCRETE ARITHMETIC DYNAMICS (DAD)</h3>
@@ -107,33 +113,27 @@
         </div>
     </section>
 
-    <!-- FOOTER -->
     <footer>
         <div class="container">
             <div class="footer-cols">
-    <div>
-        <h5>INTELLECTUAL PROPERTY</h5>
-        <p>Patent Pending Portfolio (11 Filings)</p>
-        <ul class="patent-list">
-            <li>US 63/921,874 (Core Architecture)</li>
-            <li>US 63/921,139 (Math Foundation)</li>
-            <li>US 63/926,626 (Industrial Control & SCADA)</li>
-            <li>US 63/926,563 (Signal Modulation & Comms)</li>
-            <li>US 63/926,586 (Avionics & Sensor Fusion)</li>
-            <li>US 63/926,608 (Biometrics & Medical)</li>
-            <li>US 63/922,194 (Autonomous Swarms)</li>
-            <li>US 63/922,200 (AI Watermarking)</li>
-            <li>US 63/922,102 (Supply Chain)</li>
-            <li>US 63/922,498 (Hashing & Integrity)</li>
-            <li>US 63/923,089 (Physical Substrates)</li>
-        </ul>
-    </div>
-    <div>
-        <h5>CONTACT</h5>
-        <p><a href="mailto:licensing@driftsystems.io">licensing@driftsystems.io</a></p>
-        <p><a href="https://github.com/LukasCainResearch/drift-core-sim">GitHub Repository</a></p>
-    </div>
-</div></div>
+                <div>
+                    <h5>INTELLECTUAL PROPERTY</h5>
+                    <p>Patent Pending Portfolio (11 Filings)</p>
+                    <ul class="patent-list">
+                        <li>US 63/921,874 (Core Architecture)</li>
+                        <li>US 63/921,139 (Math Foundation)</li>
+                        <li>US 63/926,563 (Signal Modulation / LPI)</li>
+                        <li>US 63/926,586 (Avionics & Sensor Fusion)</li>
+                        <li>US 63/922,194 (Autonomous Swarms)</li>
+                        <li>+ 6 Additional Filings</li>
+                    </ul>
+                </div>
+                <div>
+                    <h5>CONTACT</h5>
+                    <p><a href="mailto:licensing@driftsystems.io">licensing@driftsystems.io</a></p>
+                    <p><a href="Drift_TRL5_Brief.pdf">Download Technical Brief</a></p>
+                </div>
+            </div>
             <div class="copyright">
                 &copy; 2025 Drift Systems Inc. All Rights Reserved. <br>
                 <span class="tiny">NIST SP 800-22 Compliant. Export Controlled Technology (EAR99).</span>
