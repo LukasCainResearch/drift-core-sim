@@ -9,6 +9,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
+        /* --- Inline CSS Overrides for Layout --- */
+        
         .research-header {
             margin-top: 60px;
             margin-bottom: 40px;
@@ -23,6 +25,13 @@
             font-family: 'JetBrains Mono', monospace;
         }
 
+        .research-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 4rem;
+        }
+
         .research-card {
             background: rgba(0, 20, 40, 0.5);
             border: 1px solid rgba(0, 255, 255, 0.2);
@@ -33,6 +42,7 @@
             flex-direction: column;
             justify-content: space-between;
             height: 100%;
+            min-height: 320px; /* Uniform height */
         }
 
         .research-card:hover {
@@ -71,6 +81,7 @@
             text-decoration: none;
             display: inline-block;
             transition: all 0.3s;
+            margin-top: auto; /* Push to bottom */
         }
 
         .btn-research:hover {
@@ -79,7 +90,11 @@
             box-shadow: 0 0 15px #00ffff;
         }
         
-        /* Utility to ensure grid spacing looks good */
+        /* Mobile adjustment */
+        @media (max-width: 768px) {
+            .research-grid { grid-template-columns: 1fr; }
+        }
+        
         .mt-large { margin-top: 4rem; }
     </style>
 </head>
@@ -195,37 +210,51 @@
                 <p style="max-width: 700px; margin: 0 auto; color: #a0a0a0;">Drift Systems is built on a new branch of number theory. We don't just pass statistical tests; we provide algebraic proofs of stability, coverage, and complexity.</p>
             </div>
 
-            <div class="grid-3 mt-large">
+            <!-- NEW 2x2 RESEARCH GRID -->
+            <div class="research-grid">
                 
+                <!-- 1. Foundations -->
                 <div class="research-card">
                     <div>
                         <div class="research-icon">Σ</div> 
                         <h5>FOUNDATIONS</h5>
                         <p>Discrete Arithmetic Dynamics & The Collatz Proof</p>
                     </div>
-                    <a href="Convergence_Proof.pdf" target="_blank" class="btn-research">[ RESEARCH ]</a>
+                    <a href="Convergence_Proof.pdf" target="_blank" class="btn-research">[ RESEARCH PDF ]</a>
                 </div>
 
+                <!-- 2. Thermodynamics (NEW) -->
+                <div class="research-card" style="border-color: rgba(255, 68, 68, 0.4);">
+                    <div>
+                        <div class="research-icon" style="color: #ff4444;">⚛</div> 
+                        <h5 style="color: #ff8888;">THERMODYNAMICS</h5>
+                        <p>The "Physics" of Digital Chaos: Entropy Barriers & The ABC Conjecture</p>
+                    </div>
+                    <a href="foundations.html" class="btn-research" style="border-color:#ff4444; color:#ff4444;">[ VIEW CASE STUDY ]</a>
+                </div>
+
+                <!-- 3. Ergodicity -->
                 <div class="research-card">
                     <div>
                         <div class="research-icon">▤</div> 
                         <h5>ERGODICITY</h5>
-                        <p>Provable State Coverage via Erdős Systems</p>
+                        <p>Provable State Coverage via Erdős Covering Systems</p>
                     </div>
                     <a href="Erdos_Ergodicity.pdf" target="_blank" class="btn-research">[ VIEW PROOF ]</a>
                 </div>
 
+                <!-- 4. Complexity -->
                 <div class="research-card">
                     <div>
                         <div class="research-icon">∞</div> 
                         <h5>COMPLEXITY</h5>
-                        <p>Undecidable Entropy & Turing Completeness</p>
+                        <p>Undecidable Entropy & Turing Completeness via Conway Maps</p>
                     </div>
                     <a href="Undecidable_Entropy.pdf" target="_blank" class="btn-research">[ ANALYZE ARCHITECTURE ]</a>
                 </div>
 
             </div>
-            </div>
+        </div>
     </section>
 
     <footer>
