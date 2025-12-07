@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Drift Systems | The Physics of Digital Chaos</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💠</text></svg>">
     <style>
         :root {
             --bg-color: #050505;
@@ -87,11 +88,11 @@
 
     <div class="container">
         <nav>
-            <a href="index.html" class="logo">DRIFT SYSTEMS</a>
+            <a href="../index.html" class="logo">DRIFT SYSTEMS</a>
             <div class="nav-links">
-                <a href="#research">Foundations</a>
+                <a href="../index.html">Home</a>
                 <a href="#technology">Technology</a>
-                <a href="#paper">Whitepaper</a>
+                <a href="../Drift_TRL6_Brief.pdf">Technical Brief</a>
             </div>
         </nav>
 
@@ -101,7 +102,8 @@
             <h1>The Physics of<br>Digital Chaos</h1>
             <p>We didn't just build an entropy chip. We mapped the thermodynamic limits of arithmetic to prove that true randomness is a fundamental property of binary computation.</p>
             <br>
-            <a href="paper/Entropy_Bounds_Collatz.pdf" class="btn">READ THE PAPER</a>
+            <!-- Adjusted paths to go UP one level if needed, or point to local PDF if you moved it to docs -->
+            <a href="../Convergence_Proof.pdf" class="btn">READ THE PAPER</a>
             <a href="https://github.com/LukasCain/drift-core-sim" class="btn btn-outline">VIEW GITHUB REPO</a>
         </section>
 
@@ -126,17 +128,17 @@
         <!-- SECTION 2: THE DISCOVERY -->
         <section>
             <h2>2. The Discovery: The Thermodynamic Envelope</h2>
-            <p>We analyzed over 1,000,000 integer triples and World Record hits to map the relationship between <strong>Arithmetic Quality ($Q$)</strong> and <strong>Binary Carry Stress ($\sigma$)</strong>.</p>
+            <p>We analyzed over 1,000,000 integer triples and World Record hits to map the relationship between <strong>Arithmetic Quality (<i>Q</i>)</strong> and <strong>Binary Carry Stress (&sigma;)</strong>.</p>
             
             <div class="graph-container">
-                <!-- REPLACE WITH YOUR IMAGE: abc_final_envelope.png -->
-                <img src="drift-core-sim/docs/abc_final_envelope.png" alt="The Thermodynamic Envelope Graph">
+                <!-- Image path updated for local folder (docs/) -->
+                <img src="abc_final_envelope.png" alt="The Thermodynamic Envelope Graph">
                 <div class="caption">
                     <strong>Figure 1: The Equation of State.</strong> The yellow line represents the physical limit of arithmetic. High-Quality numbers (Low Radical) are strictly confined to the left. As Binary Stress increases (moving right), the structural integrity of the number collapses into entropy.
                 </div>
             </div>
 
-            <p>We discovered a <strong>"Forbidden Zone."</strong> Nature physically prevents numbers from being both "Structurally Simple" (High Q) and "Binary Complex" (High Stress) at the same time. This trade-off acts like a Law of Thermodynamics for data.</p>
+            <p>We discovered a <strong>"Forbidden Zone."</strong> Nature physically prevents numbers from being both "Structurally Simple" (High <i>Q</i>) and "Binary Complex" (High Stress) at the same time. This trade-off acts like a Law of Thermodynamics for data.</p>
         </section>
 
         <!-- SECTION 3: THE MECHANISM -->
@@ -146,13 +148,13 @@
             
             <div class="grid">
                 <div class="graph-container" style="margin:0;">
-                    <!-- REPLACE WITH YOUR IMAGE: kummer_zoomed.png -->
-                    <img src="drift-core-sim/docs/kummer_zoomed.png" alt="Kummer Stress Phase Transition">
+                    <!-- Image path updated for local folder (docs/) -->
+                    <img src="kummer_zoomed.png" alt="Kummer Stress Phase Transition">
                 </div>
                 <div>
                     <h3>Laminar vs. Turbulent</h3>
-                    <p><strong>The Laminar Phase ($\sigma \approx 0$):</strong> Rare "Champion" numbers fit together perfectly. They generate zero carries. They are predictable, linear, and low-entropy. <span style="color:var(--accent-red)">This is bad for security.</span></p>
-                    <p><strong>The Turbulent Phase ($\sigma > 0.4$):</strong> The vast majority of numbers create a cascade of carries. This is "Arithmetic Turbulence." <span style="color:var(--accent-cyan)">This is perfect for security.</span></p>
+                    <p><strong>The Laminar Phase (&sigma; &asymp; 0):</strong> Rare "Champion" numbers fit together perfectly. They generate zero carries. They are predictable, linear, and low-entropy. <span style="color:var(--accent-red)">This is bad for security.</span></p>
+                    <p><strong>The Turbulent Phase (&sigma; > 0.4):</strong> The vast majority of numbers create a cascade of carries. This is "Arithmetic Turbulence." <span style="color:var(--accent-cyan)">This is perfect for security.</span></p>
                     <div class="metrics">
                         <div class="stat-card">
                             <div class="stat-val">Laminar</div>
@@ -171,11 +173,11 @@
         <section id="technology">
             <h2>4. From Theory to Silicon: The Drift Core</h2>
             <p>Most cryptographic systems try to minimize noise. <strong>Drift Systems engineered a core that maximizes it.</strong></p>
-            <p>By forcing our internal state machine to constantly switch between incommensurate prime bases ($3n$, $5n$, $7n$), we structurally guarantee that the system remains in the <strong>Turbulent Phase</strong>. We use the "Hamming Barrier" (visualized below) to ensure the state can never collapse into a linear pattern.</p>
+            <p>By forcing our internal state machine to constantly switch between incommensurate prime bases (3<i>n</i>, 5<i>n</i>, 7<i>n</i>), we structurally guarantee that the system remains in the <strong>Turbulent Phase</strong>. We use the "Hamming Barrier" (visualized below) to ensure the state can never collapse into a linear pattern.</p>
 
             <div class="graph-container">
-                <!-- REPLACE WITH YOUR IMAGE: power_of_3_entropy.png -->
-                <img src="docs/power_of_3_entropy.png" alt="Multiplier Automaton Chaos">
+                <!-- Image path updated for local folder (docs/) -->
+                <img src="power_of_3_entropy.png" alt="Multiplier Automaton Chaos">
                 <div class="caption">
                     <strong>Figure 3: The Engine of Chaos.</strong> Visualization of the Drift Core's internal mixing. The "Static" is not random noise; it is <em>Deterministic Chaos</em> generated by the collision of Base-3 logic with Base-2 hardware.
                 </div>
