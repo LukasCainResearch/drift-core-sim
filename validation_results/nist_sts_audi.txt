@@ -1,3 +1,12 @@
+// -----------------------------------------------------------------------------
+// Copyright (c) 2025 Drift Systems Inc.
+// CONFIDENTIAL AND PROPRIETARY
+//
+// This source code is protected by U.S. Patent Applications.
+// Unlicensed use, reproduction, or distribution is strictly prohibited.
+// -----------------------------------------------------------------------------
+
+
 # The file file_input_raw was rewound 10 times
          sts_monobit|   1|    100000|     100|0.91437761|  PASSED  
 # The file file_input_raw was rewound 10 times
