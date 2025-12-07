@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
-        /* --- CSS Fixes for Layout --- */
+        /* --- CSS Overrides --- */
         
         .research-header {
             margin-top: 80px;
@@ -25,25 +25,24 @@
             font-family: 'JetBrains Mono', monospace;
         }
 
-        /* FIXED: Grid Layout */
+        /* 2x2 Grid Layout */
         .research-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr; /* 2 Columns */
-            gap: 40px; /* Increased gap to prevent overlap */
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
             margin-top: 4rem;
-            align-items: stretch; /* Forces cards to be same height per row */
+            align-items: stretch;
         }
 
         .research-card {
             background: rgba(0, 20, 40, 0.5);
             border: 1px solid rgba(0, 255, 255, 0.2);
-            padding: 2.5rem 2rem; /* More padding */
+            padding: 2.5rem 2rem;
             text-align: center;
             transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            /* Removed fixed height to allow expansion */
             position: relative;
         }
 
@@ -52,16 +51,6 @@
             box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
             transform: translateY(-5px);
             z-index: 10;
-        }
-
-        /* Specific style for the Red Thermodynamics Card */
-        .card-thermo {
-            border-color: rgba(255, 68, 68, 0.3) !important;
-            background: rgba(40, 10, 10, 0.3);
-        }
-        .card-thermo:hover {
-            border-color: #ff4444 !important;
-            box-shadow: 0 0 20px rgba(255, 68, 68, 0.2);
         }
 
         .research-icon {
@@ -95,7 +84,7 @@
             text-decoration: none;
             display: inline-block;
             transition: all 0.3s;
-            margin-top: auto; /* Pushes button to bottom */
+            margin-top: auto;
         }
 
         .btn-research:hover {
@@ -104,8 +93,7 @@
             box-shadow: 0 0 15px #00ffff;
         }
         
-        /* FIXED: Responsive Breakpoint */
-        /* Stacks cards sooner (at 900px) to prevent squishing */
+        /* Mobile adjustment */
         @media (max-width: 900px) {
             .research-grid { grid-template-columns: 1fr; gap: 30px; }
         }
@@ -225,7 +213,7 @@
                 <p style="max-width: 700px; margin: 0 auto; color: #a0a0a0;">Drift Systems is built on a new branch of number theory. We don't just pass statistical tests; we provide algebraic proofs of stability, coverage, and complexity.</p>
             </div>
 
-            <!-- RESEARCH GRID (FIXED LAYOUT) -->
+            <!-- RESEARCH GRID -->
             <div class="research-grid">
                 
                 <!-- 1. Foundations -->
@@ -238,14 +226,15 @@
                     <a href="Convergence_Proof.pdf" target="_blank" class="btn-research">[ RESEARCH PDF ]</a>
                 </div>
 
-                <!-- 2. Thermodynamics (NEW & RED) -->
-                <div class="research-card card-thermo">
+                <!-- 2. Thermodynamics (UPDATED: Blue & Correct Path) -->
+                <div class="research-card">
                     <div>
-                        <div class="research-icon" style="color: #ff4444;">⚛</div> 
-                        <h5 style="color: #ff8888;">THERMODYNAMICS</h5>
+                        <div class="research-icon">⚛</div> 
+                        <h5>THERMODYNAMICS</h5>
                         <p>The "Physics" of Digital Chaos: Entropy Barriers & The ABC Conjecture</p>
                     </div>
-                    <a href="foundations.html" class="btn-research" style="border-color:#ff4444; color:#ff4444;">[ VIEW CASE STUDY ]</a>
+                    <!-- Path updated to point to docs/ folder -->
+                    <a href="docs/foundations.html" class="btn-research">[ VIEW CASE STUDY ]</a>
                 </div>
 
                 <!-- 3. Ergodicity -->
