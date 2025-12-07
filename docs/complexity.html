@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drift Systems | Undecidable Entropy</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💠</text></svg>">
+    <style>
+        :root {
+            --bg-color: #050505;
+            --card-bg: #111111;
+            --text-main: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --accent-purple: #bb86fc; /* Purple for "Complexity/Infinite" */
+            --accent-blue: #4488ff;
+            --border-color: #333;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 { font-weight: 700; letter-spacing: -0.02em; margin-bottom: 1rem; color: #fff; }
+        h1 { font-size: 3.5rem; line-height: 1.1; background: linear-gradient(90deg, #fff, var(--accent-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        h2 { font-size: 2rem; border-left: 4px solid var(--accent-purple); padding-left: 1rem; margin-top: 3rem; }
+        p { margin-bottom: 1.5rem; font-size: 1.1rem; color: var(--text-muted); }
+        
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+        
+        /* Navigation */
+        nav { padding: 20px 0; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-weight: 800; font-size: 1.2rem; letter-spacing: 0.1em; color: #fff; text-decoration: none; }
+        .nav-links a { color: var(--text-muted); text-decoration: none; margin-left: 20px; font-size: 0.9rem; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--accent-purple); }
+
+        /* Hero Section */
+        .hero { padding: 80px 0; text-align: center; }
+        .hero p { max-width: 600px; margin: 0 auto 2rem auto; font-size: 1.25rem; }
+        .btn { display: inline-block; padding: 12px 30px; background: var(--accent-purple); color: #000; font-weight: 700; text-decoration: none; border-radius: 2px; transition: transform 0.2s; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(187, 134, 252, 0.4); }
+        .btn-outline { background: transparent; border: 1px solid var(--border-color); color: #fff; margin-left: 10px; }
+        .btn-outline:hover { border-color: #fff; }
+
+        /* Graphics Section */
+        .graph-container {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+        .caption { margin-top: 15px; font-size: 0.9rem; color: #888; border-left: 2px solid var(--accent-purple); padding-left: 10px; text-align: left; }
+
+        /* Two Column Layout */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; margin: 60px 0; }
+        
+        /* Metric Cards */
+        .metrics { display: flex; gap: 20px; margin-top: 20px; }
+        .stat-card { background: #1a1a1a; padding: 20px; flex: 1; border-radius: 4px; border-top: 2px solid var(--accent-purple); }
+        .stat-val { font-size: 1.5rem; font-weight: 700; color: #fff; }
+        .stat-label { font-size: 0.85rem; color: #888; text-transform: uppercase; letter-spacing: 0.05em; }
+
+        /* Diagram Box */
+        .diagram-box {
+            border: 1px dashed #444;
+            background: #0a0a0a;
+            padding: 30px;
+            color: #666;
+            font-family: monospace;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 200px;
+        }
+
+        /* Footer */
+        footer { border-top: 1px solid var(--border-color); padding: 40px 0; margin-top: 80px; text-align: center; font-size: 0.9rem; color: #666; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .grid { grid-template-columns: 1fr; }
+            .metrics { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <nav>
+            <a href="../index.html" class="logo">DRIFT SYSTEMS</a>
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="#nonlocal">Non-Locality</a>
+                <a href="#turing">Irreducibility</a>
+            </div>
+        </nav>
+
+        <!-- HERO -->
+        <section class="hero">
+            <span style="color: var(--accent-purple); font-weight: 600; letter-spacing: 0.1em; font-size: 0.9rem;">INFINITE COMPLEXITY</span>
+            <h1>Undecidable Entropy:<br>Beyond Encryption</h1>
+            <p>We leverage Generalized Collatz Maps (Conway Maps) to create entropy streams where state prediction is formally reducible to the Halting Problem.</p>
+            <br>
+            <!-- Link to local PDF -->
+            <a href="Undecidable_Entropy.pdf" class="btn">ANALYZE ARCHITECTURE</a>
+            <a href="https://github.com/LukasCain/drift-core-sim" class="btn btn-outline">GITHUB REPO</a>
+        </section>
+
+        <hr style="border: 0; border-top: 1px solid var(--border-color);">
+
+        <!-- SECTION 1: THE CONCEPT -->
+        <section id="nonlocal">
+            <h2>1. The Concept: Non-Local Dynamics</h2>
+            <div class="grid">
+                <div>
+                    <p>Standard cryptographic algorithms (AES, SHA) are "Local." Their behavior depends on fixed block sizes (e.g., 128 bits) and localized bitwise operations.</p>
+                    <p>Drift Systems introduces <strong>Non-Local Maps</strong>. By checking the residue of a number modulo a prime $P$ (e.g., $n \pmod 3$), we force a dependency on the <strong>entire</strong> bit string.</p>
+                    <p>A single bit flip at the LSB (Least Significant Bit) ripples all the way to the MSB (Most Significant Bit) to determine the next arithmetic step. This creates maximal diffusion instantly.</p>
+                </div>
+                
+                <div class="graph-container" style="margin: 0; background: #000;">
+                    <div class="diagram-box">
+                        <div style="text-align: left;">
+                            <span style="color: #fff;">Logic Flow:</span><br><br>
+                            <span style="color: var(--accent-purple);">1. State Register $S$</span><br>
+                            &nbsp;&nbsp;&darr;<br>
+                            <span style="color: #888;">2. Global Check:</span> $S \pmod 3$<br>
+                            &nbsp;&nbsp;&darr;<br>
+                            <span style="color: #888;">3. Feedback:</span> Select Multiplier $q$<br>
+                            &nbsp;&nbsp;&darr;<br>
+                            <span style="color: var(--accent-purple);">4. Arithmetic Op:</span> $S' = qS + d$
+                        </div>
+                    </div>
+                    <div class="caption">
+                        <strong>Figure 1: The Non-Local Feedback Loop.</strong> The modulus check ($n \pmod P$) acts as a global dependency, entangling every bit of the state register in a single clock cycle.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: THE GUARANTEE -->
+        <section id="turing">
+            <h2>2. The Guarantee: Computational Irreducibility</h2>
+            <p>In 1972, John Conway proved that generalized arithmetic maps of this class are <strong>Turing Complete</strong>. This has profound implications for security.</p>
+            
+            <div class="metrics">
+                <div class="stat-card">
+                    <div class="stat-val">Theorem 1</div>
+                    <div class="stat-label">Irreducibility</div>
+                    <p style="font-size: 0.8rem; margin-top: 10px;">There is no shortcut algorithm. To predict state $S_{t+k}$, an attacker must perform $k$ sequential calculations.</p>
+                </div>
+                <div class="stat-card" style="border-top-color: var(--accent-blue);">
+                    <div class="stat-val">Application</div>
+                    <div class="stat-label">Verifiable Delay Functions</div>
+                    <p style="font-size: 0.8rem; margin-top: 10px;">Ideal for blockchain consensus (Proof of Time) and anti-spam protocols.</p>
+                </div>
+            </div>
+
+            <br><br>
+            <p>This means the Drift Core is not just a random number generator; it is a <strong>Physical One-Way Function</strong>. The computational cost to simulate the stream is equal to the cost of generating it, preventing parallelized attacks.</p>
+        </section>
+
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Drift Systems Inc. <br> Systems Architect: Lukas Cain</p>
+            <p style="font-size: 0.8rem; color: #444;">Protected by 16 pending patents. <br> Validated for High-Assurance Environments.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
