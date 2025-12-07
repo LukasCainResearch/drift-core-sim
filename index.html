@@ -9,10 +9,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
-        /* --- CSS Overrides --- */
+        /* --- Internal CSS for the Research Grid --- */
         
         .research-header {
-            margin-top: 80px;
+            margin-top: 60px;
             margin-bottom: 40px;
             border-top: 1px solid rgba(255,255,255,0.1);
             padding-top: 40px;
@@ -25,13 +25,12 @@
             font-family: 'JetBrains Mono', monospace;
         }
 
-        /* 2x2 Grid Layout */
+        /* 2x2 Grid Layout for 4 Cards */
         .research-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 40px;
+            gap: 30px;
             margin-top: 4rem;
-            align-items: stretch;
         }
 
         .research-card {
@@ -43,14 +42,14 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            position: relative;
+            height: 100%;
+            min-height: 300px;
         }
 
         .research-card:hover {
             border-color: rgba(0, 255, 255, 0.8);
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.1);
             transform: translateY(-5px);
-            z-index: 10;
         }
 
         .research-icon {
@@ -62,17 +61,16 @@
 
         .research-card h5 {
             color: #fff;
-            margin-bottom: 0.8rem;
+            margin-bottom: 0.5rem;
             letter-spacing: 1px;
             font-weight: 700;
-            font-size: 1.1rem;
         }
 
         .research-card p {
             color: #a0a0a0;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             margin-bottom: 2rem;
-            line-height: 1.5;
+            line-height: 1.4;
         }
 
         .btn-research {
@@ -80,11 +78,11 @@
             font-size: 0.8rem;
             color: #00ffff;
             border: 1px solid #00ffff;
-            padding: 12px 20px;
+            padding: 10px 15px;
             text-decoration: none;
             display: inline-block;
             transition: all 0.3s;
-            margin-top: auto;
+            margin-top: auto; /* Pushes button to bottom */
         }
 
         .btn-research:hover {
@@ -94,10 +92,11 @@
         }
         
         /* Mobile adjustment */
-        @media (max-width: 900px) {
-            .research-grid { grid-template-columns: 1fr; gap: 30px; }
+        @media (max-width: 768px) {
+            .research-grid { grid-template-columns: 1fr; }
         }
         
+        /* Utility to ensure grid spacing looks good */
         .mt-large { margin-top: 4rem; }
     </style>
 </head>
@@ -213,7 +212,7 @@
                 <p style="max-width: 700px; margin: 0 auto; color: #a0a0a0;">Drift Systems is built on a new branch of number theory. We don't just pass statistical tests; we provide algebraic proofs of stability, coverage, and complexity.</p>
             </div>
 
-            <!-- RESEARCH GRID -->
+            <!-- NEW 2x2 RESEARCH GRID -->
             <div class="research-grid">
                 
                 <!-- 1. Foundations -->
@@ -223,18 +222,19 @@
                         <h5>FOUNDATIONS</h5>
                         <p>Discrete Arithmetic Dynamics & The Collatz Proof</p>
                     </div>
-                    <a href="Convergence_Proof.pdf" target="_blank" class="btn-research">[ RESEARCH PDF ]</a>
+                    <!-- Linked to docs folder -->
+                    <a href="docs/Convergence_Proof.pdf" target="_blank" class="btn-research">[ RESEARCH PDF ]</a>
                 </div>
 
-                <!-- 2. Thermodynamics (UPDATED: Blue & Correct Path) -->
+                <!-- 2. Thermodynamics (NEW) -->
                 <div class="research-card">
                     <div>
                         <div class="research-icon">⚛</div> 
                         <h5>THERMODYNAMICS</h5>
-                        <p>The "Physics" of Digital Chaos: Entropy Barriers & The ABC Conjecture</p>
+                        <p>The "Physics" of Digital Chaos: Entropy Barriers & ABC</p>
                     </div>
-                    <!-- Path updated to point to docs/ folder -->
-                    <a href="docs/Thermodynamics.html" class="btn-research">[ VIEW CASE STUDY ]</a>
+                    <!-- Linked to the HTML Case Study in docs -->
+                    <a href="docs/foundations.html" class="btn-research">[ VIEW CASE STUDY ]</a>
                 </div>
 
                 <!-- 3. Ergodicity -->
@@ -244,7 +244,8 @@
                         <h5>ERGODICITY</h5>
                         <p>Provable State Coverage via Erdős Covering Systems</p>
                     </div>
-                    <a href="Erdos_Ergodicity.pdf" target="_blank" class="btn-research">[ VIEW PROOF ]</a>
+                    <!-- Linked to docs folder -->
+                    <a href="docs/Erdos_Ergodicity.pdf" target="_blank" class="btn-research">[ VIEW PROOF ]</a>
                 </div>
 
                 <!-- 4. Complexity -->
@@ -252,9 +253,10 @@
                     <div>
                         <div class="research-icon">∞</div> 
                         <h5>COMPLEXITY</h5>
-                        <p>Undecidable Entropy & Turing Completeness via Conway Maps</p>
+                        <p>Undecidable Entropy & Turing Completeness</p>
                     </div>
-                    <a href="Undecidable_Entropy.pdf" target="_blank" class="btn-research">[ ANALYZE ARCHITECTURE ]</a>
+                    <!-- Linked to docs folder -->
+                    <a href="docs/Undecidable_Entropy.pdf" target="_blank" class="btn-research">[ ANALYZE ARCHITECTURE ]</a>
                 </div>
 
             </div>
