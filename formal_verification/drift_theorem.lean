@@ -1,3 +1,10 @@
+// -----------------------------------------------------------------------------
+// Copyright (c) 2025 Drift Systems Inc.
+// CONFIDENTIAL AND PROPRIETARY
+//
+// This source code is protected by U.S. Patent Applications.
+// Unlicensed use, reproduction, or distribution is strictly prohibited.
+// -----------------------------------------------------------------------------
 import Mathlib.Data.Rat.Defs
 import Mathlib.Tactic
 
