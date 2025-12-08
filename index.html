@@ -5,7 +5,106 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Drift Systems | TRL-6 Prototype</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💠</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- CSS Layout Fixes --- */
+        
+        .research-header {
+            margin-top: 80px;
+            margin-bottom: 40px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 40px;
+        }
+        
+        .research-header h4 {
+            color: #00ffff;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* FIXED: Grid Layout - Removed strict row sizing */
+        .research-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* 2 Columns */
+            gap: 60px; /* Increased gap to prevent touching */
+            margin-top: 4rem;
+            margin-bottom: 6rem;
+            align-items: stretch; /* Cards in same row stretch to match height */
+            height: auto; 
+        }
+
+        .research-card {
+            background: rgba(0, 20, 40, 0.5);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            padding: 2.5rem 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            
+            /* Flexbox ensures button stays at bottom */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            
+            height: 100%; 
+            position: relative;
+            min-height: 350px; /* Safety minimum height */
+        }
+
+        .research-card:hover {
+            border-color: rgba(0, 255, 255, 0.8);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+            transform: translateY(-5px);
+            z-index: 10;
+        }
+
+        .research-icon {
+            font-size: 2.5rem;
+            color: #00ffff;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
+        }
+
+        .research-card h5 {
+            color: #fff;
+            margin-bottom: 0.8rem;
+            letter-spacing: 1px;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .research-card p {
+            color: #a0a0a0;
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            line-height: 1.5;
+        }
+
+        .btn-research {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: #00ffff;
+            border: 1px solid #00ffff;
+            padding: 12px 20px;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+            margin-top: auto; /* Pushes button to bottom */
+        }
+
+        .btn-research:hover {
+            background: #00ffff;
+            color: #000;
+            box-shadow: 0 0 15px #00ffff;
+        }
+        
+        /* Mobile adjustment: Stack to 1 column */
+        @media (max-width: 900px) {
+            .research-grid { grid-template-columns: 1fr; gap: 40px; }
+        }
+    </style>
 </head>
 <body>
 
@@ -16,93 +115,58 @@
             </div>
 
             <div class="hero-content">
-                <div class="status-badge">TRL-6 PROTOTYPE (DEC 2025)</div>
-                <h1>THE STANDARD FOR <br>LOW-POWER ENTROPY.</h1>
-                <p class="subtitle">Cryptographic-grade non-linearity at linear-grade speed. <br>Native silicon architecture for IoT, Defense, and AI.</p>
+                <div class="status-badge" style="border: 1px solid #00ffaa; color: #00ffaa; padding: 5px 10px; display:inline-block; margin-bottom:20px; font-size: 0.8rem; letter-spacing: 1px;">TRL-6 PROTOTYPE (DEC 2025)</div>
+                
+                <h1 style="font-size: 3rem; margin-bottom: 1rem; color:#fff;">THE STANDARD FOR <br>LOW-POWER ENTROPY.</h1>
+                <p class="subtitle" style="color: #ccc; font-size: 1.2rem; margin-bottom: 2rem;">Cryptographic-grade non-linearity at linear-grade speed. <br>Native silicon architecture for IoT, Defense, and AI.</p>
                 
                 <div class="cta-group">
-                    <a href="Drift_TRL6_Brief.pdf" target="_blank" class="btn primary">Download Tech Brief</a>
-                    <a href="mailto:licensing@driftsystems.io" class="btn secondary">Contact Engineering</a>
+                    <a href="Drift_TRL6_Brief.pdf" target="_blank" class="btn primary" style="background: #00ffff; color:#000; padding: 10px 20px; text-decoration:none; font-weight:bold; margin-right: 10px;">Download Tech Brief</a>
+                    <a href="mailto:licensing@driftsystems.io" class="btn secondary" style="border: 1px solid #fff; color:#fff; padding: 10px 20px; text-decoration:none;">Contact Engineering</a>
                 </div>
             </div>
         </div>
     </header>
 
-    <section class="metrics">
-        <div class="container">
-            <div class="grid-3">
+    <section class="metrics" style="background: #050505; padding: 60px 0; color: #fff;">
+        <div class="container" style="max-width: 1100px; margin: 0 auto; padding: 0 20px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; text-align: center; margin-bottom: 60px;">
                 <div class="metric-card">
-                    <h2>686</h2>
-                    <p>LOGIC CELLS</p>
-                    <span class="sub">Verified Lattice iCE40</span>
-                </div>
-                <div class="metric-card">
-                    <h2>1</h2>
-                    <p>CLOCK CYCLE</p>
-                    <span class="sub">Zero-Wait Latency</span>
+                    <h2 style="font-size: 2.5rem; margin:0;">686</h2>
+                    <p style="color:#888; margin:0;">LOGIC CELLS</p>
+                    <span class="sub" style="color: #00ffff; font-size: 0.8rem;">Verified Lattice iCE40</span>
                 </div>
                 <div class="metric-card">
-                    <h2>0.00002</h2>
-                    <p>CORRELATION</p>
-                    <span class="sub">NIST SP 800-22 Compliant</span>
+                    <h2 style="font-size: 2.5rem; margin:0;">1</h2>
+                    <p style="color:#888; margin:0;">CLOCK CYCLE</p>
+                    <span class="sub" style="color: #00ffff; font-size: 0.8rem;">Zero-Wait Latency</span>
                 </div>
-            </div>
-            
-            <div class="dashboard-grid">
-                <div class="dashboard-card">
-                    <div class="card-header"><span class="blink">●</span> DRIFT-HOP™ (LPI/LPD)</div>
-                    <img src="drift_hop.gif" alt="Frequency Hopping Pattern Generator" class="dashboard-img">
-                    <div class="card-footer">RF SPECTRUM ANALYSIS</div>
-                </div>
-
-                <div class="dashboard-card">
-                    <div class="card-header"><span class="blink">●</span> VISUAL ENTROPY (HDMI)</div>
-                    <img src="drift_core_interactive_demo.gif" alt="Visual Entropy Proof" class="dashboard-img">
-                    <div class="card-footer">RTL SIMULATION</div>
+                <div class="metric-card">
+                    <h2 style="font-size: 2.5rem; margin:0;">0.00002</h2>
+                    <p style="color:#888; margin:0;">CORRELATION</p>
+                    <span class="sub" style="color: #00ffff; font-size: 0.8rem;">NIST SP 800-22 Compliant</span>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="dark-section">
-        <div class="container">
-            <h3>DEPLOYMENT VERTICALS</h3>
-            <div class="grid-2">
-                <div class="card">
-                    <h4>DEFENSE & AEROSPACE</h4>
-                    <p><strong>Swarm-Sync™</strong> provides GPS-independent synchronization and unjammable frequency hopping (Drift-Hop™) for autonomous systems.</p>
-                </div>
-                <div class="card">
-                    <h4>GENERATIVE AI</h4>
-                    <p><strong>Drift-Mark™</strong> injects deterministic arithmetic noise into diffusion models, creating immutable provenance watermarks.</p>
-                </div>
-                <div class="card">
-                    <h4>MEDICAL & IOT</h4>
-                    <p><strong>Bio-Drift™</strong> enables cryptographic authentication on implantables using < 5µW power, eliminating thermal risks.</p>
-                </div>
-                <div class="card">
-                    <h4>LOGISTICS</h4>
-                    <p><strong>Drift-Tag™</strong> enables rolling-code security on printed electronics and disposable supply chain labels.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="manifesto">
-        <div class="container">
-            <h3>DISCRETE ARITHMETIC DYNAMICS (DAD)</h3>
-            <p>We do not simulate chaos; we engineer it. By utilizing the non-linear properties of 2-adic carry propagation, we generate maximum entropy for the minimum movement of electrons.</p>
-            
-            <div class="code-block">
+    <section class="manifesto" style="background: #000; padding: 80px 0; color: #fff;">
+        <div class="container text-center" style="max-width: 1000px; margin: 0 auto; padding: 0 20px;">
+            <h3 style="font-size: 2rem; margin-bottom: 20px;">DISCRETE ARITHMETIC DYNAMICS (DAD)</h3>
+            <p style="color: #ccc;">We do not simulate chaos; we engineer it.</p>
+            <p style="color: #ccc;">Drift Systems replaces inefficient analog randomness with <strong>Native Digital Chaos</strong>. By utilizing the non-linear properties of 2-adic carry propagation and forced drift topologies, we generate maximum entropy for the minimum movement of electrons.</p>
+            <br>
+            <div class="code-block" style="background: #111; border: 1px dashed #333; padding: 20px; font-family: monospace; display: inline-block;">
                 S_next = Fold( (q*S + d) >> k )
             </div>
 
             <div class="research-header">
                 <h4>RIGOROUS MATHEMATICAL FOUNDATIONS</h4>
-                <p>Drift Systems is built on a new branch of number theory. We don't just pass statistical tests; we provide algebraic proofs.</p>
+                <p style="max-width: 700px; margin: 0 auto; color: #a0a0a0;">Drift Systems is built on a new branch of number theory. We don't just pass statistical tests; we provide algebraic proofs of stability, coverage, and complexity.</p>
             </div>
 
             <div class="research-grid">
+                
                 <div class="research-card">
                     <div>
                         <div class="research-icon">Σ</div> 
@@ -138,32 +202,15 @@
                     </div>
                     <a href="docs/complexity.html" target="_blank" class="btn-research">[ ANALYZE ARCHITECTURE ]</a>
                 </div>
+
             </div>
         </div>
     </section>
 
     <footer>
-        <div class="container">
-            <div class="footer-cols">
-                <div>
-                    <h5>INTELLECTUAL PROPERTY</h5>
-                    <ul class="patent-list">
-                        <li>US 63/921,874 (Core Architecture)</li>
-                        <li>US 63/921,139 (Math Foundation)</li>
-                        <li>US 63/926,563 (Signal Modulation / LPI)</li>
-                        <li>+ 13 Additional Filings</li>
-                    </ul>
-                </div>
-                <div>
-                    <h5>CONTACT</h5>
-                    <p><a href="mailto:licensing@driftsystems.io">licensing@driftsystems.io</a></p>
-                    <p><a href="Drift_TRL6_Brief.pdf">Download Technical Brief</a></p>
-                </div>
-            </div>
-            <div style="text-align: center; margin-top: 40px;">
-                &copy; 2025 Drift Systems Inc. All Rights Reserved. <br>
-                <span class="tiny">NIST SP 800-22 Compliant. Export Controlled Technology (EAR99).</span>
-            </div>
+        <div class="container" style="text-align: center; color: #666; padding: 40px 0; border-top: 1px solid #222;">
+            <p>&copy; 2025 Drift Systems Inc. All Rights Reserved. <br>
+            <span class="tiny" style="font-size: 0.8rem;">NIST SP 800-22 Compliant. Export Controlled Technology (EAR99).</span></p>
         </div>
     </footer>
 
