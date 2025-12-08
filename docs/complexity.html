@@ -4,6 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Drift Systems | Undecidable Entropy</title>
+    
+    <script>
+        window.MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']]
+          },
+          svg: {
+            fontCache: 'global'
+          }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💠</text></svg>">
     <style>
         :root {
@@ -104,20 +119,18 @@
             </div>
         </nav>
 
-        <!-- HERO -->
         <section class="hero">
             <span style="color: var(--accent-purple); font-weight: 600; letter-spacing: 0.1em; font-size: 0.9rem;">INFINITE COMPLEXITY</span>
             <h1>Undecidable Entropy:<br>Beyond Encryption</h1>
             <p>We leverage Generalized Collatz Maps (Conway Maps) to create entropy streams where state prediction is formally reducible to the Halting Problem.</p>
             <br>
-            <!-- Link to local PDF -->
+
             <a href="Undecidable_Entropy.pdf" class="btn">ANALYZE ARCHITECTURE</a>
             <a href="https://github.com/LukasCain/drift-core-sim" class="btn btn-outline">GITHUB REPO</a>
         </section>
 
         <hr style="border: 0; border-top: 1px solid var(--border-color);">
 
-        <!-- SECTION 1: THE CONCEPT -->
         <section id="nonlocal">
             <h2>1. The Concept: Non-Local Dynamics</h2>
             <div class="grid">
@@ -131,13 +144,14 @@
                     <div class="diagram-box">
                         <div style="text-align: left;">
                             <span style="color: #fff;">Logic Flow:</span><br><br>
+
                             <span style="color: var(--accent-purple);">1. State Register $S$</span><br>
                             &nbsp;&nbsp;&darr;<br>
                             <span style="color: #888;">2. Global Check:</span> $S \pmod 3$<br>
                             &nbsp;&nbsp;&darr;<br>
                             <span style="color: #888;">3. Feedback:</span> Select Multiplier $q$<br>
                             &nbsp;&nbsp;&darr;<br>
-                            <span style="color: var(--accent-purple);">4. Arithmetic Op:</span> $S' = qS + d$
+                            <span style="color: var(--accent-purple);">4. Arithmetic Op:</span> $S' = qS + d$<br>
                         </div>
                     </div>
                     <div class="caption">
@@ -147,7 +161,6 @@
             </div>
         </section>
 
-        <!-- SECTION 2: THE GUARANTEE -->
         <section id="turing">
             <h2>2. The Guarantee: Computational Irreducibility</h2>
             <p>In 1972, John Conway proved that generalized arithmetic maps of this class are <strong>Turing Complete</strong>. This has profound implications for security.</p>
@@ -165,7 +178,6 @@
                 </div>
             </div>
 
-            <br><br>
             <p>This means the Drift Core is not just a random number generator; it is a <strong>Physical One-Way Function</strong>. The computational cost to simulate the stream is equal to the cost of generating it, preventing parallelized attacks.</p>
         </section>
 
