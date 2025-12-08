@@ -5,120 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Drift Systems | TRL-6 Prototype</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💠</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    
-    <style>
-        /* --- CSS Layout Fixes --- */
-        
-        .research-header {
-            margin-top: 80px;
-            margin-bottom: 40px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            padding-top: 40px;
-        }
-        
-        .research-header h4 {
-            color: #00ffff;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        /* FIXED: Grid Layout to prevent overlap */
-        .research-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr; /* 2 Columns */
-            gap: 40px; /* Increased space between cards */
-            margin-top: 4rem;
-            margin-bottom: 4rem; /* Ensure space below the grid */
-            align-items: stretch; /* Forces cards to equal height */
-        }
-
-        .research-card {
-            background: rgba(0, 20, 40, 0.5);
-            border: 1px solid rgba(0, 255, 255, 0.2);
-            padding: 2.5rem 2rem;
-            text-align: center;
-            transition: all 0.3s ease;
-            
-            /* Flexbox to push button to bottom */
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            
-            /* Dynamic height handling */
-            height: 100%; 
-            position: relative;
-        }
-
-        .research-card:hover {
-            border-color: rgba(0, 255, 255, 0.8);
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
-            transform: translateY(-5px);
-            z-index: 10;
-        }
-
-        .research-icon {
-            font-size: 2.5rem;
-            color: #00ffff;
-            margin-bottom: 1rem;
-            text-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
-        }
-
-        .research-card h5 {
-            color: #fff;
-            margin-bottom: 0.8rem;
-            letter-spacing: 1px;
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-
-        .research-card p {
-            color: #a0a0a0;
-            font-size: 0.95rem;
-            margin-bottom: 2rem;
-            line-height: 1.5;
-        }
-
-        .btn-research {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8rem;
-            color: #00ffff;
-            border: 1px solid #00ffff;
-            padding: 12px 20px;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s;
-            margin-top: auto; /* Pushes button to bottom of card */
-        }
-
-        .btn-research:hover {
-            background: #00ffff;
-            color: #000;
-            box-shadow: 0 0 15px #00ffff;
-        }
-        
-        /* Mobile adjustment: Stack to 1 column */
-        @media (max-width: 900px) {
-            .research-grid { grid-template-columns: 1fr; gap: 30px; }
-        }
-        
-        .mt-large { margin-top: 4rem; }
-    </style>
 </head>
 <body>
 
     <header>
         <div class="container">
             <div class="logo-row">
-                <img src="logo.png" alt="Drift Systems" style="height: 70px; width: auto; filter: drop-shadow(0 0 1px rgba(255,255,255,0.9));">
-                <span class="logo-text">DRIFT<span class="thin">SYSTEMS</span></span>
+                <div style="font-weight:900; font-size: 2rem; color: #fff;">DRIFT<span style="font-weight:300;">SYSTEMS</span></div>
             </div>
 
             <div class="hero-content">
-                <div class="status-badge" style="border-color: #00ffaa; color: #00ffaa;">TRL-6 PROTOTYPE (DEC 2025)</div>
-                
+                <div class="status-badge">TRL-6 PROTOTYPE (DEC 2025)</div>
                 <h1>THE STANDARD FOR <br>LOW-POWER ENTROPY.</h1>
                 <p class="subtitle">Cryptographic-grade non-linearity at linear-grade speed. <br>Native silicon architecture for IoT, Defense, and AI.</p>
                 
@@ -152,21 +50,15 @@
             
             <div class="dashboard-grid">
                 <div class="dashboard-card">
-                    <div class="card-header">
-                        <span class="blink">●</span> DRIFT-HOP™ (LPI/LPD)
-                    </div>
+                    <div class="card-header"><span class="blink">●</span> DRIFT-HOP™ (LPI/LPD)</div>
                     <img src="drift_hop.gif" alt="Frequency Hopping Pattern Generator" class="dashboard-img">
-                    <div class="card-footer">
-                        </div>
+                    <div class="card-footer">RF SPECTRUM ANALYSIS</div>
                 </div>
 
                 <div class="dashboard-card">
-                    <div class="card-header">
-                        <span class="blink">●</span> VISUAL ENTROPY (HDMI)
-                    </div>
+                    <div class="card-header"><span class="blink">●</span> VISUAL ENTROPY (HDMI)</div>
                     <img src="drift_core_interactive_demo.gif" alt="Visual Entropy Proof" class="dashboard-img">
-                    <div class="card-footer">
-                        </div>
+                    <div class="card-footer">RTL SIMULATION</div>
                 </div>
             </div>
         </div>
@@ -182,7 +74,7 @@
                 </div>
                 <div class="card">
                     <h4>GENERATIVE AI</h4>
-                    <p><strong>Drift-Mark™</strong> injects deterministic arithmetic noise into diffusion models, creating immutable provenance watermarks with zero latency.</p>
+                    <p><strong>Drift-Mark™</strong> injects deterministic arithmetic noise into diffusion models, creating immutable provenance watermarks.</p>
                 </div>
                 <div class="card">
                     <h4>MEDICAL & IOT</h4>
@@ -192,80 +84,60 @@
                     <h4>LOGISTICS</h4>
                     <p><strong>Drift-Tag™</strong> enables rolling-code security on printed electronics and disposable supply chain labels.</p>
                 </div>
-                <div class="card">
-                    <h4>WEB3 & BLOCKCHAIN</h4>
-                    <p><strong>Drift-Fortress™</strong> (DC-200) delivers hardware-verified entropy for the <strong>$DRFT</strong> Protocol, enabling Proof-of-Useful-Work (PoUW) and VDF consensus.</p>
-                </div>
-                <div class="card">
-                    <h4>INDUSTRIAL GRID</h4>
-                    <p><strong>Drift-Grid™</strong> secures SCADA infrastructure against replay attacks with rolling-code telemetry and sub-millisecond authentication.</p>
-                </div>
             </div>
         </div>
     </section>
 
     <section class="manifesto">
-        <div class="container text-center">
+        <div class="container">
             <h3>DISCRETE ARITHMETIC DYNAMICS (DAD)</h3>
-            <p>We do not simulate chaos; we engineer it.</p>
-            <p>Drift Systems replaces inefficient analog randomness with <strong>Native Digital Chaos</strong>. By utilizing the non-linear properties of 2-adic carry propagation and forced drift topologies, we generate maximum entropy for the minimum movement of electrons.</p>
-            <br>
+            <p>We do not simulate chaos; we engineer it. By utilizing the non-linear properties of 2-adic carry propagation, we generate maximum entropy for the minimum movement of electrons.</p>
+            
             <div class="code-block">
                 S_next = Fold( (q*S + d) >> k )
             </div>
 
             <div class="research-header">
                 <h4>RIGOROUS MATHEMATICAL FOUNDATIONS</h4>
-                <p style="max-width: 700px; margin: 0 auto; color: #a0a0a0;">Drift Systems is built on a new branch of number theory. We don't just pass statistical tests; we provide algebraic proofs of stability, coverage, and complexity.</p>
+                <p>Drift Systems is built on a new branch of number theory. We don't just pass statistical tests; we provide algebraic proofs.</p>
             </div>
 
-            <!-- RESEARCH GRID (LINKS UPDATED TO DOCS FOLDER) -->
             <div class="research-grid">
-                
-                <!-- 1. Foundations -->
                 <div class="research-card">
                     <div>
                         <div class="research-icon">Σ</div> 
                         <h5>FOUNDATIONS</h5>
                         <p>Discrete Arithmetic Dynamics & The Collatz Proof</p>
                     </div>
-                    <!-- Linked to docs/convergence.html -->
                     <a href="docs/convergence.html" target="_blank" class="btn-research">[ RESEARCH PDF ]</a>
                 </div>
 
-                <!-- 2. Thermodynamics -->
                 <div class="research-card">
                     <div>
                         <div class="research-icon">⚛</div> 
                         <h5>THERMODYNAMICS</h5>
                         <p>The "Physics" of Digital Chaos: Entropy Barriers & ABC</p>
                     </div>
-                    <!-- Linked to docs/Thermodynamics.html -->
                     <a href="docs/Thermodynamics.html" target="_blank" class="btn-research">[ VIEW CASE STUDY ]</a>
                 </div>
 
-                <!-- 3. Ergodicity -->
                 <div class="research-card">
                     <div>
                         <div class="research-icon">▤</div> 
                         <h5>ERGODICITY</h5>
                         <p>Provable State Coverage via Erdős Covering Systems</p>
                     </div>
-                    <!-- Linked to docs/ergodicity.html -->
                     <a href="docs/ergodicity.html" target="_blank" class="btn-research">[ VIEW PROOF ]</a>
                 </div>
 
-                <!-- 4. Complexity -->
                 <div class="research-card">
                     <div>
                         <div class="research-icon">∞</div> 
                         <h5>COMPLEXITY</h5>
                         <p>Undecidable Entropy & Turing Completeness</p>
                     </div>
-                    <!-- Linked to docs/complexity.html -->
                     <a href="docs/complexity.html" target="_blank" class="btn-research">[ ANALYZE ARCHITECTURE ]</a>
                 </div>
-
             </div>
         </div>
     </section>
@@ -275,14 +147,11 @@
             <div class="footer-cols">
                 <div>
                     <h5>INTELLECTUAL PROPERTY</h5>
-                    <p>Patent Pending Portfolio (16 Filings)</p>
                     <ul class="patent-list">
                         <li>US 63/921,874 (Core Architecture)</li>
                         <li>US 63/921,139 (Math Foundation)</li>
                         <li>US 63/926,563 (Signal Modulation / LPI)</li>
-                        <li>US 63/926,586 (Avionics & Sensor Fusion)</li>
-                        <li>US PPA-16 (Drift-Flex / Elastic State)</li>
-                        <li>+ 11 Additional Filings</li>
+                        <li>+ 13 Additional Filings</li>
                     </ul>
                 </div>
                 <div>
@@ -291,7 +160,7 @@
                     <p><a href="Drift_TRL6_Brief.pdf">Download Technical Brief</a></p>
                 </div>
             </div>
-            <div class="copyright">
+            <div style="text-align: center; margin-top: 40px;">
                 &copy; 2025 Drift Systems Inc. All Rights Reserved. <br>
                 <span class="tiny">NIST SP 800-22 Compliant. Export Controlled Technology (EAR99).</span>
             </div>
