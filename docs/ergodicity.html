@@ -27,9 +27,9 @@
             --card-bg: #111111;
             --text-main: #e0e0e0;
             --text-muted: #a0a0a0;
-            --accent-green: #00ffaa; /* Emerald for "Safe/Covered" */
+            --accent-green: #00ffaa;
             --accent-blue: #4488ff;
-            --accent-red: #ff4444;   /* Added for Lock 2 */
+            --accent-red: #ff4444;
             --border-color: #333;
         }
 
@@ -50,13 +50,11 @@
         
         .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
         
-        /* Navigation */
         nav { padding: 20px 0; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
         .logo { font-weight: 800; font-size: 1.2rem; letter-spacing: 0.1em; color: #fff; text-decoration: none; }
         .nav-links a { color: var(--text-muted); text-decoration: none; margin-left: 20px; font-size: 0.9rem; transition: color 0.2s; }
         .nav-links a:hover { color: var(--accent-green); }
 
-        /* Hero Section */
         .hero { padding: 80px 0; text-align: center; }
         .hero p { max-width: 600px; margin: 0 auto 2rem auto; font-size: 1.25rem; }
         .btn { display: inline-block; padding: 12px 30px; background: var(--accent-green); color: #000; font-weight: 700; text-decoration: none; border-radius: 2px; transition: transform 0.2s; }
@@ -64,7 +62,6 @@
         .btn-outline { background: transparent; border: 1px solid var(--border-color); color: #fff; margin-left: 10px; }
         .btn-outline:hover { border-color: #fff; }
 
-        /* Graphics Section */
         .graph-container {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -75,27 +72,15 @@
             text-align: center;
         }
         
-        /* IMAGE FIX: Ensure image responds correctly */
-        .graph-container img { 
-            max-width: 100%; 
-            height: auto; 
-            border-radius: 4px; 
-            display: block; /* Removes bottom space */
-            margin: 0 auto; /* Centers image */
-        }
-        
         .caption { margin-top: 15px; font-size: 0.9rem; color: #888; border-left: 2px solid var(--accent-green); padding-left: 10px; text-align: left; }
 
-        /* Two Column Layout */
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; margin: 60px 0; }
         
-        /* Metric Cards */
         .metrics { display: flex; gap: 20px; margin-top: 20px; }
         .stat-card { background: #1a1a1a; padding: 20px; flex: 1; border-radius: 4px; border-top: 2px solid var(--accent-green); }
         .stat-val { font-size: 1.5rem; font-weight: 700; color: #fff; }
         .stat-label { font-size: 0.85rem; color: #888; text-transform: uppercase; letter-spacing: 0.05em; }
 
-        /* Diagram Box */
         .diagram-box {
             border: 1px dashed #444;
             background: #0a0a0a;
@@ -106,13 +91,10 @@
             align-items: center;
             justify-content: center;
             min-height: 200px;
-            margin-top: 20px; /* Spacing from image */
         }
 
-        /* Footer */
         footer { border-top: 1px solid var(--border-color); padding: 40px 0; margin-top: 80px; text-align: center; font-size: 0.9rem; color: #666; }
 
-        /* Responsive */
         @media (max-width: 768px) {
             h1 { font-size: 2.5rem; }
             .grid { grid-template-columns: 1fr; }
@@ -167,8 +149,7 @@
             <h2>2. The Solution: Dynamic Covering Systems</h2>
             <p>We solved this using a concept from Number Theory called <strong>Erdős Covering Systems</strong>. A covering system is a set of congruences that completely partitions the integers.</p>
             
-          <!--  <div class="graph-container">
-                <img src="Erdos_flow.png" alt="Covering Logic Unit Flowchart"> -->
+            <div class="graph-container">
                 
                 <div class="diagram-box">
                     <div style="text-align: left;">
