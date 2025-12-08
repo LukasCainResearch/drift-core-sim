@@ -4,6 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Drift Systems | Discrete Arithmetic Dynamics</title>
+    
+    <script>
+        window.MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']]
+          },
+          svg: {
+            fontCache: 'global'
+          }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💠</text></svg>">
     <style>
         :root {
@@ -13,6 +28,7 @@
             --text-muted: #a0a0a0;
             --accent-cyan: #00ffcc;
             --accent-blue: #4488ff;
+            --accent-red: #ff4444;
             --border-color: #333;
         }
 
@@ -57,7 +73,6 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             text-align: center;
         }
-        .graph-container img { max-width: 100%; height: auto; border-radius: 4px; }
         .caption { margin-top: 15px; font-size: 0.9rem; color: #888; border-left: 2px solid var(--accent-blue); padding-left: 10px; text-align: left; }
 
         /* Two Column Layout */
@@ -73,6 +88,56 @@
         pre { background: #000; padding: 20px; border-radius: 6px; overflow-x: auto; border: 1px solid #333; margin: 20px 0; text-align: left; }
         code { font-family: 'Courier New', monospace; color: var(--accent-cyan); font-size: 0.9rem; }
 
+        /* --- DASHBOARD STYLES (Merged from your CodePen) --- */
+        .controls-area { display: flex; gap: 10px; margin: 0 0 20px 0; }
+        #n_input {
+            flex-grow: 1; font-size: 1rem; padding: 8px; border: 1px solid #555;
+            background-color: #000; color: #fff; border-radius: 4px; font-family: monospace;
+        }
+        #run_btn {
+            font-size: 0.9rem; padding: 8px 20px; background-color: var(--accent-blue);
+            color: white; border: none; border-radius: 4px; cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #run_btn:hover { background-color: var(--accent-cyan); color: #000; }
+        #run_btn:disabled { background-color: #333; cursor: not-allowed; color: #666; }
+
+        #tape_container {
+            background-color: #000; border: 1px solid #333; border-radius: 4px;
+            padding: 10px; overflow-x: auto; white-space: nowrap;
+            margin-bottom: 15px; scrollbar-color: #666 #333; min-height: 50px;
+        }
+        .tape-message { display: inline-block; padding: 0 5px; font-family: monospace; font-size: 1em; width: auto; color: #f39c12; }
+        .tape-bit {
+            display: inline-block; width: 20px; height: 20px; line-height: 20px;
+            text-align: center; font-family: monospace; font-size: 1.1em;
+            color: #444; transition: all 0.3s;
+        }
+        .tape-bit.active { background-color: var(--accent-blue); color: #fff; border-radius: 2px; font-weight: bold; }
+        
+        #analysis_ticker {
+            background-color: #0a0a0a; border: 1px dashed #444; border-radius: 4px;
+            padding: 10px; margin-bottom: 15px; font-family: monospace;
+            font-size: 0.85em; color: var(--accent-cyan); text-align: center;
+            height: 40px; line-height: 1.4; display: flex; align-items: center; justify-content: center;
+        }
+
+        #fsa_diagram { width: 100%; height: auto; max-height: 300px; font-family: monospace; }
+        .fsa-state { fill: #222; stroke: #555; stroke-width: 2; transition: fill 0.3s, stroke 0.3s; }
+        .fsa-engine { fill: #332200; stroke: #f39c12; } /* V-Engine States */
+        .fsa-state.active { fill: var(--accent-blue); stroke: #fff; stroke-width: 3; }
+        .fsa-label { fill: #fff; font-size: 14px; text-anchor: middle; user-select: none; font-weight: bold; }
+        .fsa-sublabel { fill: #888; font-size: 11px; text-anchor: middle; user-select: none; }
+        .fsa-transition { fill: none; stroke: #444; stroke-width: 2; marker-end: url(#arrowhead); transition: stroke 0.3s, stroke-width 0.3s; }
+        .fsa-transition.active { stroke: var(--accent-cyan); stroke-width: 3; marker-end: url(#arrowhead-active); }
+        .fsa-transition-label { fill: #666; font-size: 12px; text-anchor: middle; user-select: none; background: #000; }
+
+        #results_area { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 10px; text-align: center; }
+        .result-box { background-color: #000; padding: 10px; border-radius: 4px; border: 1px solid #222; }
+        .result-label { font-size: 0.75rem; color: #666; margin-bottom: 2px; text-transform: uppercase; }
+        .result-value { font-size: 1.1rem; font-weight: bold; color: #fff; font-family: monospace; }
+        #v_value { color: #f39c12; }
+        
         /* Footer */
         footer { border-top: 1px solid var(--border-color); padding: 40px 0; margin-top: 80px; text-align: center; font-size: 0.9rem; color: #666; }
 
@@ -96,20 +161,17 @@
             </div>
         </nav>
 
-        <!-- HERO -->
         <section class="hero">
             <span style="color: var(--accent-blue); font-weight: 600; letter-spacing: 0.1em; font-size: 0.9rem;">MATHEMATICAL FOUNDATIONS</span>
             <h1>Discrete Arithmetic<br>Dynamics</h1>
             <p>We solved the "Halting Problem" for our core architecture by formally proving the convergence of the Collatz map via 2-adic geometry.</p>
             <br>
-            <!-- Link to the PDF in the same folder -->
             <a href="Convergence_Proof.pdf" class="btn">READ THE PROOF</a>
             <a href="https://github.com/LukasCain/drift-core-sim" class="btn btn-outline">VIEW GITHUB REPO</a>
         </section>
 
         <hr style="border: 0; border-top: 1px solid var(--border-color);">
 
-        <!-- SECTION 1: THE REDUCTION -->
         <section id="fsa">
             <h2>1. The Reduction: From Infinite to Finite</h2>
             <div class="grid">
@@ -118,20 +180,75 @@
                     <p>Drift Systems approached this not as a number theory problem, but as a <strong>Digital Logic</strong> problem. We proved that the operation can be modeled by a <strong>6-State Finite Automaton (FSA)</strong>.</p>
                     <p>This reduces the infinite complexity of the integers to a bounded, deterministic circuit.</p>
                 </div>
-                <div class="graph-container" style="margin: 0;">
-                    <!-- Placeholder for FSA Diagram -->
-                    <!-- Ideally, upload an image of the 6-state machine here -->
-                    <div style="padding: 40px; border: 1px dashed #333; color: #666;">
-                        [ FSA STATE DIAGRAM ]
+                
+                <div class="graph-container" style="margin: 0; padding-bottom: 30px;">
+                    
+                    <div style="text-align: left; margin-bottom: 10px; font-size: 0.8rem; color: #666; font-weight: bold; letter-spacing: 1px;">INTERACTIVE SIMULATION</div>
+                    
+                    <div class="controls-area">
+                        <input type="number" id="n_input" placeholder="Enter Integer" value="27">
+                        <button id="run_btn">TRACE</button>
                     </div>
+            
+                    <div id="tape_container">
+                        <div id="binary_tape"></div>
+                    </div>
+            
+                    <div id="analysis_ticker">
+                        Waiting for input...
+                    </div>
+
+                    <svg id="fsa_diagram" viewBox="0 0 800 350">
+                        <defs>
+                            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                <polygon points="0 0, 10 3.5, 0 7" fill="#444" />
+                            </marker>
+                            <marker id="arrowhead-active" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                <polygon points="0 0, 10 3.5, 0 7" fill="#00ffcc" />
+                            </marker>
+                        </defs>
+                        <g id="S0_group"><circle id="S0" class="fsa-state" cx="100" cy="270" r="40"/><text class="fsa-label" x="100" y="270">S₀</text><text class="fsa-sublabel" x="100" y="288">(0,0,F)</text></g>
+                        <g id="S1_group"><circle id="S1" class="fsa-state" cx="260" cy="270" r="40"/><text class="fsa-label" x="260" y="270">S₁</text><text class="fsa-sublabel" x="260" y="288">(0,1,F)</text></g>
+                        <g id="S2_group"><circle id="S2" class="fsa-state" cx="540" cy="270" r="40"/><text class="fsa-label" x="540" y="270">S₂</text><text class="fsa-sublabel" x="540" y="288">(1,0,F)</text></g>
+                        <g id="S4_group"><circle id="S4" class="fsa-state" cx="700" cy="270" r="40"/><text class="fsa-label" x="700" y="270">S₄</text><text class="fsa-sublabel" x="700" y="288">(1,1,F)</text></g>
+                        <g id="S3_group"><circle id="S3" class="fsa-state fsa-engine" cx="350" cy="80" r="40"/><text class="fsa-label" x="350" y="80">S₃</text><text class="fsa-sublabel" x="350" y="98">(1,0,T)</text><text class="fsa-label" x="300" y="50" style="font-size: 10px; fill: #666;">START</text><path d="M 300 70 L 320 75" class="fsa-transition" marker-end="url(#arrowhead)"/></g>
+                        <g id="S5_group"><circle id="S5" class="fsa-state fsa-engine" cx="450" cy="80" r="40"/><text class="fsa-label" x="450" y="80">S₅</text><text class="fsa-sublabel" x="450" y="98">(1,1,T)</text></g>
+                        <path id="S3_1_S5" class="fsa-transition" d="M 390 75 Q 400 60, 410 75" /><text id="S3_1_S5_label" class="fsa-transition-label" x="400" y="55">1 / (-)</text>
+                        <path id="S5_0_S3" class="fsa-transition" d="M 410 85 Q 400 100, 390 85" /><text id="S5_0_S3_label" class="fsa-transition-label" x="400" y="115">0 / (-)</text>
+                        <path id="S3_0_S0" class="fsa-transition" d="M 320 110 L 130 240" /><text id="S3_0_S0_label" class="fsa-transition-label" x="210" y="170">0 / 1</text>
+                        <path id="S5_1_S4" class="fsa-transition" d="M 480 110 L 670 240" /><text id="S5_1_S4_label" class="fsa-transition-label" x="590" y="170">1 / 1</text>
+                        <path id="S0_0_S0" class="fsa-transition" d="M 80 310 Q 100 340, 120 310" /><text id="S0_0_S0_label" class="fsa-transition-label" x="100" y="345">0 / 0</text>
+                        <path id="S4_1_S4" class="fsa-transition" d="M 680 310 Q 700 340, 720 310" /><text id="S4_1_S4_label" class="fsa-transition-label" x="700" y="345">1 / 1</text>
+                        <path id="S0_1_S1" class="fsa-transition" d="M 140 270 L 220 270" /><text id="S0_1_S1_label" class="fsa-transition-label" x="180" y="260">1 / 1</text>
+                        <path id="S1_0_S0" class="fsa-transition" d="M 220 280 L 140 280" /><text id="S1_0_S0_label" class="fsa-transition-label" x="180" y="295">0 / 1</text>
+                        <path id="S2_1_S4" class="fsa-transition" d="M 580 270 L 660 270" /><text id="S2_1_S4_label" class="fsa-transition-label" x="620" y="260">1 / 0</text>
+                        <path id="S4_0_S2" class="fsa-transition" d="M 660 280 L 580 280" /><text id="S4_0_S2_label" class="fsa-transition-label" x="620" y="295">0 / 0</text>
+                        <path id="S1_1_S4" class="fsa-transition" d="M 300 270 Q 400 230, 660 270" /><text id="S1_1_S4_label" class="fsa-transition-label" x="480" y="245">1 / 0</text>
+                        <path id="S2_0_S0" class="fsa-transition" d="M 500 280 Q 400 320, 140 280" /><text id="S2_0_S0_label" class="fsa-transition-label" x="320" y="315">0 / 1</text>
+                    </svg>
+            
+                    <div id="results_area">
+                        <div class="result-box">
+                            <div class="result-label">Input n</div>
+                            <div class="result-value" id="n_value">-</div>
+                        </div>
+                        <div class="result-box">
+                            <div class="result-label">v-Step (Power)</div>
+                            <div class="result-value" id="v_value">-</div>
+                        </div>
+                        <div class="result-box">
+                            <div class="result-label">Next Odd n₁</div>
+                            <div class="result-value" id="n1_value">-</div>
+                        </div>
+                    </div>
+
                     <div class="caption">
-                        <strong>Figure 1: The 6-State Collatz Automaton.</strong> By resolving arithmetic into bitwise logic, we prove the system has finite memory.
+                        <strong>Figure 1: The 6-State Collatz Automaton.</strong> This logic circuit processes the binary representation of any integer, calculating the next step in the Collatz trajectory purely via bitwise operations.
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION 2: THE BASIN GAP -->
         <section id="proof">
             <h2>2. The "Circuit Breaker" Mechanism</h2>
             <p>Why can't the system cycle forever? We discovered a structural gap in the 2-adic geometry of the map.</p>
@@ -146,17 +263,16 @@
                     <div class="stat-label">System T2 Attractor</div>
                 </div>
                 <div class="stat-card" style="border-top-color: var(--accent-red);">
-                    <div class="stat-val">-5/3</div>
+                    <div class="stat-val">$-\frac{5}{3}$</div>
                     <div class="stat-label">The Unbridgeable Gap</div>
                 </div>
             </div>
 
             <br><br>
-            <p>To sustain an infinite cycle, a trajectory must "Refuel" by jumping from the Descent Basin back to the Ascent Basin. We proved that this jump requires the number to hit a specific target: <strong>-5/3</strong>.</p>
+            <p>To sustain an infinite cycle, a trajectory must "Refuel" by jumping from the Descent Basin back to the Ascent Basin. We proved that this jump requires the number to hit a specific target: $-\frac{5}{3}$.</p>
             <p>This target is <strong>structurally disjoint</strong> from the limit sets of the map. It creates a "Basin Gap" that acts as a circuit breaker, forcing the system to bleed energy (magnitude) until it collapses to 1.</p>
         </section>
 
-        <!-- SECTION 3: LEAN VERIFICATION -->
         <section style="margin-top: 60px;">
             <h2>3. Formal Verification in Lean 4</h2>
             <p>We didn't just write a paper. We formalized the algebraic core of this proof in the <strong>Lean 4 Theorem Prover</strong>.</p>
@@ -173,7 +289,6 @@ by
 
             <p>This verification provides the mathematical guarantee that our <strong>Drift-Hop™</strong> protocol (which relies on similar dynamics) will never enter an infinite loop or a dead-lock state.</p>
         </section>
-
     </div>
 
     <footer>
@@ -183,5 +298,184 @@ by
         </div>
     </footer>
 
+    <script>
+        // --- DOM Elements ---
+        const n_input = document.getElementById('n_input');
+        const run_btn = document.getElementById('run_btn');
+        const n_value_el = document.getElementById('n_value');
+        const v_value_el = document.getElementById('v_value');
+        const n1_value_el = document.getElementById('n1_value');
+        const tape_element = document.getElementById('binary_tape');
+        const ticker = document.getElementById('analysis_ticker');
+
+        // --- FSA Definition ---
+        const fsaTransitions = {
+            'S0': {'0': {next: 'S0', out: '0'}, '1': {next: 'S1', out: '1'}},
+            'S1': {'0': {next: 'S0', out: '1'}, '1': {next: 'S4', out: '0'}},
+            'S2': {'0': {next: 'S0', out: '1'}, '1': {next: 'S4', out: '0'}},
+            'S3': {'0': {next: 'S0', out: '1'}, '1': {next: 'S5', out: null}}, // null out = increment v
+            'S4': {'0': {next: 'S2', out: '0'}, '1': {next: 'S4', out: '1'}},
+            'S5': {'0': {next: 'S3', out: null}, '1': {next: 'S4', out: '1'}}, // null out = increment v
+        };
+        const allStates = ['S0', 'S1', 'S2', 'S3', 'S4', 'S5'];
+        const allTransitions = [
+            'S3_1_S5', 'S5_0_S3', 'S3_0_S0', 'S5_1_S4', 'S0_0_S0', 'S4_1_S4',
+            'S0_1_S1', 'S1_0_S0', 'S2_1_S4', 'S4_0_S2', 'S1_1_S4', 'S2_0_S0'
+        ];
+        
+        let animationRunning = false;
+        
+        // --- Event Listeners ---
+        run_btn.addEventListener('click', runAnimation);
+        n_input.addEventListener('keyup', (e) => { if (e.key === 'Enter') runAnimation(); });
+
+        function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
+        
+        function resetVisuals() {
+            tape_element.innerHTML = '';
+            ticker.innerHTML = 'Analyzing...';
+            allStates.forEach(s => document.getElementById(s).classList.remove('active'));
+            allTransitions.forEach(t => {
+                const el = document.getElementById(t);
+                el.classList.remove('active');
+                el.style.markerEnd = 'url(#arrowhead)';
+            });
+            n_value_el.textContent = '-';
+            v_value_el.textContent = '-';
+            n1_value_el.textContent = '-';
+            n1_value_el.style.color = '#fff';
+        }
+        
+        function highlightFSA(stateId, transitionId) {
+            allStates.forEach(s => document.getElementById(s).classList.remove('active'));
+            allTransitions.forEach(t => {
+                const el = document.getElementById(t);
+                el.classList.remove('active');
+                el.style.markerEnd = 'url(#arrowhead)';
+            });
+            
+            if (stateId) document.getElementById(stateId).classList.add('active');
+            if (transitionId) {
+                const el = document.getElementById(transitionId);
+                el.classList.add('active');
+                el.style.markerEnd = 'url(#arrowhead-active)';
+            }
+        }
+        
+        function populateTape(bits) {
+            tape_element.innerHTML = '';
+            for (let i = 0; i < bits.length; i++) {
+                const bitSpan = document.createElement('span');
+                bitSpan.id = `bit-idx-${i}`;
+                bitSpan.className = 'tape-bit';
+                bitSpan.textContent = bits[i];
+                tape_element.appendChild(bitSpan);
+            }
+        }
+        
+        function highlightTape(index) {
+            document.querySelectorAll('.tape-bit.active').forEach(el => el.classList.remove('active'));
+            const bitSpan = document.getElementById(`bit-idx-${index}`);
+            if (bitSpan) {
+                bitSpan.classList.add('active');
+                bitSpan.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
+        }
+
+        async function runAnimation() {
+            if (animationRunning) return;
+            animationRunning = true;
+            run_btn.disabled = true;
+            resetVisuals();
+            
+            let n;
+            try {
+                n = BigInt(n_input.value);
+                if (n <= 0n) throw new Error("Positive only");
+            } catch (e) {
+                alert("Please enter a valid positive integer.");
+                animationRunning = false; run_btn.disabled = false; return;
+            }
+            
+            // Handle Even Numbers
+            if (n % 2n === 0n) {
+                ticker.innerHTML = `Input ${n} is even. Reducing...`;
+                await sleep(1000);
+                while (n > 1n && n % 2n === 0n) n = n / 2n;
+                n_input.value = n.toString();
+                ticker.innerHTML = `Starting analysis at odd core: ${n}`;
+                await sleep(1000);
+            }
+
+            n_value_el.textContent = n.toString();
+            
+            const PADDING_BITS = 3;
+            let n_binary_string = n.toString(2);
+            const bits = n_binary_string.padStart(n_binary_string.length + PADDING_BITS, '0');
+            const real_bit_start_index = PADDING_BITS;
+            
+            populateTape(bits);
+            
+            let currentState = 'S3';
+            let v = 0;
+            let n1_bits = [];
+            
+            highlightFSA('S3', null);
+            ticker.innerHTML = "Initializing state S3...";
+            await sleep(1000);
+
+            // PROCESS LSB FIRST
+            for (let i = bits.length - 1; i >= 0; i--) {
+                const bit = bits[i];
+                highlightTape(i);
+                
+                const transition = fsaTransitions[currentState][bit];
+                const transitionId = `${currentState}_${bit}_${transition.next}`;
+                highlightFSA(transition.next, transitionId);
+                
+                const isPadding = (i < real_bit_start_index);
+
+                if (transition.out === null) {
+                    v++;
+                    ticker.innerHTML = `Bit '${bit}' detected. <strong>V-Engine Active</strong>. v = ${v}`;
+                } else {
+                    n1_bits.push(transition.out);
+                    if (isPadding && transition.next === 'S0') {
+                        ticker.innerHTML = `Reading padding. <strong>S0 Lock-in</strong>.`;
+                    } else if (currentState === 'S3' || currentState === 'S5') {
+                        ticker.innerHTML = `Bit '${bit}'. <strong>Exit V-Engine</strong>. v locked at ${v}.`;
+                    } else {
+                         ticker.innerHTML = `Bit '${bit}' processed. Output: '${transition.out}'.`;
+                    }
+                }
+                
+                currentState = transition.next;
+                v_value_el.textContent = v;
+                await sleep(600);
+            }
+            
+            highlightTape(-1);
+            
+            // Calculate Result
+            while (n1_bits.length > 0 && n1_bits[n1_bits.length - 1] === '0') n1_bits.pop();
+            const n1_binary = n1_bits.reverse().join('');
+            const n1 = n1_binary ? parseInt(n1_binary, 2) : 0;
+            
+            n1_value_el.textContent = n1.toString();
+            
+            // Validate
+            let expected_n1 = (3n * n + 1n) / (2n ** BigInt(v));
+            if (n1 === Number(expected_n1)) {
+                 n1_value_el.style.color = '#00ffcc';
+                 ticker.innerHTML = `Result ${n1} validated against algebraic definition.`;
+            } else {
+                 n1_value_el.style.color = '#ff4444';
+                 ticker.innerHTML = `Validation Error.`;
+            }
+
+            animationRunning = false;
+            run_btn.disabled = false;
+        }
+    </script>
 </body>
 </html>
