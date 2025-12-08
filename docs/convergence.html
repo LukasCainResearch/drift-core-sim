@@ -234,10 +234,10 @@
         </section>
 
         <section id="proof">
-            <h2>2. [cite_start]The "Circuit Breaker" Mechanism [cite: 8]</h2>
+            <h2>2. The "Circuit Breaker" Mechanism]</h2>
             <p>Why can't the system cycle forever? We discovered a structural gap in the 2-adic geometry of the map.</p>
-            <p>To sustain an infinite cycle, a trajectory must "Refuel" (Ascend) repeatedly. [cite_start]However, the "Entropy Cost" of maintaining an ascent forces the trajectory to move geometrically away from the <strong>Refueling Target</strong> ($-\frac{5}{3}$)[cite: 8].</p>
-            [cite_start]<p>This creates a "Metric Space Contradiction"[cite: 217]: The more fuel you gather, the impossible it becomes to bridge the gap back to the descent basin.</p>
+            <p>To sustain an infinite cycle, a trajectory must "Refuel" (Ascend) repeatedly. However, the "Entropy Cost" of maintaining an ascent forces the trajectory to move geometrically away from the <strong>Refueling Target</strong> ($-\frac{5}{3}$).</p>
+            <p>This creates a "Metric Space Contradiction": The more fuel you gather, the impossible it becomes to bridge the gap back to the descent basin.</p>
 
             <div class="graph-container" style="border: 1px solid #333; background: #000; padding: 20px; border-radius: 8px;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
@@ -278,12 +278,12 @@
             </div>
             
             <p style="font-size: 0.9rem; color: #666; margin-top: 20px;">
-                The middle gauge shows the "Risk" of entering a cycle. Notice how it may spike (attempting to bridge) but immediately crashes. [cite_start]This visualizes the system's inability to sustain the $-\frac{5}{3}$ pattern required for an infinite loop[cite: 18].
+                The middle gauge shows the "Risk" of entering a cycle. Notice how it may spike (attempting to bridge) but immediately crashes. This visualizes the system's inability to sustain the $-\frac{5}{3}$ pattern required for an infinite loop.
             </p>
         </section>
 
         <section style="margin-top: 60px;">
-            <h2>3. [cite_start]Formal Verification in Lean 4 [cite: 800]</h2>
+            <h2>3. Formal Verification in Lean 4 </h2>
             <p>We formalized the algebraic core of this proof in the <strong>Lean 4 Theorem Prover</strong>.</p>
             <pre><code>theorem refueling_necessity (n : Q2) :
   T2 n = ascent_basin ↔ n = bridge_target :=
