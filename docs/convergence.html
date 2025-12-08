@@ -125,29 +125,73 @@
         .result-label { font-size: 0.75rem; color: #666; margin-bottom: 2px; text-transform: uppercase; }
         .result-value { font-size: 1.1rem; font-weight: bold; color: #fff; font-family: monospace; }
 
-        /* --- RISK GAUGE STYLES --- */
-        .gauge-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; height: 200px; margin-bottom: 20px; }
-        .gauge-box { background: #111; border: 1px solid #333; border-radius: 4px; position: relative; display: flex; justify-content: center; }
-        .gauge-title { position: absolute; top: 10px; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
-        .bar-container { align-self: flex-end; width: 100%; height: 0%; transition: height 0.4s; }
-        
-        .marker { position: absolute; left: 0; right: 0; border-top: 1px dashed rgba(255,255,255,0.3); font-size: 9px; color: #666; text-align: right; padding-right: 2px; }
-        
-        .status-badge {
-            position: absolute; top: 30px; font-size: 0.6rem; padding: 2px 4px; border-radius: 2px; border: 1px solid;
+        /* --- 2-ADIC PUMP (ORIGINAL STYLE) --- */
+        .gauge-dashboard { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin: 20px 0; text-align: center; }
+        .gauge-container {
+            background-color: #333; border-radius: 8px; padding: 15px;
+            border: 1px solid #555; height: 300px; display: flex; flex-direction: column; position: relative;
         }
+        .gauge-label { font-size: 0.9em; color: #aaa; margin-bottom: 10px; }
+        .bar-well { flex-grow: 1; background-color: #222; border-radius: 4px; position: relative; overflow: hidden; border: 1px solid #444; }
+        .bar-level { position: absolute; bottom: 0; left: 0; right: 0; transition: height 0.5s ease-out; }
         
-        #mini_log { height: 100px; overflow-y: auto; font-family: monospace; font-size: 0.8rem; color: #888; border-top: 1px solid #333; padding-top: 10px; text-align: left; }
-        .log-row { display: flex; justify-content: space-between; border-bottom: 1px solid #222; padding: 2px 0; }
+        #t1_bar { background-color: #3498db; } /* Blue */
+        #t2_bar { background-color: #f39c12; } /* Orange */
         
+        .level-marker {
+            position: absolute; left: 0; right: 0;
+            border-bottom: 2px dashed #fff; font-size: 11px; color: #fff;
+            padding-left: 3px; text-align: left; padding-bottom: 1px; transition: all 0.1s;
+        }
+        #t1_marker_2 { bottom: 20%; } /* T1 exit at x'=2 */
+        #t2_marker_2 { bottom: 20%; } /* T2 exit at x=2 */
+        #t2_marker_3 { bottom: 30%; } /* T2 jump at x=3 */
+
+        @keyframes flash-marker-animation {
+            0% { color: #fff; border-color: #fff; } 50% { color: #ff0000; border-color: #ff0000; } 100% { color: #fff; border-color: #fff; }
+        }
+        .flash-marker { animation: flash-marker-animation 0.5s ease-out; }
+        
+        #terminal_exit_chute {
+            background-color: #444; border: 1px solid #666; transition: all 0.1s;
+            display: flex; align-items: center; justify-content: center; flex-direction: column;
+        }
+        #terminal_exit_chute.active { background-color: #990000; border-color: #ff0000; color: #fff; }
+        .chute-icon { font-size: 3em; line-height: 1; }
+        
+        /* Tooltips */
+        .tooltip-trigger {
+            font-size: 10px; color: #888; border: 1px solid #888; border-radius: 50%;
+            width: 14px; height: 14px; line-height: 14px; display: inline-block; cursor: pointer; margin-left: 5px;
+        }
+        .tooltip-content {
+            display: none; position: absolute; top: 40px; left: 50%; transform: translateX(-50%);
+            width: 200px; background-color: #111; color: #eee; border: 1px solid #777;
+            border-radius: 4px; padding: 10px; font-size: 0.85em; text-align: left; z-index: 10;
+        }
+        .gauge-container:hover .tooltip-content { display: block; }
+        
+        /* Pump Log Table */
+        #log_container { max-height: 400px; overflow-y: auto; border: 1px solid #444; border-radius: 4px; margin-top: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #444; vertical-align: top; }
+        th { background-color: #333; color: #00aaff; position: sticky; top: 0; }
+        tr:nth-child(even) { background-color: #2f2f2f; }
+        .analysis-text { font-size: 0.9em; color: #ccc; }
+        .analysis-subscript { display: block; font-size: 0.9em; color: #aaa; margin-top: 5px; }
+        .highlight-exit { background-color: #5d0000 !important; color: #fff !important; font-weight: bold; }
+        .highlight-jump { background-color: #004d00 !important; color: #fff !important; }
+        .highlight-contract { color: #aaa; }
+        @keyframes flash-animation { 0% { background-color: #007bff; border-color: #fff; } 100% { background-color: #333; border-color: #555; } }
+        .flash { animation: flash-animation 0.5s ease-out; }
+
         /* Footer */
         footer { border-top: 1px solid var(--border-color); padding: 40px 0; margin-top: 80px; text-align: center; font-size: 0.9rem; color: #666; }
 
         @media (max-width: 768px) {
             h1 { font-size: 2.5rem; }
             .grid { grid-template-columns: 1fr; }
-            .gauge-grid { grid-template-columns: 1fr; height: auto; }
-            .gauge-box { height: 150px; margin-bottom: 10px; }
+            .gauge-dashboard { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -234,56 +278,76 @@
         </section>
 
         <section id="proof">
-            <h2>2. The "Circuit Breaker" Mechanism]</h2>
+            <h2>2. The "Circuit Breaker" Mechanism</h2>
             <p>Why can't the system cycle forever? We discovered a structural gap in the 2-adic geometry of the map.</p>
             <p>To sustain an infinite cycle, a trajectory must "Refuel" (Ascend) repeatedly. However, the "Entropy Cost" of maintaining an ascent forces the trajectory to move geometrically away from the <strong>Refueling Target</strong> ($-\frac{5}{3}$).</p>
-            <p>This creates a "Metric Space Contradiction": The more fuel you gather, the impossible it becomes to bridge the gap back to the descent basin.</p>
 
             <div class="graph-container" style="border: 1px solid #333; background: #000; padding: 20px; border-radius: 8px;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
-                    <h3 style="margin:0; color:#fff; font-size:1.2rem;">Entropy Circuit Breaker (Live Sim)</h3>
-                    <div style="font-size:0.8rem; color:#666;">Target: -5/3 Bridge</div>
+                    <h3 style="margin:0; color:#fff; font-size:1.2rem;">Interactive 2-Adic Level Dashboard</h3>
                 </div>
 
                 <div class="controls-area">
-                    <input type="number" id="risk_input" class="sim-input" value="27" placeholder="Enter Integer">
-                    <button id="risk_start" class="sim-btn">START</button>
-                    <button id="risk_next" class="sim-btn" style="background:#333; border:1px solid #555;" disabled>NEXT STEP</button>
+                    <input type="number" id="n_input" class="sim-input" placeholder="Enter N (e.g., 27)" value="27">
+                    <button id="start_btn" class="sim-btn" style="background-color: #007bff;">Start / Reset</button>
+                    <button id="next_step_btn" class="sim-btn" style="background-color: #28a745;" disabled>Next Odd Step</button>
+                </div>
+                
+                <div class="gauge-dashboard">
+                    <div class="gauge-container">
+                        <div class="gauge-label">
+                            T₁ Level (pulls to -1)
+                            <span class="tooltip-trigger">(?)</span>
+                            <div class="tooltip-content">
+                                This measures the 2-adic distance from N=-1 (v₂(n+1)). The paper proves the T₁ function is a "contraction" that is *forced* to drain this level down to the T₁ Exit at x'=2.
+                            </div>
+                        </div>
+                        <div class="bar-well">
+                            <div class="level-marker" id="t1_marker_2">x' = 2 (Exit)</div>
+                            <div class="bar-level" id="t1_bar" style="height: 0%;"></div>
+                        </div>
+                    </div>
+                    <div class="gauge-container">
+                        <div class="gauge-label">
+                            T₂ Level (pulls to 1)
+                            <span class="tooltip-trigger">(?)</span>
+                            <div class="tooltip-content">
+                                This measures the 2-adic distance from N=1 (v₂(n-1)). The paper proves the T₂ function is a "contraction" that is *forced* to drain this level down to the Terminal Exit at x=2.
+                            </div>
+                        </div>
+                        <div class="bar-well">
+                            <div class="level-marker" id="t2_marker_3">x = 3 (Jump)</div>
+                            <div class="level-marker" id="t2_marker_2">x = 2 (EXIT)</div>
+                            <div class="bar-level" id="t2_bar" style="height: 0%;"></div>
+                        </div>
+                    </div>
+                    <div class="gauge-container" id="terminal_exit_chute">
+                        <div class="chute-icon">⚡</div>
+                        <div class="gauge-label">Terminal Exit</div>
+                        <div class="gauge-label">(Next Sub-sequence)</div>
+                    </div>
                 </div>
 
-                <div class="gauge-grid">
-                    <div class="gauge-box">
-                        <div class="gauge-title" style="color:var(--accent-blue)">ASCENT</div>
-                        <div class="bar-container" style="background: linear-gradient(to top, #0044cc, #4488ff);" id="t1_fill"></div>
-                        <div class="marker" style="bottom: 20%">EXIT (x=2)</div>
-                    </div>
-
-                    <div class="gauge-box" style="border-color: #555;">
-                        <div class="gauge-title" style="color:#fff;">CYCLE RISK</div>
-                        <div id="risk_label" class="status-badge" style="color: var(--accent-cyan); border-color: var(--accent-cyan);">NO LOCK</div>
-                        <div class="bar-container" style="background: var(--accent-cyan); transition: height 0.4s, background-color 0.4s;" id="bridge_fill"></div>
-                        <div class="marker" style="bottom: 70%; color: var(--accent-red);">CRITICAL</div>
-                    </div>
-
-                    <div class="gauge-box">
-                        <div class="gauge-title" style="color:var(--accent-orange)">DESCENT</div>
-                        <div class="bar-container" style="background: linear-gradient(to top, #cc6600, #ffaa00);" id="t2_fill"></div>
-                        <div class="marker" style="bottom: 20%">DRAIN</div>
-                    </div>
-                </div>
-
-                <div id="mini_log">
-                    <div>System Ready...</div>
+                <div id="log_container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>n</th>
+                                <th>v-Step</th>
+                                <th>v₂(n-1)</th>
+                                <th>v₂(n+1)</th>
+                                <th>Analysis (per Sec 5.3 & 5.4)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="log_body">
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            
-            <p style="font-size: 0.9rem; color: #666; margin-top: 20px;">
-                The middle gauge shows the "Risk" of entering a cycle. Notice how it may spike (attempting to bridge) but immediately crashes. This visualizes the system's inability to sustain the $-\frac{5}{3}$ pattern required for an infinite loop.
-            </p>
         </section>
 
         <section style="margin-top: 60px;">
-            <h2>3. Formal Verification in Lean 4 </h2>
+            <h2>3. Formal Verification in Lean 4</h2>
             <p>We formalized the algebraic core of this proof in the <strong>Lean 4 Theorem Prover</strong>.</p>
             <pre><code>theorem refueling_necessity (n : Q2) :
   T2 n = ascent_basin ↔ n = bridge_target :=
@@ -389,60 +453,237 @@ by
     </script>
 
     <script>
-        (function(){
-            let n = 0n;
-            const inp = document.getElementById('risk_input');
-            const start = document.getElementById('risk_start');
-            const next = document.getElementById('risk_next');
-            const t1 = document.getElementById('t1_fill');
-            const t2 = document.getElementById('t2_fill');
-            const br = document.getElementById('bridge_fill');
-            const rl = document.getElementById('risk_label');
-            const log = document.getElementById('mini_log');
-
-            function getVal(x) { 
-                if(x===0n) return 0; 
-                let v=0; while(x%2n===0n && x!==0n){x/=2n;v++} 
-                return v; 
-            }
+        (function() {
+            // --- DOM Elements ---
+            const n_input = document.getElementById('n_input');
+            const start_btn = document.getElementById('start_btn');
+            const next_step_btn = document.getElementById('next_step_btn');
+            const log_body = document.getElementById('log_body');
+            const t1_bar = document.getElementById('t1_bar');
+            const t2_bar = document.getElementById('t2_bar');
+            const terminal_exit_chute = document.getElementById('terminal_exit_chute');
+            const t2_marker_2 = document.getElementById('t2_marker_2'); 
             
-            function getRisk(x) {
-                const pat = 0b1010101010101011; const mask = 0xFFFF;
-                let bits = Number(x & BigInt(mask));
-                let match = ~(bits ^ pat) & mask;
-                let c=0; for(let i=0;i<16;i++) if((match>>i)&1) c++;
-                return (c/16)*100;
+            // --- Global State ---
+            let current_n = 0n;
+            let animation_lock = false;
+
+            // --- Event Listeners ---
+            start_btn.addEventListener('click', startOrReset);
+            next_step_btn.addEventListener('click', runNextStep);
+            n_input.addEventListener('keyup', (e) => {
+                if (e.key === 'Enter') {
+                    startOrReset();
+                }
+            });
+            
+            /** Utility to pause execution */
+            function sleep(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
             }
 
-            function update(x) {
-                const v1 = getVal(x+1n);
-                const v2 = getVal(x-1n);
-                const r = getRisk(x);
-                
-                t1.style.height = Math.min(v1*10, 100)+'%';
-                t2.style.height = Math.min(v2*10, 100)+'%';
-                br.style.height = r+'%';
-                
-                if(r>80) { br.style.background='#ff4444'; rl.innerText="CRITICAL"; rl.style.color='#ff4444'; rl.style.borderColor='#ff4444'; }
-                else if(r>50) { br.style.background='#ffaa00'; rl.innerText="DRIFTING"; rl.style.color='#ffaa00'; rl.style.borderColor='#ffaa00'; }
-                else { br.style.background='#00ffcc'; rl.innerText="GAP SECURE"; rl.style.color='#00ffcc'; rl.style.borderColor='#00ffcc'; }
-                
-                let riskType = r>50 ? (r>80?"Crit":"High") : "Low";
-                log.innerHTML = `<div style="display:flex; justify-content:space-between; border-bottom:1px solid #222;"><span>N=${x}</span> <span style="color:${br.style.background}">${riskType} Risk (${Math.floor(r)}%)</span></div>` + log.innerHTML;
+            /** Calculates the 2-adic valuation (v2) of a BigInt */
+            function getValuation2(n) {
+                if (n === 0n) return Infinity; 
+                let v2 = 0; 
+                while (n > 0n && n % 2n === 0n) {
+                    n = n / 2n;
+                    v2++;
+                }
+                return v2;
             }
 
-            start.onclick = () => {
-                try { n = BigInt(inp.value); if(n%2n===0n) while(n%2n===0n) n/=2n; log.innerHTML=''; update(n); next.disabled=false; }
-                catch(e){alert('Invalid Integer');}
+            /** Initializes or resets the simulation. */
+            function startOrReset() {
+                let n_start_str = n_input.value;
+                let n;
+                try {
+                     n = BigInt(n_start_str);
+                } catch (e) {
+                    alert("Invalid input. Please enter a valid integer.");
+                    return;
+                }
+                
+                if (n <= 0n) {
+                    alert("Please enter a positive integer.");
+                    return;
+                }
+
+                // Fast-forward to the first odd number
+                while (n > 1n && n % 2n === 0n) {
+                    n = n / 2n;
+                }
+                
+                current_n = n;
+                n_input.value = n.toString(); 
+                log_body.innerHTML = ''; 
+                
+                // Set gauges to initial state
+                updateGauges(current_n, 'set'); // 'set' = no animation
+                
+                next_step_btn.disabled = false;
+                animation_lock = false;
+                
+                if (n === 1n) {
+                    addLogEntry(1n, '-', '-', '-', 'Converged (Trivial Cycle)');
+                    next_step_btn.disabled = true;
+                }
             }
 
-            next.onclick = () => {
-                if(n===1n) return;
-                n = 3n*n+1n;
-                while(n%2n===0n) n/=2n;
-                update(n);
-                if(n===1n) { next.disabled=true; log.innerHTML = `<div style="color:#00ffcc; font-weight:bold;">CONVERGED</div>` + log.innerHTML; }
+            /** Runs a single "odd step" of the analysis. */
+            async function runNextStep() {
+                if (current_n === 1n || animation_lock) {
+                    next_step_btn.disabled = true;
+                    return;
+                }
+                animation_lock = true;
+                next_step_btn.disabled = true;
+
+                let n = current_n;
+
+                // --- 1. Calculate v-step ---
+                let n_next_odd = (3n * n + 1n);
+                let v = 0n;
+                while (n_next_odd % 2n === 0n) {
+                    n_next_odd = n_next_odd / 2n;
+                    v++;
+                }
+
+                // --- 2. Calculate 2-adic valuations ---
+                const v2_n_minus_1 = getValuation2(n - 1n);
+                const v2_n_plus_1 = getValuation2(n + 1n);
+
+                // --- 3. Perform analysis based on Section 5.3 & 5.4 ---
+                let analysis = "";
+                let rowClass = "";
+                let isTerminalExit = false;
+
+                if (v >= 3n) {
+                    analysis = "TERMINAL EXIT / Strong Descent";
+                    rowClass = "highlight-exit";
+                    isTerminalExit = true;
+                } 
+                else if (v === 1n) {
+                    // T1 System
+                    if (v2_n_plus_1 === 2) {
+                        analysis = "T₁ Exit (x'=2): Jumps to T₂";
+                        rowClass = "highlight-jump";
+                    } else {
+                        analysis = `T₁ Contraction (x'=${v2_n_plus_1} \u2192 ${v2_n_plus_1 - 1})`;
+                        rowClass = "highlight-contract";
+                    }
+                } 
+                else if (v === 2n) {
+                    // T2 System
+                    if (v2_n_minus_1 === 2) {
+                        analysis = "TERMINAL EXIT STATE (x=2)";
+                        rowClass = "highlight-exit";
+                        isTerminalExit = true;
+                    } 
+                    else if (v2_n_minus_1 === 3) {
+                        rowClass = "highlight-jump";
+                        const c = (n - 1n) / 8n;
+                        const c_mod_4 = c % 4n;
+                        let subscript = "";
+                        if (c_mod_4 === 1n) {
+                            subscript = `&nbsp;&nbsp;&nbsp;\u2514 Solving n=1+8c \u2192 c=${c}. (c mod 4 = 1) \u2192 <strong>Case 2: Finite T\u2081 Contraction</strong>.`;
+                        } else {
+                            subscript = `&nbsp;&nbsp;&nbsp;\u2514 Solving n=1+8c \u2192 c=${c}. (c mod 4 = 3) \u2192 <strong>Case 1: Forced T\u2081 Exit</strong>.`;
+                        }
+                        analysis = `T₂ Jump (x=3): Jumps to T₁<span class="analysis-subscript">${subscript}</span>`;
+                    } else {
+                        analysis = `T₂ Contraction (x=${v2_n_minus_1} \u2192 ${v2_n_minus_1 - 2})`;
+                        rowClass = "highlight-contract";
+                    }
+                }
+
+                // --- 4. Add to log and update state ---
+                addLogEntry(n, v, v2_n_minus_1, v2_n_plus_1, analysis, rowClass);
+                
+                // --- 5. Animate the Exit/Jump ---
+                if (isTerminalExit) {
+                    t2_marker_2.classList.add('flash-marker');
+                    t2_bar.style.height = '0%';
+                    await sleep(200); 
+                    terminal_exit_chute.classList.add('active');
+                }
+                
+                // Wait for animations
+                await sleep(500); 
+                if (isTerminalExit) {
+                    terminal_exit_chute.classList.remove('active');
+                    t2_marker_2.classList.remove('flash-marker');
+                    n_input.classList.add('flash');
+                    n_input.value = n_next_odd.toString();
+                    setTimeout(() => n_input.classList.remove('flash'), 500);
+                }
+
+                // --- 6. Update n for next step ---
+                current_n = n_next_odd;
+                updateGauges(current_n, 'animate');
+
+                // --- 7. Check for convergence ---
+                if (current_n === 1n) {
+                    addLogEntry(1n, '-', '-', '-', 'Converged (Trivial Cycle)');
+                    next_step_btn.disabled = true;
+                } else {
+                    next_step_btn.disabled = false;
+                    animation_lock = false;
+                }
             }
+
+            /** Updates the T1/T2 level bars. */
+            function updateGauges(n, mode = 'animate') {
+                 if (n === 1n) {
+                    t1_bar.style.height = '0%';
+                    t2_bar.style.height = '0%';
+                    return;
+                }
+                
+                if (mode === 'set') {
+                    t1_bar.style.transition = 'none';
+                    t2_bar.style.transition = 'none';
+                }
+                
+                const v2_n_plus_1 = getValuation2(n + 1n);
+                const v2_n_minus_1 = getValuation2(n - 1n);
+                
+                // Max height at 100% (for v2 >= 10)
+                const t1_height = Math.min(v2_n_plus_1, 10) * 10;
+                const t2_height = Math.min(v2_n_minus_1, 10) * 10;
+                
+                t1_bar.style.height = `${t1_height}%`;
+                t2_bar.style.height = `${t2_height}%`;
+                
+                if (mode === 'set') {
+                    void t1_bar.offsetHeight; 
+                    t1_bar.style.transition = 'height 0.5s ease-out';
+                    t2_bar.style.transition = 'height 0.5s ease-out';
+                }
+            }
+
+            /** Helper function to add a new row to the log table. */
+            function addLogEntry(n, v, v2_n1, v2_n_1, analysis, rowClass = '') {
+                const newRow = document.createElement('tr');
+                newRow.className = rowClass;
+                
+                const v_str = v.toString();
+                const v2_n1_str = (v2_n1 === Infinity) ? "∞" : v2_n1.toString();
+                const v2_n_1_str = (v2_n_1 === Infinity) ? "∞" : v2_n_1.toString();
+
+                newRow.innerHTML = `
+                    <td><strong>${n.toString()}</strong></td>
+                    <td>${v_str}</td>
+                    <td>${v2_n1_str}</td>
+                    <td>${v2_n_1_str}</td>
+                    <td class="analysis-text">${analysis}</td>
+                `;
+                log_body.appendChild(newRow);
+                document.getElementById('log_container').scrollTop = document.getElementById('log_container').scrollHeight;
+            }
+
+            // --- Initialize ---
+            startOrReset();
         })();
     </script>
 </body>
