@@ -20,15 +20,16 @@
     </script>
 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💠</text></svg>">
+    
     <style>
         :root {
             --bg-color: #050505;
             --card-bg: #111111;
             --text-main: #e0e0e0;
             --text-muted: #a0a0a0;
-            --accent-green: #00ffaa;
+            --accent-green: #00ffaa; /* Emerald for "Safe/Covered" */
             --accent-blue: #4488ff;
-            --accent-red: #ff4444;
+            --accent-red: #ff4444;   /* Added for Lock 2 */
             --border-color: #333;
         }
 
@@ -49,11 +50,13 @@
         
         .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
         
+        /* Navigation */
         nav { padding: 20px 0; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
         .logo { font-weight: 800; font-size: 1.2rem; letter-spacing: 0.1em; color: #fff; text-decoration: none; }
         .nav-links a { color: var(--text-muted); text-decoration: none; margin-left: 20px; font-size: 0.9rem; transition: color 0.2s; }
         .nav-links a:hover { color: var(--accent-green); }
 
+        /* Hero Section */
         .hero { padding: 80px 0; text-align: center; }
         .hero p { max-width: 600px; margin: 0 auto 2rem auto; font-size: 1.25rem; }
         .btn { display: inline-block; padding: 12px 30px; background: var(--accent-green); color: #000; font-weight: 700; text-decoration: none; border-radius: 2px; transition: transform 0.2s; }
@@ -61,6 +64,7 @@
         .btn-outline { background: transparent; border: 1px solid var(--border-color); color: #fff; margin-left: 10px; }
         .btn-outline:hover { border-color: #fff; }
 
+        /* Graphics Section */
         .graph-container {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -70,15 +74,28 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             text-align: center;
         }
+        
+        /* IMAGE FIX: Ensure image responds correctly */
+        .graph-container img { 
+            max-width: 100%; 
+            height: auto; 
+            border-radius: 4px; 
+            display: block; /* Removes bottom space */
+            margin: 0 auto; /* Centers image */
+        }
+        
         .caption { margin-top: 15px; font-size: 0.9rem; color: #888; border-left: 2px solid var(--accent-green); padding-left: 10px; text-align: left; }
 
+        /* Two Column Layout */
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; margin: 60px 0; }
         
+        /* Metric Cards */
         .metrics { display: flex; gap: 20px; margin-top: 20px; }
         .stat-card { background: #1a1a1a; padding: 20px; flex: 1; border-radius: 4px; border-top: 2px solid var(--accent-green); }
         .stat-val { font-size: 1.5rem; font-weight: 700; color: #fff; }
         .stat-label { font-size: 0.85rem; color: #888; text-transform: uppercase; letter-spacing: 0.05em; }
 
+        /* Diagram Box */
         .diagram-box {
             border: 1px dashed #444;
             background: #0a0a0a;
@@ -89,10 +106,13 @@
             align-items: center;
             justify-content: center;
             min-height: 200px;
+            margin-top: 20px; /* Spacing from image */
         }
 
+        /* Footer */
         footer { border-top: 1px solid var(--border-color); padding: 40px 0; margin-top: 80px; text-align: center; font-size: 0.9rem; color: #666; }
 
+        /* Responsive */
         @media (max-width: 768px) {
             h1 { font-size: 2.5rem; }
             .grid { grid-template-columns: 1fr; }
@@ -104,8 +124,9 @@
 
     <div class="container">
         <nav>
-            <a href="#" class="logo">DRIFT SYSTEMS</a>
+            <a href="../index.html" class="logo">DRIFT SYSTEMS</a>
             <div class="nav-links">
+                <a href="../index.html">Home</a>
                 <a href="#coverage">Coverage</a>
                 <a href="#security">No Backdoors</a>
             </div>
@@ -116,8 +137,8 @@
             <h1>Provable Ergodicity:<br>Anti-Backdoor Logic</h1>
             <p>We use Erdős Covering Systems to mathematically guarantee that our entropy engine visits every possible state, leaving no "Dark Corners" for exploits to hide.</p>
             <br>
-            <a href="#" class="btn">VIEW THE PROOF</a>
-            <a href="#" class="btn btn-outline">GITHUB REPO</a>
+            <a href="Erdos_Ergodicity.pdf" class="btn">VIEW THE PROOF</a>
+            <a href="https://github.com/LukasCain/drift-core-sim" class="btn btn-outline">GITHUB REPO</a>
         </section>
 
         <hr style="border: 0; border-top: 1px solid var(--border-color);">
@@ -127,7 +148,7 @@
             <div class="grid">
                 <div>
                     <p>In standard cryptography, Pseudo-Random Number Generators (PRNGs) operate on massive state spaces (e.g., $2^{256}$). However, purely linear generators often get trapped in <strong>isolated cycles</strong> or fail to reach vast regions of the state space.</p>
-                    <p>These unreachable regions are <strong>"Dark Corners."</strong> They are dangerous because a malicious actor could embed a "Backdoor State" in a region the generator <em>should</em> never visit.</p>
+                    <p>These unreachable regions are <strong>"Dark Corners."</strong> They are dangerous because a malicious actor could embed a "Backdoor State" in a region the generator <em>should</em> never visit, but can be triggered by a specific injection.</p>
                     <div class="stat-card" style="border-top-color: var(--accent-blue);">
                         <div class="stat-val">The Goal</div>
                         <p style="font-size: 0.95rem; margin-top: 10px;">We need a mathematical guarantee that the generator is <strong>Ergodic</strong>—that it flows through the entire integer set $\mathbb{Z}$ without exception.</p>
@@ -144,9 +165,11 @@
 
         <section id="security">
             <h2>2. The Solution: Dynamic Covering Systems</h2>
-            <p>We define our transition function $T(n)$ using a concept from Number Theory called <strong>Erdős Covering Systems</strong>. A covering system is a set of congruences that completely partitions the integers.</p>
+            <p>We solved this using a concept from Number Theory called <strong>Erdős Covering Systems</strong>. A covering system is a set of congruences that completely partitions the integers.</p>
             
             <div class="graph-container">
+                <img src="Erdos_flow.png" alt="Covering Logic Unit Flowchart">
+                
                 <div class="diagram-box">
                     <div style="text-align: left;">
                         <span style="color: var(--accent-green);">Input State $S_t$</span><br>
@@ -160,13 +183,21 @@
                 </div>
 
                 <div class="caption">
-                    <strong>Figure 1: The Modulus Controller (CLU).</strong> Instead of a static update rule, the Drift Core dynamically switches arithmetic laws based on the residue. Because $\{0 \pmod 2, 1 \pmod 4, 3 \pmod 4\}$ form a <em>Covering System</em>, every possible integer triggers a valid transition.
+                    <strong>Figure 1: The Modulus Controller (CLU).</strong> Instead of a static update rule, the Drift Core dynamically switches arithmetic laws based on the state's residue. Because the conditions $\{0\pmod 2, 1\pmod 4, 3\pmod 4\}$ form a <em>Covering System</em>, every possible integer triggers a valid transition.
                 </div>
             </div>
+
+            <p>By defining our transition function $T(n)$ using a Covering System, we algebraically prove that:</p>
+            <ol style="margin-left: 20px; color: #ccc;">
+                <li style="margin-bottom: 10px;"><strong>No state is Idle:</strong> Every integer has a defined "Next Step."</li>
+                <li><strong>Global Mixing:</strong> The trajectories are forced to jump between disparate modular domains, preventing localization.</li>
+            </ol>
         </section>
 
         <section style="margin-top: 60px;">
             <h2>3. Security as Physics: The Double-Lock</h2>
+            <p>This "Geometric" proof (Reachability) pairs with our "Thermodynamic" proof (Complexity) to form the core security argument of the Drift Architecture.</p>
+            
             <div class="metrics">
                 <div class="stat-card">
                     <div class="stat-val">Lock 1</div>
@@ -180,11 +211,13 @@
                 </div>
             </div>
         </section>
+
     </div>
 
     <footer>
         <div class="container">
             <p>&copy; 2025 Drift Systems Inc. <br> Systems Architect: Lukas Cain</p>
+            <p style="font-size: 0.8rem; color: #444;">Protected by 16 pending patents. <br> Validated for High-Assurance Environments.</p>
         </div>
     </footer>
 
