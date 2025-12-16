@@ -164,7 +164,7 @@
         <section class="hero">
             <span class="eyebrow">CONTESTED ENVIRONMENTS</span>
             <h1>Anti-Jam Liveness &<br>Clockless Sync</h1>
-            <p>Maintain mesh continuity in GPS-denied environments. Drift Systems replaces timestamp-based authentication with state-based ordering, rendering replay attacks and jamming mathematically distinguishable[cite: 59, 62].</p>
+            <p>Maintain mesh continuity in GPS-denied environments. Drift Systems replaces timestamp-based authentication with state-based ordering, rendering replay attacks and jamming mathematically distinguishable.</p>
             <br>
             <a href="#sim" class="btn">LAUNCH SIMULATOR</a>
         </section>
@@ -173,7 +173,7 @@
 
         <section id="sim">
             <h2>1. Tactical Mesh Simulator</h2>
-            <p>The simulation below demonstrates the three core invariants of the Drift Protocol: <strong>Freshness</strong> (Sequence Validity), <strong>Timing</strong> (Latency Budgets), and <strong>Quorum</strong> (Majority Rule)[cite: 116, 117].</p>
+            <p>The simulation below demonstrates the three core invariants of the Drift Protocol: <strong>Freshness</strong> (Sequence Validity), <strong>Timing</strong> (Latency Budgets), and <strong>Quorum</strong> (Majority Rule).</p>
 
             <div class="sim-container">
                 <div class="sim-header">
@@ -227,7 +227,7 @@
             </div>
             
             <p style="font-size: 0.95rem; border-left: 2px solid var(--border); padding-left: 15px; color: var(--muted2);">
-                <strong style="color:var(--text);">Instruction:</strong> Click "SEND CHALLENGE" to verify mesh health. Toggle "JAM" to simulate <strong>High-Power Broadband Barrage</strong> (forcing retries/latency)[cite: 63]. Click "REPLAY" to inject a valid-but-stale packet[cite: 62].
+                <strong style="color:var(--text);">Instruction:</strong> Click "SEND CHALLENGE" to verify mesh health. Toggle "JAM" to simulate <strong>High-Power Broadband Barrage</strong> (forcing retries/latency). Click "REPLAY" to inject a valid-but-stale packet.
                 <br><br>
                 <em>Note: Reactive/Follower jammers are defeated automatically by the hopping pattern and are not simulated here.</em>
             </p>
@@ -242,15 +242,15 @@
                 </div>
                 <div class="feature-card">
                     <h3>GPS-Denied Liveness</h3>
-                    <p>Drift replaces "Wall Clock Time" with "Sequence Time"[cite: 17]. Even if the local clock drifts by seconds, the arithmetic sequence ensures packet ordering. This allows for tight authentication windows without atomic clocks.</p>
+                    <p>Drift replaces "Wall Clock Time" with "Sequence Time". Even if the local clock drifts by seconds, the arithmetic sequence ensures packet ordering. This allows for tight authentication windows without atomic clocks.</p>
                 </div>
                 <div class="feature-card">
                     <h3>Anti-Replay Geometry</h3>
-                    <p>Because the state evolution $S_{t+1} = F(S_t)$ is non-invertible and path-dependent, a captured packet $P_t$ cannot be used to forge $P_{t+1}$. Replaying $P_t$ fails the freshness check immediately[cite: 16].</p>
+                    <p>Because the state evolution $S_{t+1} = F(S_t)$ is non-invertible and path-dependent, a captured packet $P_t$ cannot be used to forge $P_{t+1}$. Replaying $P_t$ fails the freshness check immediately.</p>
                 </div>
                 <div class="feature-card">
                     <h3>Quorum Recovery</h3>
-                    <p>If a node is jammed, the mesh degrades gracefully. As demonstrated in the sim, if 2/3 nodes respond, the mesh remains "Operational" (Amber Status) rather than failing completely[cite: 64].</p>
+                    <p>If a node is jammed, the mesh degrades gracefully. As demonstrated in the sim, if 2/3 nodes respond, the mesh remains "Operational" (Amber Status) rather than failing completely.</p>
                 </div>
             </div>
         </section>
