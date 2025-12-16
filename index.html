@@ -8,7 +8,6 @@
   <meta name="description" content="Cryptographic-grade non-linearity at linear-grade speed. Native digital chaos for IoT, Defense, and AI. TRL-6 prototype (Dec 2025)." />
   <meta name="theme-color" content="#000000" />
 
-  <!-- Social -->
   <meta property="og:title" content="Drift Systems | TRL-6 Prototype" />
   <meta property="og:description" content="Cryptographic-grade non-linearity at linear-grade speed. Native digital chaos for IoT, Defense, and AI." />
   <meta property="og:type" content="website" />
@@ -21,8 +20,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
 
-  <!-- Page-local layer: keeps your aesthetic but reduces inline styles.
-       Safe to keep even if style.css already defines some of these. -->
   <style>
     :root{
       --bg0:#000;
@@ -372,24 +369,23 @@
 
     <section class="section-black" aria-label="Manifesto and overview">
       <div class="container center">
-        <h2 style="margin:0 0 14px 0; font-size: 2rem;">DISCRETE ARITHMETIC DYNAMICS (DAD)</h2>
+        <h2 style="margin:0 0 14px 0; font-size: 2rem;">DISCRETE ARITHMETIC DYNAMICS</h2>
         <p class="lead" style="margin-top: 0;">We do not simulate chaos; we engineer it.</p>
         <p class="lead">
-          Drift Systems replaces inefficient analog randomness with <strong>Native Digital Chaos</strong>.
-          By utilizing the non-linear properties of 2-adic carry propagation and forced drift topologies,
-          we generate maximum entropy for the minimum movement of electrons.
+          Drift Systems replaces inefficient analog randomness with <strong>Deterministic Digital Chaos</strong>.
+          By utilizing the non-linear properties of arithmetic drift recurrence and forced topology constraints,
+          we generate maximum entropy without the thermal overhead of TRNGs.
         </p>
 
         <div class="code-block" aria-label="Core update rule">
-          S_next = Fold( (q*S + d) &gt;&gt; k )
+          S_next = Fold( (q*S + d) >> k )
         </div>
 
-        <!-- Deployment Verticals -->
         <div class="section-header" id="verticals">
           <h4>DEPLOYMENT VERTICALS</h4>
           <p class="lead" style="max-width: 760px;">
-            Four commercialization tracks. Each vertical links to an overview page and interactive demonstrations of the core invariants:
-            freshness, integrity, timing budget, quorum, and recovery.
+            Commercialization tracks spanning defense, industry, and aerospace.
+            Each vertical leverages the core invariants: freshness, timing budgets, and recovery.
           </p>
         </div>
 
@@ -404,14 +400,14 @@
               <h3 style="margin:0 0 10px 0;">Anti-Jam Radios &amp; Contested Comms</h3>
               <p>Time-bounded liveness and synchronization for LPI/LPD links under jamming, replay, and on-path tamper.</p>
               <ul class="bullets">
-                <li>Reject replay and stale responses with a fresh challenge window</li>
-                <li>Classify delay/jamming as TIMEOUT vs compromise behavior</li>
-                <li>Maintain mesh continuity with quorum + recovery policy</li>
+                <li>Reject replay/stale responses via fresh drift windows</li>
+                <li>Classify delay/jamming as TIMEOUT vs compromise</li>
+                <li>Maintain mesh continuity with quorum + recovery</li>
               </ul>
             </div>
             <div class="actions">
               <a href="docs/defense.html" class="btn-solid">[ OVERVIEW ]</a>
-              <a href="docs/defense.html#demos" class="btn-outline">[ DEMOS ]</a>
+              <a href="docs/defense.html#demos" class="btn-outline">[ SIMULATION ]</a>
             </div>
           </article>
 
@@ -425,9 +421,9 @@
               <h3 style="margin:0 0 10px 0;">Silicon Security &amp; Self-Test</h3>
               <p>Hardware-bound identity and low-overhead primitives suitable for integration into third-party silicon.</p>
               <ul class="bullets">
-                <li>On-chip identity / attestation primitives without heavy DSP load</li>
-                <li>High-stress test pattern generation under thermal constraints</li>
-                <li>Secure initialization for constrained accelerators and edge devices</li>
+                <li>On-chip identity / attestation without heavy DSP load</li>
+                <li>High-stress test pattern generation (Burn-in)</li>
+                <li>Secure initialization for constrained accelerators</li>
               </ul>
             </div>
             <div class="actions">
@@ -446,9 +442,9 @@
               <h3 style="margin:0 0 10px 0;">Rolling Codes for Labels &amp; Tokens</h3>
               <p>Scan-evolve authentication workflows for anti-counterfeit and chain-of-custody at scale.</p>
               <ul class="bullets">
-                <li>Cloned labels fail: stale state + replay attempts are rejected</li>
-                <li>Lightweight authentication for scanners and handhelds</li>
-                <li>Tracks custody without requiring a global ledger model</li>
+                <li>Cloned labels fail: stale state + replay attempts rejected</li>
+                <li>Lightweight authentication for scanners/handhelds</li>
+                <li>Tracks custody without global ledger overhead</li>
               </ul>
             </div>
             <div class="actions">
@@ -464,12 +460,12 @@
                 <span class="chip">INFRASTRUCTURE</span>
               </div>
               <div class="icon" aria-hidden="true">⚙</div>
-              <h3 style="margin:0 0 10px 0;">ICS / SCADA Integrity Under Delay</h3>
+              <h3 style="margin:0 0 10px 0;">ICS / SCADA Integrity</h3>
               <p>Anti-replay and liveness verification for long-lived systems where patching is rare and latency matters.</p>
               <ul class="bullets">
-                <li>Stale control actions rejected; timing budgets enforce safety</li>
+                <li>Stale control actions rejected via timing budgets</li>
                 <li>Retrofit-friendly protocol behavior for legacy endpoints</li>
-                <li>Degraded-mode operations with quorum decision policy</li>
+                <li>Degraded-mode operations with quorum policy</li>
               </ul>
             </div>
             <div class="actions">
@@ -477,14 +473,73 @@
               <a href="docs/infrastructure.html#demos" class="btn-outline">[ DEMOS ]</a>
             </div>
           </article>
+          
+          <article class="card" role="listitem">
+            <div>
+              <div class="top-chips">
+                <span class="chip chip-trl">EXTREME ENV</span>
+                <span class="chip">SPACE / LEO</span>
+              </div>
+              <div class="icon" aria-hidden="true">☄</div>
+              <h3 style="margin:0 0 10px 0;">Radiation-Hardened Entropy</h3>
+              <p>Fault-tolerant sequence generation for satellite constellations and deep-space telemetry.</p>
+              <ul class="bullets">
+                <li>Resistant to Single Event Upsets (SEUs) via self-healing logic</li>
+                <li>Operates in cryogenic/thermal extremes where analog TRNGs fail</li>
+                <li>Low-gate count minimizes shielding requirements</li>
+              </ul>
+            </div>
+            <div class="actions">
+              <a href="docs/space.html" class="btn-solid">[ OVERVIEW ]</a>
+            </div>
+          </article>
+
+          <article class="card" role="listitem">
+            <div>
+              <div class="top-chips">
+                <span class="chip chip-vol">CRITICAL SAFETY</span>
+                <span class="chip">MEDICAL / IMD</span>
+              </div>
+              <div class="icon" aria-hidden="true">♥</div>
+              <h3 style="margin:0 0 10px 0;">Bio-Telemetry &amp; Implants</h3>
+              <p>Secure command authentication for pacemakers, insulin pumps, and body-area networks.</p>
+              <ul class="bullets">
+                <li>Prevents "battery-drain" denial of service attacks</li>
+                <li>Cryptographic assurance within μW power budgets</li>
+                <li>Zero-trust binding for external programmer wands</li>
+              </ul>
+            </div>
+            <div class="actions">
+              <a href="docs/medical.html" class="btn-solid">[ OVERVIEW ]</a>
+            </div>
+          </article>
+          
+           <article class="card" role="listitem">
+            <div>
+              <div class="top-chips">
+                <span class="chip chip-ret">ULTRA LOW LATENCY</span>
+                <span class="chip">FINTECH</span>
+              </div>
+              <div class="icon" aria-hidden="true">⚡</div>
+              <h3 style="margin:0 0 10px 0;">HFT &amp; Trade Serialization</h3>
+              <p>Hardware-enforced ordering and anti-spoofing for high-frequency trading pipelines.</p>
+              <ul class="bullets">
+                <li>Nanosecond-precision trade serialization (prevents front-running)</li>
+                <li>Stateless exchange connectors without clock skew</li>
+                <li>Audit trails derived from deterministic state evolution</li>
+              </ul>
+            </div>
+            <div class="actions">
+              <a href="docs/fintech.html" class="btn-solid">[ OVERVIEW ]</a>
+            </div>
+          </article>
+
         </div>
 
-        <!-- Research -->
         <div class="section-header" id="research">
           <h4>RIGOROUS MATHEMATICAL FOUNDATIONS</h4>
           <p class="lead" style="max-width: 760px;">
-            Drift Systems is built on a new branch of number theory. We don't just pass statistical tests;
-            we provide algebraic proofs of stability, coverage, and complexity.
+            Drift Systems is built on <strong>Arithmetic Dynamics over &#8484;<sub>2</sub></strong>. We provide algebraic proofs of stability, coverage, and complexity without relying on unproven physical assumptions.
           </p>
         </div>
 
@@ -492,8 +547,8 @@
           <article class="card" role="listitem">
             <div>
               <div class="icon" aria-hidden="true">Σ</div>
-              <h5>FOUNDATIONS</h5>
-              <p>Discrete Arithmetic Dynamics &amp; The Collatz Proof</p>
+              <h5>ARITHMETIC DYNAMICS</h5>
+              <p>Applied 2-adic Dynamics &amp; Collatz-like Recurrence</p>
             </div>
             <a href="docs/convergence.html" target="_blank" rel="noopener" class="btn-outline">[ RESEARCH PDF ]</a>
           </article>
@@ -501,8 +556,8 @@
           <article class="card" role="listitem">
             <div>
               <div class="icon" aria-hidden="true">⚛</div>
-              <h5>THERMODYNAMICS</h5>
-              <p>The "Physics" of Digital Chaos: Entropy Barriers &amp; ABC</p>
+              <h5>ENTROPY BARRIERS</h5>
+              <p>Non-Parallelizable Time-Lock Puzzles &amp; Forward Security</p>
             </div>
             <a href="docs/Thermodynamics.html" target="_blank" rel="noopener" class="btn-outline">[ VIEW CASE STUDY ]</a>
           </article>
@@ -520,21 +575,18 @@
             <div>
               <div class="icon" aria-hidden="true">∞</div>
               <h5>COMPLEXITY</h5>
-              <p>Undecidable Entropy &amp; Turing Completeness</p>
+              <p>Path-Dependent State Evolution &amp; Cycle Maximization</p>
             </div>
             <a href="docs/complexity.html" target="_blank" rel="noopener" class="btn-outline">[ ANALYZE ARCHITECTURE ]</a>
           </article>
         </div>
 
-        <!-- Contact -->
         <div class="section-header" id="contact">
           <h4>CONTACT</h4>
           <p class="lead" style="max-width: 760px;">
-            For evaluation, licensing, or integration inquiries: add your preferred contact endpoint here
-            (email, calendar link, or intake form).
+            For evaluation, licensing, or integration inquiries.
           </p>
 
-          <!-- Replace the href with your actual contact method -->
           <div style="margin-top:18px;">
             <a class="btn primary" href="mailto:info@driftsystems.io">REQUEST EVALUATION</a>
           </div>
