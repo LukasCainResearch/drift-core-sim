@@ -198,6 +198,92 @@ h1 {
 .card h4 { color: var(--cyan); margin-bottom: 15px; }
 .card p { font-size: 0.95rem; color: var(--gray); }
 
+/* --- VERTICAL BADGE GRID (MATCHES FOUNDATIONS STYLE) --- */
+.badge-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin: 30px 0 10px 0;
+}
+.badge-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 18px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+.badge-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(68,136,255,0.6);
+}
+.badge-topline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.badge-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  font-weight: 700;
+  color: #888;
+  text-transform: uppercase;
+}
+.badge-chip {
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid #2a2a2a;
+  color: #fff;
+}
+.chip-blue { background: rgba(68,136,255,0.18); border-color: rgba(68,136,255,0.35); }
+.chip-cyan { background: rgba(0,255,204,0.12); border-color: rgba(0,255,204,0.28); }
+.chip-orange { background: rgba(255,170,0,0.12); border-color: rgba(255,170,0,0.30); }
+.chip-red { background: rgba(255,68,68,0.12); border-color: rgba(255,68,68,0.30); }
+
+.badge-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 8px 0;
+}
+.badge-desc {
+  margin: 0 0 14px 0;
+  color: var(--text-muted);
+  font-size: 1.02rem;
+  line-height: 1.5;
+}
+.badge-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.btn-sm {
+  display: inline-block;
+  padding: 10px 16px;
+  font-size: 0.9rem;
+  border-radius: 2px;
+  font-weight: 800;
+  text-decoration: none;
+  border: 1px solid var(--border-color);
+  color: #fff;
+  background: rgba(255,255,255,0.04);
+  transition: transform 0.2s;
+}
+.btn-sm:hover { transform: translateY(-2px); border-color: #fff; }
+.btn-sm-primary {
+  background: var(--accent-blue);
+  border-color: rgba(68,136,255,0.6);
+}
+.btn-sm-primary:hover { box-shadow: 0 4px 12px rgba(68,136,255,0.4); border-color: rgba(68,136,255,0.9); }
+
+@media (max-width: 768px) {
+  .badge-grid { grid-template-columns: 1fr; }
+}
+
 /* --- MANIFESTO --- */
 .manifesto {
     padding: 100px 0;
