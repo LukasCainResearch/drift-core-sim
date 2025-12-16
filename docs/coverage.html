@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drift Systems | State Coverage</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💠</text></svg>">
+    <style>
+        :root {
+            --bg-color: #050505;
+            --card-bg: #111111;
+            --text-main: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --accent-green: #00ffaa;
+            --accent-blue: #4488ff;
+            --border-color: #333;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 { font-weight: 700; letter-spacing: -0.02em; margin-bottom: 1rem; color: #fff; }
+        h1 { font-size: 3.5rem; line-height: 1.1; background: linear-gradient(90deg, #fff, var(--accent-green)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        h2 { font-size: 2rem; border-left: 4px solid var(--accent-green); padding-left: 1rem; margin-top: 3rem; }
+        p { margin-bottom: 1.5rem; font-size: 1.1rem; color: var(--text-muted); }
+        
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+        
+        nav { padding: 20px 0; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-weight: 800; font-size: 1.2rem; letter-spacing: 0.1em; color: #fff; text-decoration: none; }
+        .nav-links a { color: var(--text-muted); text-decoration: none; margin-left: 20px; font-size: 0.9rem; transition: color 0.2s; }
+
+        .hero { padding: 80px 0; text-align: center; }
+        .hero p { max-width: 600px; margin: 0 auto 2rem auto; font-size: 1.25rem; }
+        .btn { display: inline-block; padding: 12px 30px; background: var(--accent-green); color: #000; font-weight: 700; text-decoration: none; border-radius: 2px; }
+
+        .graph-container {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 40px 0;
+            text-align: center;
+        }
+        .caption { margin-top: 15px; font-size: 0.9rem; color: #888; border-left: 2px solid var(--accent-green); padding-left: 10px; text-align: left; }
+
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; margin: 60px 0; }
+        .stat-card { background: #1a1a1a; padding: 20px; flex: 1; border-radius: 4px; border-top: 2px solid var(--accent-green); }
+        .stat-val { font-size: 1.5rem; font-weight: 700; color: #fff; }
+
+        .diagram-box {
+            border: 1px dashed #444;
+            background: #0a0a0a;
+            padding: 30px;
+            color: #ccc;
+            font-family: monospace;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        footer { border-top: 1px solid var(--border-color); padding: 40px 0; margin-top: 80px; text-align: center; font-size: 0.9rem; color: #666; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <nav>
+            <a href="../index.html" class="logo">DRIFT SYSTEMS</a>
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="#coverage">Coverage</a>
+                <a href="#security">Anti-Backdoor</a>
+            </div>
+        </nav>
+
+        <section class="hero">
+            <span style="color: var(--accent-green); font-weight: 600; letter-spacing: 0.1em; font-size: 0.9rem;">GEOMETRIC SECURITY</span>
+            <h1>Provable<br>State Space Reachability</h1>
+            <p>We use Erdős Covering Systems to mathematically guarantee that our entropy engine is ergodic, ensuring no "Shadow States" or backdoors exist within the cycle.</p>
+            <br>
+            <a href="Erdos_Ergodicity.pdf" class="btn">VIEW THE PROOF</a>
+        </section>
+
+        <hr style="border: 0; border-top: 1px solid var(--border-color);">
+
+        <section id="coverage">
+            <h2>1. The Risk of Isolated Cycles</h2>
+            <div class="grid">
+                <div>
+                    <p>In finite-state machines, a common failure mode is the <strong>Short Cycle</strong>. If a generator falls into a small loop, it ceases to produce entropy. Even worse are <strong>Unreachable Regions</strong>—parts of the state space that can never be reached during normal operation, but could harbor malicious trigger states.</p>
+                    <div class="stat-card" style="border-top-color: var(--accent-blue);">
+                        <div class="stat-val">The Goal</div>
+                        <p style="font-size: 0.95rem; margin-top: 10px;">To prove <strong>Ergodicity</strong>: The guarantee that the trajectory $\tau$ will eventually visit any open set $U$ within the state space.</p>
+                    </div>
+                </div>
+                <div class="graph-container" style="margin: 0; background: #000;">
+                     <div style="text-align: center; padding: 40px; color: #333; font-size: 3rem;">&empty;</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="security">
+            <h2>2. Covering Systems as Control Logic</h2>
+            <p>We solved this using <strong>Erdős Covering Systems</strong>. By selecting a set of moduli that partition the integers, we ensure that every possible state triggers a deterministic transition.</p>
+            
+            <div class="graph-container">
+                <div class="diagram-box">
+                    <div style="text-align: left;">
+                        <span style="color: var(--accent-green);">Input State $S_t$</span><br>
+                        &nbsp;&nbsp;|<br>
+                        &nbsp;&nbsp;├── $S \equiv 0 \pmod 2 \to T_1$ (Covers 50%)<br>
+                        &nbsp;&nbsp;├── $S \equiv 1 \pmod 4 \to T_2$ (Covers 25%)<br>
+                        &nbsp;&nbsp;└── $S \equiv 3 \pmod 4 \to T_3$ (Covers 25%)<br>
+                        &nbsp;&nbsp;|<br>
+                        <span style="color: var(--accent-green);">Coverage: 100%</span>
+                    </div>
+                </div>
+
+                <div class="caption">
+                    <strong>Figure 1: The Modulus Controller.</strong> The set $\{0\pmod 2, 1\pmod 4, 3\pmod 4\}$ forms a Complete Covering System. This guarantees that no integer state is "Idle" or undefined.
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Drift Systems Inc. <br> Systems Architect: Lukas Cain</p>
+        </div>
+    </footer>
+</body>
+</html>
