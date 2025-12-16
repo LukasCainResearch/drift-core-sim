@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Drift Systems | Defense</title>
-  <meta name="description" content="Defense deployment vertical: time-bounded liveness and synchronization for contested communications. Anti-replay, delay classification, quorum recovery." />
+  <title>Drift Systems | Logistics</title>
+  <meta name="description" content="Logistics deployment vertical: time-bounded liveness, anti-replay, and quorum recovery for distributed operations and supply chains." />
   <link rel="stylesheet" href="../style.css">
 </head>
 
@@ -28,10 +28,10 @@
 
       <div class="docs-hero">
         <div class="docs-kicker">DEPLOYMENT VERTICAL</div>
-        <h1 class="docs-title">Defense</h1>
+        <h1 class="docs-title">Logistics</h1>
         <p class="docs-subtitle">
-          Time-bounded liveness and synchronization for contested communications: reject replay/tamper, degrade gracefully under delay/jamming,
-          and recover when trusted peers agree.
+          Time-bounded liveness and synchronization for distributed operations: reject replay/tamper, classify delay vs compromise,
+          and recover using quorum policy across fleets, hubs, and suppliers.
         </p>
 
         <div class="docs-cta">
@@ -53,15 +53,15 @@
           <div>
             <p class="docs-lead"><strong>What it solves:</strong></p>
             <ul class="docs-list">
-              <li>Replay and stale-message acceptance under stress</li>
-              <li>On-path tamper detection without heavy protocol overhead</li>
-              <li>Jamming-induced delay classification (TIMEOUT vs compromise)</li>
-              <li>Mesh continuity with quorum and recovery policy</li>
+              <li>Replay/stale updates across handoffs (scan events, EDI, telemetry)</li>
+              <li>Tamper detection for on-path message manipulation (status, routing, custody)</li>
+              <li>Delay classification: benign latency vs adversarial disruption</li>
+              <li>Quorum continuity for degraded modes and controlled recovery</li>
             </ul>
 
             <p class="docs-note">
-              <strong>How to read the demos:</strong> they demonstrate protocol invariants (freshness, timing, quorum) using tutorial math,
-              not the proprietary construction.
+              <strong>How to read the demos:</strong> they demonstrate invariants (freshness, timing, quorum) using tutorial math,
+              not proprietary construction or production keys.
             </p>
           </div>
 
@@ -69,7 +69,7 @@
             <div class="docs-panel-title">DECISION INVARIANTS</div>
             <p class="docs-caption">
               Fresh challenge + strict deadline window + expected/received comparison → PASS/FAIL/TIMEOUT.
-              Quorum policy controls degrade/recover behavior.
+              Policy maps these outcomes to isolate, degrade, reroute, or recover.
             </p>
           </aside>
         </div>
@@ -81,20 +81,46 @@
         <div class="badge-grid docs-left">
           <div class="badge-card">
             <div class="badge-topline">
-              <div class="badge-label">Anti-jam comms</div>
-              <div class="badge-chip chip-red">LPI/LPD</div>
+              <div class="badge-label">Chain of custody</div>
+              <div class="badge-chip chip-orange">Integrity</div>
             </div>
-            <div class="badge-title">Radio handshake under EW</div>
-            <p class="badge-desc">Fast liveness and anti-replay under interference; preserves mesh operation with quorum.</p>
+            <div class="badge-title">Custody handoff verification</div>
+            <p class="badge-desc">
+              Enforce freshness and timing at transfer points (dock, hub, carrier) to prevent replayed or altered custody events.
+            </p>
           </div>
 
           <div class="badge-card">
             <div class="badge-topline">
-              <div class="badge-label">Swarm</div>
+              <div class="badge-label">Fleet operations</div>
               <div class="badge-chip chip-cyan">Mesh</div>
             </div>
-            <div class="badge-title">Quorum continuity</div>
-            <p class="badge-desc">Operate through node compromise/partition; isolate failures and recover by policy.</p>
+            <div class="badge-title">Quorum continuity for dispatch</div>
+            <p class="badge-desc">
+              Maintain safe degraded operation under partition (connectivity loss, spoofed nodes) and recover by policy when peers agree.
+            </p>
+          </div>
+
+          <div class="badge-card">
+            <div class="badge-topline">
+              <div class="badge-label">Warehouse systems</div>
+              <div class="badge-chip chip-blue">Sync</div>
+            </div>
+            <div class="badge-title">Deadline-bounded synchronization</div>
+            <p class="badge-desc">
+              Distinguish late-but-valid events from suspect traffic; route TIMEOUT outcomes into resync workflows instead of silent acceptance.
+            </p>
+          </div>
+
+          <div class="badge-card">
+            <div class="badge-topline">
+              <div class="badge-label">Supplier network</div>
+              <div class="badge-chip chip-red">Resilience</div>
+            </div>
+            <div class="badge-title">Policy-based recovery</div>
+            <p class="badge-desc">
+              Use quorum thresholds and recovery rules to isolate compromised edges while keeping the network operational.
+            </p>
           </div>
         </div>
       </section>
@@ -106,11 +132,12 @@
         </p>
 
         <div class="docs-panel docs-left">
-          <div class="docs-panel-head">Demo A — Challenge/Response Mesh (Freshness + Timing + Quorum)</div>
+          <div class="docs-panel-head">Demo A — Logistics Walkthrough (Freshness + Timing + Quorum)</div>
           <p class="docs-caption">
-            Uses PASS/FAIL/TIMEOUT plus quorum-based recovery to demonstrate anti-tamper, anti-replay, and jamming delay.
+            Demonstrates PASS/FAIL/TIMEOUT outcomes plus quorum-based continuity and recovery. Tutorial abstraction only.
           </p>
-          <a class="btn" href="demo-mesh.html" target="_blank" rel="noopener">OPEN INTERACTIVE DEMO</a>
+          <a class="btn primary" href="demo-logistics.html" target="_blank" rel="noopener">OPEN INTERACTIVE DEMO</a>
+          <a class="btn secondary" href="https://codepen.io/Lukas_Cain/pen/RNazovX" target="_blank" rel="noopener">VIEW SOURCE (CODEPEN)</a>
         </div>
       </section>
     </div>
