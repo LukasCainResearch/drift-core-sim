@@ -1,137 +1,345 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Drift Systems | Infrastructure</title>
-  <meta name="description" content="Infrastructure deployment vertical: zero-trust event pipelines with freshness, replay defense, ordering gates, and quorum commit." />
-  <link rel="stylesheet" href="../style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drift Systems | Critical Infrastructure</title>
+    
+    <script>
+        window.MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']]
+          },
+          svg: {
+            fontCache: 'global'
+          }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💠</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+    <style>
+        :root {
+            /* BRAND PALETTE */
+            --bg0: #000;
+            --bg1: #050505;
+            --panel: rgba(0,20,40,0.5);
+            --border: rgba(0,255,255,0.2);
+            --border-strong: rgba(0,255,255,0.8);
+            --text: #fff;
+            --muted: #a0a0a0;
+            --muted2: #888;
+            --cyan: #00ffff;
+            --mint: #00ffaa;
+            --warn: #ffaa00;
+            --fail: #ff4444;
+            --mono: 'JetBrains Mono', ui-monospace, monospace;
+            --sans: 'Inter', system-ui, sans-serif;
+            --shadow: 0 0 20px rgba(0,255,255,0.10);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: var(--sans);
+            background-color: var(--bg0);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Typography */
+        h1, h2, h3 { font-weight: 700; letter-spacing: -0.02em; margin-bottom: 1rem; color: #fff; }
+        h1 { 
+            font-size: 3rem; line-height: 1.1; 
+            background: linear-gradient(90deg, #fff, var(--cyan)); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+        }
+        h2 { 
+            font-size: 1.8rem; border-left: 4px solid var(--cyan); 
+            padding-left: 1rem; margin-top: 3rem; 
+        }
+        p { margin-bottom: 1.5rem; font-size: 1.05rem; color: var(--muted); }
+        
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+        
+        /* Navigation */
+        nav { padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: var(--sans); font-weight: 900; font-size: 1.2rem; letter-spacing: 1px; color: #fff; text-decoration: none; }
+        .nav-links a { font-family: var(--mono); color: var(--muted); text-decoration: none; margin-left: 20px; font-size: 0.85rem; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--cyan); }
+
+        /* Hero */
+        .hero { padding: 80px 0; text-align: center; }
+        .hero .eyebrow { color: var(--cyan); font-family: var(--mono); font-weight: 700; letter-spacing: 1px; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        
+        .btn { 
+            display: inline-block; padding: 12px 30px; 
+            background: rgba(0, 255, 255, 0.1); color: var(--cyan); 
+            border: 1px solid var(--cyan); font-family: var(--mono); 
+            font-size: 0.85rem; font-weight: 700; text-decoration: none; 
+            transition: all 0.2s; 
+        }
+        .btn:hover { background: var(--cyan); color: #000; box-shadow: 0 0 20px rgba(0,255,255,0.4); }
+
+        /* --- SCADA SIMULATOR STYLES --- */
+        .sim-container {
+            background: var(--bg1); border: 1px solid var(--border); border-radius: 4px;
+            padding: 24px; margin: 40px 0; position: relative;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+        }
+
+        /* HMI Panel */
+        .hmi-panel {
+            background: #111; border: 2px solid #333; padding: 20px; border-radius: 6px;
+            position: relative;
+        }
+        .hmi-header {
+            font-family: var(--mono); font-weight: 700; color: #888; border-bottom: 1px solid #333;
+            margin-bottom: 20px; padding-bottom: 10px; display: flex; justify-content: space-between;
+        }
+        .valve-control {
+            display: flex; flex-direction: column; align-items: center; gap: 15px; margin-bottom: 30px;
+        }
+        .valve-status {
+            width: 80px; height: 80px; border-radius: 50%; border: 4px solid #333;
+            display: flex; align-items: center; justify-content: center;
+            font-family: var(--mono); font-weight: 900; color: #333; transition: all 0.3s;
+        }
+        .valve-status.open { border-color: var(--mint); color: var(--mint); box-shadow: 0 0 15px rgba(0,255,170,0.2); }
+        .valve-status.closed { border-color: var(--fail); color: var(--fail); }
+
+        .btn-control {
+            font-family: var(--mono); font-weight: 700; padding: 15px 30px; cursor: pointer;
+            border: 1px solid var(--cyan); background: rgba(0,255,255,0.1); color: var(--cyan);
+            transition: all 0.1s;
+        }
+        .btn-control:active { transform: translateY(2px); }
+        .btn-control:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* Network Visualizer */
+        .network-log {
+            font-family: var(--mono); font-size: 0.8rem; height: 300px; overflow-y: hidden;
+            border-left: 1px solid #333; padding-left: 20px; display: flex; flex-direction: column;
+        }
+        .packet {
+            background: #222; padding: 10px; margin-bottom: 10px; border-left: 3px solid #555;
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn { from { transform: translateX(20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        
+        .packet.valid { border-color: var(--mint); }
+        .packet.replay { border-color: var(--fail); opacity: 0.7; }
+        .packet.stale { border-color: var(--warn); }
+
+        .packet-header { display: flex; justify-content: space-between; color: #fff; font-weight: 700; margin-bottom: 4px; }
+        .packet-meta { color: #888; font-size: 0.7rem; }
+        .packet-status { font-weight: 900; float: right; }
+
+        .attacker-controls {
+            margin-top: 20px; border-top: 1px dashed #444; padding-top: 15px;
+            display: flex; gap: 10px; align-items: center;
+        }
+        .btn-attack {
+            background: #220000; border: 1px solid var(--fail); color: var(--fail);
+            font-family: var(--mono); padding: 8px 12px; cursor: pointer; font-size: 0.75rem;
+        }
+        .btn-attack:hover { background: var(--fail); color: #000; }
+
+        /* --- SECTION STYLES --- */
+        .grid-text { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin: 60px 0; }
+        .feature-card { border: 1px solid var(--border); padding: 24px; background: var(--panel); transition: transform 0.2s; }
+        .feature-card:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+        .feature-card h3 { color: var(--cyan); font-family: var(--mono); font-size: 1rem; margin-bottom: 12px; letter-spacing: 1px; }
+
+        footer { border-top: 1px solid rgba(255,255,255,0.1); padding: 40px 0; margin-top: 80px; text-align: center; font-size: 0.9rem; color: #666; }
+        
+        @media (max-width: 900px) {
+            .sim-container { grid-template-columns: 1fr; }
+            .grid-text { grid-template-columns: 1fr; }
+            .network-log { border-left: none; border-top: 1px solid #333; padding-left: 0; padding-top: 20px; }
+        }
+    </style>
 </head>
-
 <body>
-  <a class="skip-link" href="#main">Skip to content</a>
 
-  <header class="docs-header">
     <div class="container">
-      <div class="docs-topbar">
-        <a href="../index.html" class="docs-logo" aria-label="Drift Systems home">
-          DRIFT<span class="docs-logo-thin">SYSTEMS</span>
-        </a>
-
-        <nav class="docs-nav" aria-label="Docs navigation">
-          <a href="../index.html">Home</a>
-          <a href="#overview">Overview</a>
-          <a href="#instantiations">Instantiations</a>
-          <a href="#demos">Demos</a>
+        <nav>
+            <a href="../index.html" class="logo">DRIFT<span style="font-weight:300;">SYSTEMS</span></a>
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="#sim">SCADA Sim</a>
+                <a href="#specs">Specs</a>
+            </div>
         </nav>
-      </div>
 
-      <div class="docs-hero">
-        <div class="docs-kicker">DEPLOYMENT VERTICAL</div>
-        <h1 class="docs-title">Infrastructure</h1>
-        <p class="docs-subtitle">
-          Zero-trust event pipelines: reject stale or replayed work, enforce monotonic sequencing,
-          and commit only with quorum under delay, partition, or partial compromise.
-        </p>
+        <section class="hero">
+            <span class="eyebrow">CRITICAL INFRASTRUCTURE</span>
+            <h1>Retrofit Integrity for<br>Legacy SCADA</h1>
+            <p>Protect 30-year-old PLCs from modern replay attacks. Drift Systems acts as a zero-trust gateway, enforcing strict "Time-of-Action" windows and monotonic ordering without requiring a cloud connection.</p>
+            <br>
+            <a href="#sim" class="btn">LAUNCH HMI DEMO</a>
+        </section>
 
-        <div class="docs-cta">
-          <a class="btn primary" href="#demos">VIEW DEMOS</a>
-          <a class="btn secondary" href="../index.html#contact">CONTACT</a>
-        </div>
-      </div>
-    </div>
-  </header>
+        <hr style="border: 0; border-top: 1px solid var(--border-color);">
 
-  <main id="main" class="docs-main">
-    <div class="container">
-      <hr class="docs-rule" />
+        <section id="sim">
+            <h2>1. The "Stale Command" Defense</h2>
+            <p>Attackers often capture valid commands (e.g., "OPEN VALVE") and replay them later to cause damage. This simulator shows how Drift's <strong>Sliding State Window</strong> rejects these packets automatically.</p>
 
-      <section id="overview" class="docs-section">
-        <h2 class="docs-h2">1. Overview</h2>
+            <div class="sim-container">
+                
+                <div class="hmi-panel">
+                    <div class="hmi-header">
+                        <span>STATION: PUMP_04</span>
+                        <span>STATUS: <span id="sys-status" style="color:var(--mint);">ONLINE</span></span>
+                    </div>
+                    
+                    <div class="valve-control">
+                        <div class="valve-status closed" id="valve-indicator">CLSD</div>
+                        <button class="btn-control" id="btn-toggle" onclick="sendCmd()">TOGGLE VALVE</button>
+                    </div>
 
-        <div class="docs-grid">
-          <div>
-            <p class="docs-lead"><strong>What it solves:</strong></p>
-            <ul class="docs-list">
-              <li>Stale/late work acceptance in distributed job and event systems</li>
-              <li>Replay of valid work items (idempotency failures, duplicate commits)</li>
-              <li>Out-of-order delivery and sequence drift across producers</li>
-              <li>Partition and partial validator failure with safe degraded-mode policy</li>
-            </ul>
+                    <div style="font-size:0.8rem; color:#666; font-family:var(--mono);">
+                        <div>LAST SEQ: <span id="last-seq" style="color:var(--cyan);">1042</span></div>
+                        <div>WINDOW: <span style="color:var(--text);">±500ms</span></div>
+                    </div>
 
-            <p class="docs-note">
-              <strong>How to read the demos:</strong> they demonstrate invariants (freshness window, replay cache, monotonic ordering, quorum),
-              using tutorial math — not the proprietary construction.
+                    <div class="attacker-controls">
+                        <span style="color:var(--fail); font-family:var(--mono); font-size:0.8rem; font-weight:700;">MITM ATTACK:</span>
+                        <button class="btn-attack" onclick="replayLast()">REPLAY LAST CMD</button>
+                    </div>
+                </div>
+
+                <div class="network-log" id="net-log">
+                    <div style="color:#666; font-size:0.8rem; margin-bottom:10px;">> TRAFFIC MONITOR (DRIFT GATEWAY)</div>
+                    </div>
+
+            </div>
+
+            <p style="font-size: 0.95rem; border-left: 2px solid var(--border); padding-left: 15px; color: var(--muted2);">
+                <strong style="color:var(--text);">Instruction:</strong> Use "TOGGLE VALVE" to send valid commands. The Gateway accepts them because the state matches. Then, try "REPLAY LAST CMD". The Gateway rejects it because the Sequence/State has already moved forward (Replay) or the time window has closed (Stale).
             </p>
-          </div>
+        </section>
 
-          <div class="docs-stack" aria-label="Infrastructure visual panels">
-            <aside class="docs-panel" aria-label="Decision invariants">
-              <div class="docs-panel-title">DECISION INVARIANTS</div>
-              <p class="docs-caption">
-                Gate enforces: max-age freshness + deadline budget + replay cache + monotonic seq → ACCEPT/REJECT/TIMEOUT.
-                Validators enforce: 2-of-3 quorum → COMMIT or degraded-mode.
-              </p>
-            </aside>
-
-            <aside class="docs-panel" aria-label="Failure classification">
-              <div class="docs-panel-title">FAILURE CLASSIFICATION</div>
-              <p class="docs-caption">
-                REPLAY vs STALE vs ORDER vs TIMEOUT are treated differently. This enables policy-driven operations:
-                reject unsafe work, continue in degraded-mode, and recover once quorum returns.
-              </p>
-            </aside>
-          </div>
-        </div>
-      </section>
-
-      <section id="instantiations" class="docs-section">
-        <h2 class="docs-h2">2. Instantiations</h2>
-
-        <div class="badge-grid docs-left">
-          <div class="badge-card">
-            <div class="badge-topline">
-              <div class="badge-label">Event bus</div>
-              <div class="badge-chip chip-blue">PIPELINE</div>
+        <section id="specs">
+            <h2>2. Retrofit Capabilities</h2>
+            <div class="grid-text">
+                <div class="feature-card">
+                    <h3>Zero-Touch Retrofit</h3>
+                    <p>Drift Gateways sit transparently between the HMI (Operator) and the PLC (Machine). No code changes are required on the legacy endpoint. We wrap standard Modbus/DNP3 packets in a Drift Integrity Envelope.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Stale Action Rejection</h3>
+                    <p>In safety-critical systems, a command that arrives 2 seconds late can be dangerous. Drift enforces strict <strong>Timing Budgets</strong> based on state evolution speed, dropping commands that violate the safety window.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Degraded Mode Policy</h3>
+                    <p>If the network is partitioned, Drift enables "Quorum-Based" degrade policies. For example, a substation can switch to local-only control if it cannot verify the freshness of the central command stream.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Audit Trail</h3>
+                    <p>Every state transition is cryptographically linked to the previous one. This creates an immutable, gap-free log of every control action, mathematically proving who authorized the valve open and exactly when.</p>
+                </div>
             </div>
-            <div class="badge-title">Zero-trust message gating</div>
-            <p class="badge-desc">Reject stale/replayed events before they reach stateful consumers; preserve correctness under delay.</p>
-          </div>
+        </section>
 
-          <div class="badge-card">
-            <div class="badge-topline">
-              <div class="badge-label">Operations</div>
-              <div class="badge-chip chip-cyan">SRE</div>
-            </div>
-            <div class="badge-title">Quorum commit under partition</div>
-            <p class="badge-desc">Continue safely with policy-driven degraded-mode, then recover to full quorum when peers return.</p>
-          </div>
-        </div>
-      </section>
-
-      <section id="demos" class="docs-section">
-        <h2 class="docs-h2">3. Demos</h2>
-        <p class="docs-note">
-          Recommended: open demos in a new tab. Each demo includes on-screen narration and a “What this is / is not” note.
-        </p>
-
-        <div class="docs-panel docs-left">
-          <div class="docs-panel-head">Demo A — Infrastructure Event Gate (Freshness + Replay + Ordering + Quorum Commit)</div>
-          <p class="docs-caption">
-            Shows ACCEPT/REJECT:REPLAY/REJECT:STALE/REJECT:ORDER/TIMEOUT and a 2-of-3 commit policy under validator delay/partition.
-          </p>
-          <a class="btn primary" href="demo-infra.html" target="_blank" rel="noopener">OPEN INTERACTIVE DEMO</a>
-          <a class="btn secondary" href="https://codepen.io/Lukas_Cain/pen/EaKBaWK" target="_blank" rel="noopener">VIEW SOURCE (CODEPEN)</a>
-        </div>
-      </section>
     </div>
-  </main>
 
-  <footer>
-    <div class="container">
-      <p>&copy; 2025 Drift Systems Inc.<br><span class="tiny">Systems Architect: Lukas Cain</span></p>
-      <p class="tiny">Research protected by pending patents. Confidential &amp; proprietary.</p>
-    </div>
-  </footer>
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Drift Systems Inc. <br> Systems Architect: Lukas Cain</p>
+            <p style="font-size: 0.8rem; color: #444;">Export Controlled Technology (EAR99).</p>
+        </div>
+    </footer>
+
+    <script>
+    (function() {
+        const logEl = document.getElementById('net-log');
+        const valveInd = document.getElementById('valve-indicator');
+        const lastSeqEl = document.getElementById('last-seq');
+        const sysStatus = document.getElementById('sys-status');
+        
+        let seq = 1042;
+        let valveOpen = false;
+        let lastPacket = null; // Stores {seq, state} for replay
+
+        function addLog(type, title, meta, status) {
+            const pkt = document.createElement('div');
+            pkt.className = `packet ${type}`;
+            pkt.innerHTML = `
+                <div class="packet-header">
+                    <span>${title}</span>
+                    <span class="packet-status" style="color: ${getColor(type)}">${status}</span>
+                </div>
+                <div class="packet-meta">${meta}</div>
+            `;
+            logEl.insertBefore(pkt, logEl.children[1]); // Keep title
+            if(logEl.children.length > 6) logEl.lastChild.remove();
+        }
+
+        function getColor(type) {
+            if(type === 'valid') return 'var(--mint)';
+            if(type === 'replay') return 'var(--fail)';
+            return '#fff';
+        }
+
+        window.sendCmd = function() {
+            seq++;
+            lastSeqEl.innerText = seq;
+            
+            // Toggle Logic
+            valveOpen = !valveOpen;
+            updateValveUI();
+            
+            // Log
+            let action = valveOpen ? "OPEN" : "CLOSE";
+            addLog('valid', `CMD: ${action}`, `SEQ: ${seq} | T: +2ms (Fresh)`, "ACCEPTED");
+            
+            // Store for attack
+            lastPacket = { seq: seq, action: action, timestamp: Date.now() };
+        };
+
+        window.replayLast = function() {
+            if(!lastPacket) {
+                alert("No command to replay yet. Send a valid command first.");
+                return;
+            }
+            
+            // Simulate Attack
+            let delay = Date.now() - lastPacket.timestamp;
+            let meta = `SEQ: ${lastPacket.seq} | T: +${delay}ms (Stale)`;
+            
+            // It fails because SEQ < Current SEQ (Replay) AND/OR Time > Window
+            addLog('replay', `CMD: ${lastPacket.action} (REPLAY)`, meta, "REJECTED");
+            
+            // Visual feedback of rejection (shake valve?)
+            sysStatus.innerText = "ATTACK DETECTED";
+            sysStatus.style.color = "var(--fail)";
+            setTimeout(() => {
+                sysStatus.innerText = "ONLINE";
+                sysStatus.style.color = "var(--mint)";
+            }, 1000);
+        };
+        
+        function updateValveUI() {
+            if(valveOpen) {
+                valveInd.className = "valve-status open";
+                valveInd.innerText = "OPEN";
+            } else {
+                valveInd.className = "valve-status closed";
+                valveInd.innerText = "CLSD";
+            }
+        }
+
+    })();
+    </script>
 </body>
 </html>
