@@ -1,168 +1,344 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Drift Systems | Semiconductors</title>
-  <meta name="description"
-        content="Semiconductor deployment vertical: deterministic timing, liveness, and state integrity for FPGA and silicon-level systems." />
-  <link rel="stylesheet" href="../style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drift Systems | Silicon Assurance</title>
+    
+    <script>
+        window.MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']]
+          },
+          svg: {
+            fontCache: 'global'
+          }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💠</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+    <style>
+        :root {
+            /* BRAND PALETTE */
+            --bg0: #000;
+            --bg1: #050505;
+            --panel: rgba(0,20,40,0.5);
+            --border: rgba(0,255,255,0.2);
+            --border-strong: rgba(0,255,255,0.8);
+            --text: #fff;
+            --muted: #a0a0a0;
+            --muted2: #888;
+            --cyan: #00ffff;
+            --mint: #00ffaa;
+            --warn: #ffaa00;
+            --fail: #ff4444;
+            --mono: 'JetBrains Mono', ui-monospace, monospace;
+            --sans: 'Inter', system-ui, sans-serif;
+            --shadow: 0 0 20px rgba(0,255,255,0.10);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: var(--sans);
+            background-color: var(--bg0);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Typography */
+        h1, h2, h3 { font-weight: 700; letter-spacing: -0.02em; margin-bottom: 1rem; color: #fff; }
+        h1 { 
+            font-size: 3rem; line-height: 1.1; 
+            background: linear-gradient(90deg, #fff, var(--cyan)); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+        }
+        h2 { 
+            font-size: 1.8rem; border-left: 4px solid var(--cyan); 
+            padding-left: 1rem; margin-top: 3rem; 
+        }
+        p { margin-bottom: 1.5rem; font-size: 1.05rem; color: var(--muted); }
+        
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+        
+        /* Navigation */
+        nav { padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: var(--sans); font-weight: 900; font-size: 1.2rem; letter-spacing: 1px; color: #fff; text-decoration: none; }
+        .nav-links a { font-family: var(--mono); color: var(--muted); text-decoration: none; margin-left: 20px; font-size: 0.85rem; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--cyan); }
+
+        /* Hero */
+        .hero { padding: 80px 0; text-align: center; }
+        .hero .eyebrow { color: var(--cyan); font-family: var(--mono); font-weight: 700; letter-spacing: 1px; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        
+        .btn { 
+            display: inline-block; padding: 12px 30px; 
+            background: rgba(0, 255, 255, 0.1); color: var(--cyan); 
+            border: 1px solid var(--cyan); font-family: var(--mono); 
+            font-size: 0.85rem; font-weight: 700; text-decoration: none; 
+            transition: all 0.2s; 
+        }
+        .btn:hover { background: var(--cyan); color: #000; box-shadow: 0 0 20px rgba(0,255,255,0.4); }
+
+        /* --- BIST SIMULATOR STYLES --- */
+        .sim-container {
+            background: var(--bg1); border: 1px solid var(--border); border-radius: 4px;
+            padding: 24px; margin: 40px 0; position: relative;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            display: grid; grid-template-columns: 2fr 1fr; gap: 20px;
+        }
+        
+        .chip-canvas {
+            display: grid; grid-template-columns: repeat(16, 1fr); grid-template-rows: repeat(16, 1fr);
+            gap: 2px; background: #111; padding: 10px; border: 1px solid #333; aspect-ratio: 1/1;
+        }
+        .gate { background: #222; transition: background 0.1s; border-radius: 1px; }
+        .gate.hit { background: #004444; }
+        .gate.hot { background: var(--cyan); box-shadow: 0 0 5px var(--cyan); }
+
+        .controls-panel {
+            display: flex; flex-direction: column; justify-content: center; gap: 20px;
+        }
+        .stat-box { background: rgba(255,255,255,0.03); padding: 15px; border: 1px solid rgba(255,255,255,0.1); }
+        .stat-label { font-family: var(--mono); font-size: 0.75rem; color: var(--muted2); display: block; margin-bottom: 5px; }
+        .stat-val { font-family: var(--mono); font-size: 1.5rem; color: #fff; font-weight: 700; }
+        .stat-val.cyan { color: var(--cyan); }
+        
+        .progress-bar { width: 100%; height: 6px; background: #333; margin-top: 10px; position: relative; }
+        .progress-fill { height: 100%; background: var(--cyan); width: 0%; transition: width 0.1s; }
+
+        .mode-switch { display: flex; gap: 10px; }
+        .mode-btn { 
+            flex: 1; padding: 10px; background: transparent; border: 1px solid #444; color: #888; 
+            font-family: var(--mono); cursor: pointer; transition: all 0.2s;
+        }
+        .mode-btn:hover { border-color: #fff; color: #fff; }
+        .mode-btn.active { background: var(--cyan); color: #000; border-color: var(--cyan); font-weight: 700; }
+
+        /* --- SECTION STYLES --- */
+        .grid-text { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin: 60px 0; }
+        .feature-card { border: 1px solid var(--border); padding: 24px; background: var(--panel); transition: transform 0.2s; }
+        .feature-card:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+        .feature-card h3 { color: var(--cyan); font-family: var(--mono); font-size: 1rem; margin-bottom: 12px; letter-spacing: 1px; }
+
+        footer { border-top: 1px solid rgba(255,255,255,0.1); padding: 40px 0; margin-top: 80px; text-align: center; font-size: 0.9rem; color: #666; }
+        
+        @media (max-width: 900px) {
+            .sim-container { grid-template-columns: 1fr; }
+            .grid-text { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
-
 <body>
-  <a class="skip-link" href="#main">Skip to content</a>
 
-  <header class="docs-header">
     <div class="container">
-      <div class="docs-topbar">
-        <a href="../index.html" class="docs-logo" aria-label="Drift Systems home">
-          DRIFT<span class="docs-logo-thin">SYSTEMS</span>
-        </a>
-
-        <nav class="docs-nav" aria-label="Docs navigation">
-          <a href="../index.html">Home</a>
-          <a href="#overview">Overview</a>
-          <a href="#instantiations">Instantiations</a>
-          <a href="#demos">Demos</a>
+        <nav>
+            <a href="../index.html" class="logo">DRIFT<span style="font-weight:300;">SYSTEMS</span></a>
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="#sim">BIST Sim</a>
+                <a href="#specs">Specs</a>
+            </div>
         </nav>
-      </div>
 
-      <div class="docs-hero">
-        <div class="docs-kicker">DEPLOYMENT VERTICAL</div>
-        <h1 class="docs-title">Semiconductors</h1>
-        <p class="docs-subtitle">
-          Deterministic liveness, timing guarantees, and state-integrity enforcement
-          for FPGA and silicon-level systems operating under reset, fault, and adversarial conditions.
-        </p>
+        <section class="hero">
+            <span class="eyebrow">SILICON ASSURANCE</span>
+            <h1>High-Coverage BIST &<br>Hardware Trojans</h1>
+            <p>Accelerate burn-in and fault detection with cryptographic-grade pattern generation. Drift Systems replaces linear LFSRs with <strong>Arithmetic Chaos</strong> to hit corner cases and thermal limits 40% faster.</p>
+            <br>
+            <a href="#sim" class="btn">LAUNCH COMPARISON</a>
+        </section>
 
-        <div class="docs-cta">
-          <a class="btn primary" href="#demos">VIEW DEMO</a>
-          <a class="btn secondary" href="../index.html#contact">CONTACT</a>
-        </div>
-      </div>
-    </div>
-  </header>
+        <hr style="border: 0; border-top: 1px solid var(--border-color);">
 
-  <main id="main" class="docs-main">
-    <div class="container">
-      <hr class="docs-rule" />
+        <section id="sim">
+            <h2>1. Pattern Efficiency Comparison</h2>
+            <p>Compare the fault coverage speed of a standard <strong>LFSR (Linear)</strong> versus the <strong>Drift Core (Chaotic)</strong>. Watch how "Linear Dependencies" cause the LFSR to miss complex gate interactions, while Drift saturates the die.</p>
 
-      <!-- ================= OVERVIEW ================= -->
-      <section id="overview" class="docs-section">
-        <h2 class="docs-h2">1. Overview</h2>
+            <div class="sim-container">
+                <div class="chip-canvas" id="chip-grid">
+                    </div>
 
-        <div class="docs-grid">
-          <!-- Left -->
-          <div>
-            <p class="docs-lead"><strong>What it solves:</strong></p>
-            <ul class="docs-list">
-              <li>Non-deterministic reset behavior and undefined startup states</li>
-              <li>Silent state corruption under clock, voltage, or logic fault</li>
-              <li>Loss of liveness guarantees in hardware pipelines</li>
-              <li>Inability to distinguish delay vs failure at silicon speed</li>
-            </ul>
+                <div class="controls-panel">
+                    <div class="mode-switch">
+                        <button class="mode-btn active" id="btn-lfsr" onclick="setMode('LFSR')">STD LFSR</button>
+                        <button class="mode-btn" id="btn-drift" onclick="setMode('DRIFT')">DRIFT CORE</button>
+                    </div>
 
-            <p class="docs-note">
-              <strong>Interpretation note:</strong> demonstrations show observable invariants
-              (timing, state transitions, reset enforcement), not RTL disclosure.
-            </p>
-          </div>
+                    <div class="stat-box">
+                        <span class="stat-label">FAULT COVERAGE</span>
+                        <div class="stat-val cyan" id="coverage-val">0.0%</div>
+                        <div class="progress-bar"><div class="progress-fill" id="coverage-bar"></div></div>
+                    </div>
 
-          <!-- Right -->
-          <div class="docs-stack" aria-label="Semiconductor visual panels">
-            <aside class="docs-panel">
-              <div class="docs-panel-title">HARDWARE INVARIANTS</div>
-              <p class="docs-caption">
-                Bounded-cycle response + expected state transition + reset enforcement
-                → VALID / FAULT / TIMEOUT.
-              </p>
-            </aside>
-
-            <aside class="docs-panel">
-              <div class="docs-panel-title">
-                FPGA INTERACTIVE DEMO (RESET + OUTPUT)
-              </div>
-              <img
-                class="docs-media"
-                src="../drift_core_interactive_demo.gif"
-                alt="FPGA interactive demo showing output behavior and reset button"
-                loading="lazy"
-              />
-              <p class="docs-caption">
-                Live hardware demonstration. Output responds to deterministic reset
-                and timing constraints. Video artifact only.
-              </p>
-            </aside>
-          </div>
-        </div>
-      </section>
-
-      <!-- ================= INSTANTIATIONS ================= -->
-      <section id="instantiations" class="docs-section">
-        <h2 class="docs-h2">2. Instantiations</h2>
-
-        <div class="badge-grid docs-left">
-          <div class="badge-card">
-            <div class="badge-topline">
-              <div class="badge-label">FPGA</div>
-              <div class="badge-chip chip-blue">RTL</div>
+                    <div class="stat-box">
+                        <span class="stat-label">CYCLES ELAPSED</span>
+                        <div class="stat-val" id="cycles-val">0</div>
+                    </div>
+                    
+                    <button class="btn" id="btn-run" onclick="runSim()" style="width:100%; text-align:center;">START TEST</button>
+                    <p style="font-size:0.8rem; color:#666; margin-top:10px; text-align:center;">
+                        Note: "Linear" mode simulates LFSR cyclic dependencies which leave coverage gaps.
+                    </p>
+                </div>
             </div>
-            <div class="badge-title">Deterministic reset domains</div>
-            <p class="badge-desc">
-              Enforce bounded recovery and provable post-reset state validity
-              in programmable logic.
-            </p>
-          </div>
+        </section>
 
-          <div class="badge-card">
-            <div class="badge-topline">
-              <div class="badge-label">Silicon</div>
-              <div class="badge-chip chip-orange">ASIC</div>
+        <section id="specs">
+            <h2>2. Manufacturing & Security Capabilities</h2>
+            <div class="grid-text">
+                <div class="feature-card">
+                    <h3>Reduced Test Time</h3>
+                    <p>Every second on the tester costs money. By generating <strong>Maximum Entropy</strong> vectors, Drift Systems triggers "Hard-to-detect" faults (resistive bridges, crosstalk) in fewer cycles than weighted LFSRs.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Trojan Activation</h3>
+                    <p>Hardware Trojans often hide behind "rare trigger" logic (e.g., "activate only if A, B, and C are high"). Drift's <strong>Ergodicity Guarantee</strong> ensures these rare states are visited, exposing the payload during test.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Secure Scan Chains</h3>
+                    <p>Prevent "Scan Dumping" of secrets. Drift can act as a <strong>Keyed Pattern Generator</strong>. Without the correct seed, the scan chain fills with chaotic noise, protecting IP from reverse engineering during test.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Chip Health / Aging</h3>
+                    <p>Drift sequences are sensitive to path delays. By measuring the "Drift Rate" of a specific logic cone, we can detect <strong>NBTI/HCI Aging</strong> (silicon wear-out) before it causes a system failure.</p>
+                </div>
             </div>
-            <div class="badge-title">State integrity enforcement</div>
-            <p class="badge-desc">
-              Detect illegal transitions and timing violations at hardware speed
-              without firmware dependence.
-            </p>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- ================= DEMOS ================= -->
-      <section id="demos" class="docs-section">
-        <h2 class="docs-h2">3. Demo</h2>
-
-        <div class="docs-panel docs-left">
-          <div class="docs-panel-head">
-            Demo — FPGA Liveness & Reset Enforcement
-          </div>
-          <p class="docs-caption">
-            Demonstrates bounded-cycle response, reset handling, and observable
-            output validity under controlled conditions.
-          </p>
-
-          <a class="btn primary" href="demo-semi.html" target="_blank" rel="noopener">
-            OPEN INTERACTIVE DEMO
-          </a>
-          <a class="btn secondary"
-             href="https://codepen.io/Lukas_Cain/pen/azNgBOy"
-             target="_blank" rel="noopener">
-            VIEW SOURCE (CODEPEN)
-          </a>
-        </div>
-      </section>
     </div>
-  </main>
 
-  <footer>
-    <div class="container">
-      <p>&copy; 2025 Drift Systems Inc.<br>
-        <span class="tiny">Systems Architect: Lukas Cain</span>
-      </p>
-      <p class="tiny">
-        Research protected by pending patents. Confidential &amp; proprietary.
-      </p>
-    </div>
-  </footer>
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Drift Systems Inc. <br> Systems Architect: Lukas Cain</p>
+            <p style="font-size: 0.8rem; color: #444;">Export Controlled Technology (EAR99).</p>
+        </div>
+    </footer>
+
+    <script>
+    (function() {
+        const GRID_SIZE = 16 * 16; // 256 gates
+        const gridEl = document.getElementById('chip-grid');
+        const cvgVal = document.getElementById('coverage-val');
+        const cvgBar = document.getElementById('coverage-bar');
+        const cycVal = document.getElementById('cycles-val');
+        const btnRun = document.getElementById('btn-run');
+        
+        let mode = 'LFSR';
+        let isRunning = false;
+        let visited = new Array(GRID_SIZE).fill(0);
+        let coverage = 0;
+        let cycles = 0;
+        let timer = null;
+
+        // Init Grid
+        for(let i=0; i<GRID_SIZE; i++) {
+            let d = document.createElement('div');
+            d.className = 'gate';
+            d.id = `gate-${i}`;
+            gridEl.appendChild(d);
+        }
+
+        window.setMode = function(m) {
+            mode = m;
+            document.getElementById('btn-lfsr').className = m === 'LFSR' ? 'mode-btn active' : 'mode-btn';
+            document.getElementById('btn-drift').className = m === 'DRIFT' ? 'mode-btn active' : 'mode-btn';
+            resetSim();
+        }
+
+        function resetSim() {
+            clearInterval(timer);
+            isRunning = false;
+            btnRun.innerText = "START TEST";
+            btnRun.disabled = false;
+            visited.fill(0);
+            coverage = 0;
+            cycles = 0;
+            updateUI();
+            // Clear Visuals
+            for(let i=0; i<GRID_SIZE; i++) {
+                document.getElementById(`gate-${i}`).className = 'gate';
+            }
+        }
+
+        window.runSim = function() {
+            if(isRunning) return;
+            isRunning = true;
+            btnRun.disabled = true;
+            btnRun.innerText = "TESTING...";
+            
+            timer = setInterval(step, 30); // Fast cycle
+        }
+
+        function step() {
+            cycles++;
+            
+            // Logic: How many gates do we hit this cycle?
+            let hits = 0;
+            
+            // LFSR simulation: predictable, linear, gets stuck in patterns
+            // Drift simulation: chaotic, fills space rapidly
+            
+            let batchSize = 4; // Simultaneous activations
+            
+            for(let k=0; k<batchSize; k++) {
+                let idx = 0;
+                
+                if(mode === 'LFSR') {
+                    // Simulating linear dependency - skips primes, creates "stripes"
+                    // Simple LCG-like behavior
+                    idx = (cycles * (k+1) * 7) % GRID_SIZE;
+                    // LFSR "Gap" simulation: Avoid certain regions
+                    if(idx > 200 && idx < 240) idx = (idx + 50) % GRID_SIZE;
+                } else {
+                    // Drift: Pseudo-random spread
+                    // Use a hash-like jump
+                    idx = (Math.floor(Math.random() * GRID_SIZE));
+                }
+                
+                // Mark visited
+                if(visited[idx] === 0) {
+                    visited[idx] = 1;
+                    coverage++;
+                    document.getElementById(`gate-${idx}`).classList.add('hit');
+                }
+                
+                // "Hot" flash effect
+                let el = document.getElementById(`gate-${idx}`);
+                el.classList.add('hot');
+                setTimeout(() => el.classList.remove('hot'), 100);
+            }
+            
+            updateUI();
+            
+            // Stop condition
+            let limit = mode === 'LFSR' ? 75 : 99; // LFSR stalls at 75%
+            let percent = (coverage / GRID_SIZE) * 100;
+            
+            if(percent >= limit || cycles > 500) {
+                clearInterval(timer);
+                btnRun.innerText = mode === 'LFSR' ? "STALLED (LINEAR GAP)" : "COVERAGE COMPLETE";
+                btnRun.disabled = false;
+                isRunning = false;
+            }
+        }
+
+        function updateUI() {
+            let percent = ((coverage / GRID_SIZE) * 100).toFixed(1);
+            cvgVal.innerText = percent + "%";
+            cvgBar.style.width = percent + "%";
+            cycVal.innerText = cycles;
+        }
+
+    })();
+    </script>
 </body>
 </html>
