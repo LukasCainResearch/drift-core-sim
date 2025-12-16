@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Drift Systems | Defense</title>
-  <meta name="description" content="Defense deployment vertical: time-bounded liveness and synchronization for contested communications. Anti-replay, delay classification, quorum recovery." />
+  <title>Drift Systems | Semiconductors</title>
+  <meta name="description"
+        content="Semiconductor deployment vertical: deterministic timing, liveness, and state integrity for FPGA and silicon-level systems." />
   <link rel="stylesheet" href="../style.css">
 </head>
 
@@ -28,14 +29,14 @@
 
       <div class="docs-hero">
         <div class="docs-kicker">DEPLOYMENT VERTICAL</div>
-        <h1 class="docs-title">Defense</h1>
+        <h1 class="docs-title">Semiconductors</h1>
         <p class="docs-subtitle">
-          Time-bounded liveness and synchronization for contested communications: reject replay/tamper, degrade gracefully under delay/jamming,
-          and recover when trusted peers agree.
+          Deterministic liveness, timing guarantees, and state-integrity enforcement
+          for FPGA and silicon-level systems operating under reset, fault, and adversarial conditions.
         </p>
 
         <div class="docs-cta">
-          <a class="btn primary" href="#demos">VIEW DEMOS</a>
+          <a class="btn primary" href="#demos">VIEW DEMO</a>
           <a class="btn secondary" href="../index.html#contact">CONTACT</a>
         </div>
       </div>
@@ -46,71 +47,108 @@
     <div class="container">
       <hr class="docs-rule" />
 
+      <!-- ================= OVERVIEW ================= -->
       <section id="overview" class="docs-section">
         <h2 class="docs-h2">1. Overview</h2>
 
         <div class="docs-grid">
+          <!-- Left -->
           <div>
             <p class="docs-lead"><strong>What it solves:</strong></p>
             <ul class="docs-list">
-              <li>Replay and stale-message acceptance under stress</li>
-              <li>On-path tamper detection without heavy protocol overhead</li>
-              <li>Jamming-induced delay classification (TIMEOUT vs compromise)</li>
-              <li>Mesh continuity with quorum and recovery policy</li>
+              <li>Non-deterministic reset behavior and undefined startup states</li>
+              <li>Silent state corruption under clock, voltage, or logic fault</li>
+              <li>Loss of liveness guarantees in hardware pipelines</li>
+              <li>Inability to distinguish delay vs failure at silicon speed</li>
             </ul>
 
             <p class="docs-note">
-              <strong>How to read the demos:</strong> they demonstrate protocol invariants (freshness, timing, quorum) using tutorial math,
-              not the proprietary construction.
+              <strong>Interpretation note:</strong> demonstrations show observable invariants
+              (timing, state transitions, reset enforcement), not RTL disclosure.
             </p>
           </div>
 
-          <aside class="docs-panel" aria-label="Decision invariants">
-            <div class="docs-panel-title">DECISION INVARIANTS</div>
-            <p class="docs-caption">
-              Fresh challenge + strict deadline window + expected/received comparison → PASS/FAIL/TIMEOUT.
-              Quorum policy controls degrade/recover behavior.
-            </p>
-          </aside>
+          <!-- Right -->
+          <div class="docs-stack" aria-label="Semiconductor visual panels">
+            <aside class="docs-panel">
+              <div class="docs-panel-title">HARDWARE INVARIANTS</div>
+              <p class="docs-caption">
+                Bounded-cycle response + expected state transition + reset enforcement
+                → VALID / FAULT / TIMEOUT.
+              </p>
+            </aside>
+
+            <aside class="docs-panel">
+              <div class="docs-panel-title">
+                FPGA INTERACTIVE DEMO (RESET + OUTPUT)
+              </div>
+              <img
+                class="docs-media"
+                src="../drift_core_interactive_demo.gif"
+                alt="FPGA interactive demo showing output behavior and reset button"
+                loading="lazy"
+              />
+              <p class="docs-caption">
+                Live hardware demonstration. Output responds to deterministic reset
+                and timing constraints. Video artifact only.
+              </p>
+            </aside>
+          </div>
         </div>
       </section>
 
+      <!-- ================= INSTANTIATIONS ================= -->
       <section id="instantiations" class="docs-section">
         <h2 class="docs-h2">2. Instantiations</h2>
 
         <div class="badge-grid docs-left">
           <div class="badge-card">
             <div class="badge-topline">
-              <div class="badge-label">Anti-jam comms</div>
-              <div class="badge-chip chip-red">LPI/LPD</div>
+              <div class="badge-label">FPGA</div>
+              <div class="badge-chip chip-blue">RTL</div>
             </div>
-            <div class="badge-title">Radio handshake under EW</div>
-            <p class="badge-desc">Fast liveness and anti-replay under interference; preserves mesh operation with quorum.</p>
+            <div class="badge-title">Deterministic reset domains</div>
+            <p class="badge-desc">
+              Enforce bounded recovery and provable post-reset state validity
+              in programmable logic.
+            </p>
           </div>
 
           <div class="badge-card">
             <div class="badge-topline">
-              <div class="badge-label">Swarm</div>
-              <div class="badge-chip chip-cyan">Mesh</div>
+              <div class="badge-label">Silicon</div>
+              <div class="badge-chip chip-orange">ASIC</div>
             </div>
-            <div class="badge-title">Quorum continuity</div>
-            <p class="badge-desc">Operate through node compromise/partition; isolate failures and recover by policy.</p>
+            <div class="badge-title">State integrity enforcement</div>
+            <p class="badge-desc">
+              Detect illegal transitions and timing violations at hardware speed
+              without firmware dependence.
+            </p>
           </div>
         </div>
       </section>
 
+      <!-- ================= DEMOS ================= -->
       <section id="demos" class="docs-section">
-        <h2 class="docs-h2">3. Demos</h2>
-        <p class="docs-note">
-          Recommended: open demos in a new tab. Each demo includes on-screen narration and a “What this is / is not” note.
-        </p>
+        <h2 class="docs-h2">3. Demo</h2>
 
         <div class="docs-panel docs-left">
-          <div class="docs-panel-head">Demo A — Challenge/Response Mesh (Freshness + Timing + Quorum)</div>
+          <div class="docs-panel-head">
+            Demo — FPGA Liveness & Reset Enforcement
+          </div>
           <p class="docs-caption">
-            Uses PASS/FAIL/TIMEOUT plus quorum-based recovery to demonstrate anti-tamper, anti-replay, and jamming delay.
+            Demonstrates bounded-cycle response, reset handling, and observable
+            output validity under controlled conditions.
           </p>
-          <a class="btn" href="demo-mesh.html" target="_blank" rel="noopener">OPEN INTERACTIVE DEMO</a>
+
+          <a class="btn primary" href="demo-semi.html" target="_blank" rel="noopener">
+            OPEN INTERACTIVE DEMO
+          </a>
+          <a class="btn secondary"
+             href="https://codepen.io/Lukas_Cain/pen/azNgBOy"
+             target="_blank" rel="noopener">
+            VIEW SOURCE (CODEPEN)
+          </a>
         </div>
       </section>
     </div>
@@ -118,8 +156,12 @@
 
   <footer>
     <div class="container">
-      <p>&copy; 2025 Drift Systems Inc.<br><span class="tiny">Systems Architect: Lukas Cain</span></p>
-      <p class="tiny">Research protected by pending patents. Confidential &amp; proprietary.</p>
+      <p>&copy; 2025 Drift Systems Inc.<br>
+        <span class="tiny">Systems Architect: Lukas Cain</span>
+      </p>
+      <p class="tiny">
+        Research protected by pending patents. Confidential &amp; proprietary.
+      </p>
     </div>
   </footer>
 </body>
