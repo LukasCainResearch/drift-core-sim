@@ -46,49 +46,52 @@
     <div class="container">
       <hr class="docs-rule" />
 
-      <section id="overview" class="docs-section">
-        <h2 class="docs-h2">1. Overview</h2>
+     <section id="overview" class="docs-section">
+  <h2 class="docs-h2">1. Overview</h2>
 
-        <div class="docs-grid">
-          <div>
-            <p class="docs-lead"><strong>What it solves:</strong></p>
-            <ul class="docs-list">
-              <li>Replay and stale-message acceptance under stress</li>
-              <li>On-path tamper detection without heavy protocol overhead</li>
-              <li>Jamming-induced delay classification (TIMEOUT vs compromise)</li>
-              <li>Mesh continuity with quorum and recovery policy</li>
-            </ul>
+  <div class="docs-grid">
+    <!-- Left column -->
+    <div>
+      <p class="docs-lead"><strong>What it solves:</strong></p>
+      <ul class="docs-list">
+        <li>Replay and stale-message acceptance under stress</li>
+        <li>On-path tamper detection without heavy protocol overhead</li>
+        <li>Jamming-induced delay classification (TIMEOUT vs compromise)</li>
+        <li>Mesh continuity with quorum and recovery policy</li>
+      </ul>
 
-            <p class="docs-note">
-              <strong>How to read the demos:</strong> they demonstrate protocol invariants (freshness, timing, quorum) using tutorial math,
-              not the proprietary construction.
-            </p>
+      <p class="docs-note">
+        <strong>How to read the demos:</strong> they demonstrate protocol invariants (freshness, timing, quorum) using tutorial math,
+        not the proprietary construction.
+      </p>
+    </div>
 
-          <div class="docs-stack" aria-label="Defense visual panels">
-  <div class="docs-stack" aria-label="Defense visual panels">
-  <aside class="docs-panel" aria-label="Decision invariants">
-    <div class="docs-panel-title">DECISION INVARIANTS</div>
-    <p class="docs-caption">
-      Fresh challenge + strict deadline window + expected/received comparison → PASS/FAIL/TIMEOUT.
-      Quorum policy controls degrade/recover behavior.
-    </p>
-  </aside>
+    <!-- Right column -->
+    <div class="docs-stack" aria-label="Defense visual panels">
+      <aside class="docs-panel" aria-label="Decision invariants">
+        <div class="docs-panel-title">DECISION INVARIANTS</div>
+        <p class="docs-caption">
+          Fresh challenge + strict deadline window + expected/received comparison → PASS/FAIL/TIMEOUT.
+          Quorum policy controls degrade/recover behavior.
+        </p>
+      </aside>
 
-  <aside class="docs-panel" aria-label="DRIFT-HOP pattern generator">
-    <div class="docs-panel-title">DRIFT-HOP — LPI/LPD PATTERN GENERATOR (TRL-5)</div>
-    <img
-      class="docs-media"
-      src="../drift_hop.gif"
-      alt="DRIFT-HOP: LPI/LPD pattern generator (TRL-5) frequency channel plot"
-      loading="lazy"
-    />
-    <p class="docs-caption">
-      Illustrative visualization for hopping under contested conditions. Display artifact only; not a protocol disclosure.
-    </p>
-  </aside>
-</div>
-      </section>
-
+      <aside class="docs-panel" aria-label="DRIFT-HOP pattern generator">
+        <div class="docs-panel-title">DRIFT-HOP — LPI/LPD PATTERN GENERATOR (TRL-5)</div>
+        <img
+          class="docs-media"
+          src="../drift_hop.gif"
+          alt="DRIFT-HOP: LPI/LPD pattern generator (TRL-5) frequency channel plot"
+          loading="lazy"
+        />
+        <p class="docs-caption">
+          Illustrative visualization for hopping under contested conditions. Display artifact only; not a protocol disclosure.
+        </p>
+      </aside>
+    </div>
+  </div>
+</section>
+      
       <section id="instantiations" class="docs-section">
         <h2 class="docs-h2">2. Instantiations</h2>
 
