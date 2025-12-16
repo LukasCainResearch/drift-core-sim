@@ -635,3 +635,49 @@ a:hover { opacity: 0.85; }
 @media (max-width: 900px){
   .docs-grid{ grid-template-columns: 1fr; }
 }
+
+.kicker{
+  display:inline-block;
+  font-family:'JetBrains Mono', monospace;
+  letter-spacing:0.12em;
+  font-weight:800;
+  font-size:0.85rem;
+  color: var(--cyan);
+  opacity: 0.9;
+}
+
+.lead{ color: var(--gray); font-size: 1.05rem; line-height: 1.6; }
+
+.callout{
+  margin: 18px auto 0 auto;
+  max-width: 900px;
+  padding: 14px 16px;
+  border: 1px solid rgba(0,255,255,0.22);
+  background: rgba(0,255,255,0.06);
+  border-radius: 10px;
+  color: #cfd8e3;
+  font-size: 0.95rem;
+}
+
+.demoEmbed{
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(0,0,0,0.25);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 14px 40px rgba(0,0,0,0.45);
+  margin: 0 auto 10px auto;
+}
+
+.demoEmbed iframe{
+  width: 100%;
+  height: min(82vh, 820px);
+  border: 0;
+  display: block;
+}
+
+.demoBullets{
+  color: var(--gray);
+  font-size: 1.02rem;
+  line-height: 1.6;
+  margin-left: 18px;
+}
