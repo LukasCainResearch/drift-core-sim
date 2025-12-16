@@ -63,29 +63,24 @@
               <strong>How to read the demos:</strong> they demonstrate protocol invariants (freshness, timing, quorum) using tutorial math,
               not the proprietary construction.
             </p>
-          </div>
 
-          <aside class="docs-panel" aria-label="Decision invariants">
-            <div class="docs-panel-title">DECISION INVARIANTS</div>
-            <p class="docs-caption">
-              Fresh challenge + strict deadline window + expected/received comparison → PASS/FAIL/TIMEOUT.
-              Quorum policy controls degrade/recover behavior.
-            </p>
-          </aside>
-          <aside class="docs-panel" aria-label="DRIFT-HOP pattern generator">
-  <div class="docs-panel-title">DRIFT-HOP — LPI/LPD PATTERN GENERATOR</div>
-  <img
-    class="docs-media"
-    src="../drift_hop.gif"
-    alt="DRIFT-HOP: LPI/LPD pattern generator (TRL-5) frequency channel plot"
-    loading="lazy"
-  />
-  <p class="docs-caption">
-    Illustrative visualization: Drift-driven hopping pattern under timing constraints. This is a display artifact, not a protocol disclosure.
-  </p>
-</aside>
-        </div>
-        
+          <div class="docs-stack" aria-label="Defense visual panels">
+  <aside class="docs-panel" aria-label="Decision invariants">
+    <div class="docs-panel-title">DECISION INVARIANTS</div>
+    <p class="docs-caption">
+      Fresh challenge + strict deadline window + expected/received comparison → PASS/FAIL/TIMEOUT.
+      Quorum policy controls degrade/recover behavior.
+    </p>
+  </aside>
+
+  <aside class="docs-panel" aria-label="DRIFT-HOP pattern generator">
+    <div class="docs-panel-title">DRIFT-HOP — LPI/LPD PATTERN GENERATOR</div>
+    <img class="docs-media" src="../drift_hop.gif" alt="DRIFT-HOP: LPI/LPD pattern generator (TRL-5) frequency channel plot" loading="lazy" />
+    <p class="docs-caption">
+      Illustrative visualization: Drift-driven hopping pattern under timing constraints. This is a display artifact, not a protocol disclosure.
+    </p>
+  </aside>
+</div>
       </section>
 
       <section id="instantiations" class="docs-section">
