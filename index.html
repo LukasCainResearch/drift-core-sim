@@ -7,17 +7,16 @@
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💠</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    
+
     <style>
-        /* --- CSS Layout Fixes --- */
-        
+        /* --- CSS Layout Fixes (Existing) --- */
         .research-header {
             margin-top: 80px;
             margin-bottom: 40px;
             border-top: 1px solid rgba(255,255,255,0.1);
             padding-top: 40px;
         }
-        
+
         .research-header h4 {
             color: #00ffff;
             letter-spacing: 2px;
@@ -25,15 +24,14 @@
             font-family: 'JetBrains Mono', monospace;
         }
 
-        /* FIXED: Grid Layout - Removed strict row sizing */
         .research-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr; /* 2 Columns */
-            gap: 60px; /* Increased gap to prevent touching */
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
             margin-top: 4rem;
             margin-bottom: 6rem;
-            align-items: stretch; /* Cards in same row stretch to match height */
-            height: auto; 
+            align-items: stretch;
+            height: auto;
         }
 
         .research-card {
@@ -42,15 +40,14 @@
             padding: 2.5rem 2rem;
             text-align: center;
             transition: all 0.3s ease;
-            
-            /* Flexbox ensures button stays at bottom */
+
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            
-            height: 100%; 
+
+            height: 100%;
             position: relative;
-            min-height: 350px; /* Safety minimum height */
+            min-height: 350px;
         }
 
         .research-card:hover {
@@ -91,7 +88,7 @@
             text-decoration: none;
             display: inline-block;
             transition: all 0.3s;
-            margin-top: auto; /* Pushes button to bottom */
+            margin-top: auto;
         }
 
         .btn-research:hover {
@@ -99,10 +96,152 @@
             color: #000;
             box-shadow: 0 0 15px #00ffff;
         }
-        
-        /* Mobile adjustment: Stack to 1 column */
+
+        /* --- NEW: VERTICALS GRID (Matches research-card look/feel) --- */
+        .verticals-header {
+            margin-top: 80px;
+            margin-bottom: 40px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 40px;
+        }
+
+        .verticals-header h4 {
+            color: #00ffff;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .verticals-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            margin-top: 4rem;
+            margin-bottom: 2rem;
+            align-items: stretch;
+            height: auto;
+        }
+
+        .vertical-card {
+            background: rgba(0, 20, 40, 0.5);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            padding: 2.5rem 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+
+            height: 100%;
+            position: relative;
+            min-height: 350px;
+        }
+
+        .vertical-card:hover {
+            border-color: rgba(0, 255, 255, 0.8);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+            transform: translateY(-5px);
+            z-index: 10;
+        }
+
+        .vertical-top {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .vertical-chip {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            letter-spacing: 1px;
+            padding: 6px 10px;
+            border: 1px solid rgba(0,255,255,0.25);
+            color: #00ffff;
+            background: rgba(0,255,255,0.06);
+        }
+
+        .chip-trl { border-color: rgba(0,255,170,0.35); color: #00ffaa; background: rgba(0,255,170,0.08); }
+        .chip-ip { border-color: rgba(68,136,255,0.45); color: #66a3ff; background: rgba(68,136,255,0.10); }
+        .chip-vol { border-color: rgba(255,170,0,0.40); color: #ffaa00; background: rgba(255,170,0,0.10); }
+        .chip-ret { border-color: rgba(0,255,255,0.30); color: #00ffff; background: rgba(0,255,255,0.06); }
+
+        .vertical-icon {
+            font-size: 2.5rem;
+            color: #00ffff;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
+        }
+
+        .vertical-card h5 {
+            color: #fff;
+            margin-bottom: 0.8rem;
+            letter-spacing: 1px;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .vertical-card p {
+            color: #a0a0a0;
+            font-size: 0.95rem;
+            margin-bottom: 1.2rem;
+            line-height: 1.5;
+        }
+
+        .vertical-bullets {
+            text-align: left;
+            max-width: 520px;
+            margin: 0 auto 1.4rem auto;
+            padding-left: 18px;
+            color: #a0a0a0;
+            font-size: 0.92rem;
+            line-height: 1.5;
+        }
+
+        .vertical-actions {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: auto;
+        }
+
+        .btn-vertical {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: #00ffff;
+            border: 1px solid #00ffff;
+            padding: 12px 18px;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+
+        .btn-vertical:hover {
+            background: #00ffff;
+            color: #000;
+            box-shadow: 0 0 15px #00ffff;
+        }
+
+        .btn-vertical-solid {
+            background: #00ffff;
+            color: #000;
+            border-color: #00ffff;
+        }
+
+        .btn-vertical-solid:hover {
+            background: #00ffaa;
+            border-color: #00ffaa;
+            box-shadow: 0 0 15px #00ffaa;
+        }
+
+        /* Mobile adjustment */
         @media (max-width: 900px) {
             .research-grid { grid-template-columns: 1fr; gap: 40px; }
+            .verticals-grid { grid-template-columns: 1fr; gap: 40px; }
         }
     </style>
 </head>
@@ -116,12 +255,11 @@
 
             <div class="hero-content">
                 <div class="status-badge" style="border: 1px solid #00ffaa; color: #00ffaa; padding: 5px 10px; display:inline-block; margin-bottom:20px; font-size: 0.8rem; letter-spacing: 1px;">TRL-6 PROTOTYPE (DEC 2025)</div>
-                
+
                 <h1 style="font-size: 3rem; margin-bottom: 1rem; color:#fff;">THE STANDARD FOR <br>LOW-POWER ENTROPY.</h1>
                 <p class="subtitle" style="color: #ccc; font-size: 1.2rem; margin-bottom: 2rem;">Cryptographic-grade non-linearity at linear-grade speed. <br>Native silicon architecture for IoT, Defense, and AI.</p>
-                
+
                 <div class="cta-group">
-                    <!-- UPDATED: Links to docs folder and renamed buttons -->
                     <a href="docs/Drift_Primer.pdf" target="_blank" class="btn primary" style="background: #00ffff; color:#000; padding: 10px 20px; text-decoration:none; font-weight:bold; margin-right: 10px;">Drift Tech Primer</a>
                     <a href="docs/Drift_Architecture_Whitepaper.pdf" target="_blank" class="btn secondary" style="border: 1px solid #fff; color:#fff; padding: 10px 20px; text-decoration:none;">White Paper</a>
                 </div>
@@ -161,16 +299,118 @@
                 S_next = Fold( (q*S + d) >> k )
             </div>
 
+            <!-- ===================== -->
+            <!-- NEW: DEPLOYMENT VERTICALS -->
+            <!-- ===================== -->
+            <div class="verticals-header" id="verticals">
+                <h4>DEPLOYMENT VERTICALS</h4>
+                <p style="max-width: 760px; margin: 0 auto; color: #a0a0a0;">
+                    Four commercialization tracks. Each vertical links to an overview page and interactive demonstrations of the core invariants:
+                    freshness, integrity, timing budget, quorum, and recovery.
+                </p>
+            </div>
+
+            <div class="verticals-grid">
+
+                <div class="vertical-card">
+                    <div>
+                        <div class="vertical-top">
+                            <div class="vertical-chip chip-trl">TRL-5 VALIDATED</div>
+                            <div class="vertical-chip">DEFENSE</div>
+                        </div>
+                        <div class="vertical-icon">🛰</div>
+                        <h5>Anti-Jam Radios & Contested Comms</h5>
+                        <p>Time-bounded liveness and synchronization for LPI/LPD links under jamming, replay, and on-path tamper.</p>
+                        <ul class="vertical-bullets">
+                            <li>Reject replay and stale responses with a fresh challenge window</li>
+                            <li>Classify delay/jamming as TIMEOUT vs compromise behavior</li>
+                            <li>Maintain mesh continuity with quorum + recovery policy</li>
+                        </ul>
+                    </div>
+                    <div class="vertical-actions">
+                        <a href="docs/defense.html" class="btn-vertical btn-vertical-solid">[ OVERVIEW ]</a>
+                        <a href="docs/defense.html#demos" class="btn-vertical">[ DEMOS ]</a>
+                    </div>
+                </div>
+
+                <div class="vertical-card">
+                    <div>
+                        <div class="vertical-top">
+                            <div class="vertical-chip chip-ip">IP LICENSING</div>
+                            <div class="vertical-chip">SEMICONDUCTOR</div>
+                        </div>
+                        <div class="vertical-icon">▣</div>
+                        <h5>Silicon Security & Self-Test</h5>
+                        <p>Hardware-bound identity and low-overhead primitives suitable for integration into third-party silicon.</p>
+                        <ul class="vertical-bullets">
+                            <li>On-chip identity / attestation primitives without heavy DSP load</li>
+                            <li>High-stress test pattern generation under thermal constraints</li>
+                            <li>Secure initialization for constrained accelerators and edge devices</li>
+                        </ul>
+                    </div>
+                    <div class="vertical-actions">
+                        <a href="docs/semiconductor.html" class="btn-vertical btn-vertical-solid">[ OVERVIEW ]</a>
+                        <a href="docs/semiconductor.html#demos" class="btn-vertical">[ DEMOS ]</a>
+                    </div>
+                </div>
+
+                <div class="vertical-card">
+                    <div>
+                        <div class="vertical-top">
+                            <div class="vertical-chip chip-vol">HIGH VOLUME</div>
+                            <div class="vertical-chip">LOGISTICS</div>
+                        </div>
+                        <div class="vertical-icon">⟲</div>
+                        <h5>Rolling Codes for Labels & Tokens</h5>
+                        <p>Scan-evolve authentication workflows for anti-counterfeit and chain-of-custody at scale.</p>
+                        <ul class="vertical-bullets">
+                            <li>Cloned labels fail: stale state + replay attempts are rejected</li>
+                            <li>Lightweight authentication for scanners and handhelds</li>
+                            <li>Tracks custody without requiring a global ledger model</li>
+                        </ul>
+                    </div>
+                    <div class="vertical-actions">
+                        <a href="docs/logistics.html" class="btn-vertical btn-vertical-solid">[ OVERVIEW ]</a>
+                        <a href="docs/logistics.html#demos" class="btn-vertical">[ DEMOS ]</a>
+                    </div>
+                </div>
+
+                <div class="vertical-card">
+                    <div>
+                        <div class="vertical-top">
+                            <div class="vertical-chip chip-ret">RETROFIT</div>
+                            <div class="vertical-chip">INFRASTRUCTURE</div>
+                        </div>
+                        <div class="vertical-icon">⚙</div>
+                        <h5>ICS / SCADA Integrity Under Delay</h5>
+                        <p>Anti-replay and liveness verification for long-lived systems where patching is rare and latency matters.</p>
+                        <ul class="vertical-bullets">
+                            <li>Stale control actions rejected; timing budgets enforce safety</li>
+                            <li>Retrofit-friendly protocol behavior for legacy endpoints</li>
+                            <li>Degraded-mode operations with quorum decision policy</li>
+                        </ul>
+                    </div>
+                    <div class="vertical-actions">
+                        <a href="docs/infrastructure.html" class="btn-vertical btn-vertical-solid">[ OVERVIEW ]</a>
+                        <a href="docs/infrastructure.html#demos" class="btn-vertical">[ DEMOS ]</a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ===================== -->
+            <!-- EXISTING: RIGOROUS MATHEMATICAL FOUNDATIONS -->
+            <!-- ===================== -->
             <div class="research-header">
                 <h4>RIGOROUS MATHEMATICAL FOUNDATIONS</h4>
                 <p style="max-width: 700px; margin: 0 auto; color: #a0a0a0;">Drift Systems is built on a new branch of number theory. We don't just pass statistical tests; we provide algebraic proofs of stability, coverage, and complexity.</p>
             </div>
 
             <div class="research-grid">
-                
+
                 <div class="research-card">
                     <div>
-                        <div class="research-icon">Σ</div> 
+                        <div class="research-icon">Σ</div>
                         <h5>FOUNDATIONS</h5>
                         <p>Discrete Arithmetic Dynamics & The Collatz Proof</p>
                     </div>
@@ -179,7 +419,7 @@
 
                 <div class="research-card">
                     <div>
-                        <div class="research-icon">⚛</div> 
+                        <div class="research-icon">⚛</div>
                         <h5>THERMODYNAMICS</h5>
                         <p>The "Physics" of Digital Chaos: Entropy Barriers & ABC</p>
                     </div>
@@ -188,7 +428,7 @@
 
                 <div class="research-card">
                     <div>
-                        <div class="research-icon">▤</div> 
+                        <div class="research-icon">▤</div>
                         <h5>ERGODICITY</h5>
                         <p>Provable State Coverage via Erdős Covering Systems</p>
                     </div>
@@ -197,7 +437,7 @@
 
                 <div class="research-card">
                     <div>
-                        <div class="research-icon">∞</div> 
+                        <div class="research-icon">∞</div>
                         <h5>COMPLEXITY</h5>
                         <p>Undecidable Entropy & Turing Completeness</p>
                     </div>
