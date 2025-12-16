@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Drift Systems | Defense</title>
-  <meta name="description" content="Defense deployment vertical: time-bounded liveness and synchronization for contested communications. Anti-replay, delay classification, quorum recovery." />
+  <title>Drift Systems | Infrastructure</title>
+  <meta name="description" content="Infrastructure deployment vertical: zero-trust event pipelines with freshness, replay defense, ordering gates, and quorum commit." />
   <link rel="stylesheet" href="../style.css">
 </head>
 
@@ -28,10 +28,10 @@
 
       <div class="docs-hero">
         <div class="docs-kicker">DEPLOYMENT VERTICAL</div>
-        <h1 class="docs-title">Defense</h1>
+        <h1 class="docs-title">Infrastructure</h1>
         <p class="docs-subtitle">
-          Time-bounded liveness and synchronization for contested communications: reject replay/tamper, degrade gracefully under delay/jamming,
-          and recover when trusted peers agree.
+          Zero-trust event pipelines: reject stale or replayed work, enforce monotonic sequencing,
+          and commit only with quorum under delay, partition, or partial compromise.
         </p>
 
         <div class="docs-cta">
@@ -53,25 +53,35 @@
           <div>
             <p class="docs-lead"><strong>What it solves:</strong></p>
             <ul class="docs-list">
-              <li>Replay and stale-message acceptance under stress</li>
-              <li>On-path tamper detection without heavy protocol overhead</li>
-              <li>Jamming-induced delay classification (TIMEOUT vs compromise)</li>
-              <li>Mesh continuity with quorum and recovery policy</li>
+              <li>Stale/late work acceptance in distributed job and event systems</li>
+              <li>Replay of valid work items (idempotency failures, duplicate commits)</li>
+              <li>Out-of-order delivery and sequence drift across producers</li>
+              <li>Partition and partial validator failure with safe degraded-mode policy</li>
             </ul>
 
             <p class="docs-note">
-              <strong>How to read the demos:</strong> they demonstrate protocol invariants (freshness, timing, quorum) using tutorial math,
-              not the proprietary construction.
+              <strong>How to read the demos:</strong> they demonstrate invariants (freshness window, replay cache, monotonic ordering, quorum),
+              using tutorial math — not the proprietary construction.
             </p>
           </div>
 
-          <aside class="docs-panel" aria-label="Decision invariants">
-            <div class="docs-panel-title">DECISION INVARIANTS</div>
-            <p class="docs-caption">
-              Fresh challenge + strict deadline window + expected/received comparison → PASS/FAIL/TIMEOUT.
-              Quorum policy controls degrade/recover behavior.
-            </p>
-          </aside>
+          <div class="docs-stack" aria-label="Infrastructure visual panels">
+            <aside class="docs-panel" aria-label="Decision invariants">
+              <div class="docs-panel-title">DECISION INVARIANTS</div>
+              <p class="docs-caption">
+                Gate enforces: max-age freshness + deadline budget + replay cache + monotonic seq → ACCEPT/REJECT/TIMEOUT.
+                Validators enforce: 2-of-3 quorum → COMMIT or degraded-mode.
+              </p>
+            </aside>
+
+            <aside class="docs-panel" aria-label="Failure classification">
+              <div class="docs-panel-title">FAILURE CLASSIFICATION</div>
+              <p class="docs-caption">
+                REPLAY vs STALE vs ORDER vs TIMEOUT are treated differently. This enables policy-driven operations:
+                reject unsafe work, continue in degraded-mode, and recover once quorum returns.
+              </p>
+            </aside>
+          </div>
         </div>
       </section>
 
@@ -81,20 +91,20 @@
         <div class="badge-grid docs-left">
           <div class="badge-card">
             <div class="badge-topline">
-              <div class="badge-label">Anti-jam comms</div>
-              <div class="badge-chip chip-red">LPI/LPD</div>
+              <div class="badge-label">Event bus</div>
+              <div class="badge-chip chip-blue">PIPELINE</div>
             </div>
-            <div class="badge-title">Radio handshake under EW</div>
-            <p class="badge-desc">Fast liveness and anti-replay under interference; preserves mesh operation with quorum.</p>
+            <div class="badge-title">Zero-trust message gating</div>
+            <p class="badge-desc">Reject stale/replayed events before they reach stateful consumers; preserve correctness under delay.</p>
           </div>
 
           <div class="badge-card">
             <div class="badge-topline">
-              <div class="badge-label">Swarm</div>
-              <div class="badge-chip chip-cyan">Mesh</div>
+              <div class="badge-label">Operations</div>
+              <div class="badge-chip chip-cyan">SRE</div>
             </div>
-            <div class="badge-title">Quorum continuity</div>
-            <p class="badge-desc">Operate through node compromise/partition; isolate failures and recover by policy.</p>
+            <div class="badge-title">Quorum commit under partition</div>
+            <p class="badge-desc">Continue safely with policy-driven degraded-mode, then recover to full quorum when peers return.</p>
           </div>
         </div>
       </section>
@@ -106,11 +116,12 @@
         </p>
 
         <div class="docs-panel docs-left">
-          <div class="docs-panel-head">Demo A — Challenge/Response Mesh (Freshness + Timing + Quorum)</div>
+          <div class="docs-panel-head">Demo A — Infrastructure Event Gate (Freshness + Replay + Ordering + Quorum Commit)</div>
           <p class="docs-caption">
-            Uses PASS/FAIL/TIMEOUT plus quorum-based recovery to demonstrate anti-tamper, anti-replay, and jamming delay.
+            Shows ACCEPT/REJECT:REPLAY/REJECT:STALE/REJECT:ORDER/TIMEOUT and a 2-of-3 commit policy under validator delay/partition.
           </p>
-          <a class="btn" href="demo-mesh.html" target="_blank" rel="noopener">OPEN INTERACTIVE DEMO</a>
+          <a class="btn primary" href="demo-infra.html" target="_blank" rel="noopener">OPEN INTERACTIVE DEMO</a>
+          <a class="btn secondary" href="https://codepen.io/pen/" target="_blank" rel="noopener">VIEW SOURCE (CODEPEN)</a>
         </div>
       </section>
     </div>
@@ -124,4 +135,3 @@
   </footer>
 </body>
 </html>
-
