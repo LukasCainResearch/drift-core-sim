@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Drift Systems | Infrastructure Demo</title>
+  <meta name="description" content="Interactive demo: infrastructure event gating with freshness, replay defense, ordering, and quorum commit (tutorial abstraction)." />
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="docs-header">
+    <div class="container">
+      <div class="docs-topbar">
+        <a href="../index.html" class="docs-logo" aria-label="Drift Systems home">
+          DRIFT<span class="docs-logo-thin">SYSTEMS</span>
+        </a>
+        <nav class="docs-nav" aria-label="Docs navigation">
+          <a href="../index.html">Home</a>
+          <a href="infrastructure.html">Infrastructure</a>
+        </nav>
+      </div>
+
+      <div class="docs-hero">
+        <div class="docs-kicker">INTERACTIVE DEMO</div>
+        <h1 class="docs-title">Infrastructure Event Gate</h1>
+        <p class="docs-subtitle">
+          Demonstrates: freshness window, replay cache, monotonic ordering, and 2-of-3 quorum commit.
+          Tutorial abstraction only.
+        </p>
+
+        <div class="docs-cta">
+          <a class="btn secondary" href="infrastructure.html">BACK TO VERTICAL</a>
+          <a class="btn primary" href="https://codepen.io/pen/" target="_blank" rel="noopener">OPEN IN CODEPEN</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs-main">
+    <div class="container">
+      <hr class="docs-rule" />
+
+      <div class="callout">
+        What this is: a narrated visualization of protocol invariants (gate decisions + quorum).<br>
+        What this is not: a disclosure of proprietary cryptographic construction, keys, or deployment details.
+      </div>
+
+      <div class="demoEmbed" style="margin-top:14px;">
+        <!-- Replace the src with your published CodePen embed URL -->
+        <iframe
+          title="Infrastructure Event Gate Demo"
+          loading="lazy"
+          src="https://codepen.io/Lukas_Cain/embed/REPLACE_WITH_NEW_PEN_ID?default-tab=result"
+          allowfullscreen
+        ></iframe>
+      </div>
+
+      <ul class="demoBullets">
+        <li><b>REPLAY</b> shows event-id cache rejection.</li>
+        <li><b>STALE</b> shows freshness window rejection.</li>
+        <li><b>ORDER</b> shows monotonic sequence gating.</li>
+        <li><b>QUORUM</b> shows commit with partial validator failure/partition.</li>
+      </ul>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Drift Systems Inc.<br><span class="tiny">Systems Architect: Lukas Cain</span></p>
+      <p class="tiny">Research protected by pending patents. Confidential &amp; proprietary.</p>
+    </div>
+  </footer>
+</body>
+</html>
