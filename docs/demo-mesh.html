@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Drift Systems | Demo — Challenge/Response Mesh</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+  <div class="container">
+    <nav>
+      <a href="../index.html" class="logo">DRIFT SYSTEMS</a>
+      <div class="nav-links">
+        <a href="../index.html">Home</a>
+        <a href="../index.html#verticals">Verticals</a>
+      </div>
+    </nav>
+
+    <section class="hero" style="padding: 50px 0; text-align:center;">
+      <span class="kicker">INTERACTIVE DEMO</span>
+      <h1 style="margin-top: 10px;">Challenge/Response Mesh</h1>
+      <p class="lead" style="max-width: 860px; margin: 0 auto;">
+        Tutorial abstraction showing <b>freshness</b> (replay rejection), <b>timing budget</b> (deadline/TIMEOUT),
+        and <b>quorum recovery</b> (>=2 PASS) as a minimal trust mesh.
+      </p>
+
+      <div class="callout">
+        <b>What this is:</b> a narrated visualization of protocol invariants. <br>
+        <b>What this is not:</b> a cryptographic implementation or a disclosure of proprietary construction.
+      </div>
+    </section>
+
+    <section class="demoEmbed">
+      <iframe
+        title="Drift Systems Demo — Challenge/Response Mesh"
+        src="https://codepen.io/Lukas_Cain/full/qEZGGvg"
+        loading="lazy"
+        referrerpolicy="no-referrer"
+        sandbox="allow-scripts allow-same-origin allow-forms allow-pointer-lock"
+        allow="fullscreen"
+      ></iframe>
+    </section>
+
+    <section style="padding: 20px 0 60px 0;">
+      <h2>How to interpret outcomes</h2>
+      <ul class="demoBullets">
+        <li><b>FAIL</b> → content mismatch (tamper, replay, wrong state/key)</li>
+        <li><b>TIMEOUT</b> → exceeded timing budget (delay/jamming classification)</li>
+        <li><b>CONSENSUS</b> → quorum governs degrade/recover policy (>=2 PASS)</li>
+      </ul>
+    </section>
+  </div>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Drift Systems Inc. <br> Systems Architect: Lukas Cain</p>
+      <p class="tiny">Research protected by pending patents. Confidential &amp; proprietary.</p>
+    </div>
+  </footer>
+</body>
+</html>
