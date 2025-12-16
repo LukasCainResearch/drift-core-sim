@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Drift Systems | Defense</title>
+
+  <!-- If your docs pages already use shared CSS, link it here -->
+  <link rel="stylesheet" href="../style.css">
+
+  <!-- If your docs pages use the inline :root theme instead, keep your existing style block -->
+</head>
+
+<body>
+  <div class="container">
+    <nav>
+      <a href="../index.html" class="logo">DRIFT SYSTEMS</a>
+      <div class="nav-links">
+        <a href="../index.html">Home</a>
+        <a href="#overview">Overview</a>
+        <a href="#instantiations">Instantiations</a>
+        <a href="#demos">Demos</a>
+      </div>
+    </nav>
+
+    <section class="hero" style="padding: 70px 0; text-align:center;">
+      <span style="color: var(--accent-blue); font-weight: 600; letter-spacing: 0.1em; font-size: 0.9rem;">
+        DEPLOYMENT VERTICAL
+      </span>
+
+      <h1 style="margin-top: 10px;">Defense</h1>
+
+      <p style="max-width: 760px; margin: 0 auto 2rem auto;">
+        Time-bounded liveness and synchronization for contested communications: reject replay/tamper, degrade gracefully under delay/jamming,
+        and recover when trusted peers agree.
+      </p>
+
+      <a class="btn" href="#demos">VIEW DEMOS</a>
+      <a class="btn btn-outline" href="../index.html#contact">CONTACT</a>
+    </section>
+
+    <hr style="border: 0; border-top: 1px solid var(--border-color);">
+
+    <section id="overview">
+      <h2>1. Overview</h2>
+      <div class="grid">
+        <div>
+          <p><strong>What it solves:</strong></p>
+          <ul style="color: var(--text-muted); font-size: 1.05rem; margin-left: 20px;">
+            <li>Replay and stale-message acceptance under stress</li>
+            <li>On-path tamper detection without heavy protocol overhead</li>
+            <li>Jamming-induced delay classification (TIMEOUT vs compromise)</li>
+            <li>Mesh continuity with quorum and recovery policy</li>
+          </ul>
+          <p style="margin-top: 14px;">
+            <strong>How to read the demos:</strong> they demonstrate protocol invariants (freshness, timing, quorum) using tutorial math,
+            not the proprietary construction.
+          </p>
+        </div>
+
+        <div class="graph-container" style="margin:0;">
+          <div style="text-align:left; margin-bottom:10px; font-size:0.8rem; color:#666; font-weight:bold; letter-spacing:1px;">
+            DECISION INVARIANTS
+          </div>
+          <p class="caption" style="border-left: 2px solid var(--accent-blue);">
+            Fresh challenge + strict deadline window + expected/received comparison → PASS/FAIL/TIMEOUT.
+            Quorum policy controls degrade/recover behavior.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="instantiations">
+      <h2>2. Instantiations</h2>
+      <div class="badge-grid" style="text-align:left;">
+        <div class="badge-card">
+          <div class="badge-topline">
+            <div class="badge-label">Anti-jam comms</div>
+            <div class="badge-chip chip-red">LPI/LPD</div>
+          </div>
+          <div class="badge-title">Radio handshake under EW</div>
+          <p class="badge-desc">Fast liveness and anti-replay under interference; preserves mesh operation with quorum.</p>
+        </div>
+
+        <div class="badge-card">
+          <div class="badge-topline">
+            <div class="badge-label">Swarm</div>
+            <div class="badge-chip chip-cyan">Mesh</div>
+          </div>
+          <div class="badge-title">Quorum continuity</div>
+          <p class="badge-desc">Operate through node compromise/partition; isolate failures and recover by policy.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="demos">
+      <h2>3. Demos</h2>
+      <p>
+        Recommended: open demos in a new tab. Each demo includes an on-screen narration and a “What this is / is not” note.
+      </p>
+
+      <div class="graph-container" style="text-align:left;">
+        <div style="font-weight:800; color:#fff; margin-bottom:8px;">Demo A — Challenge/Response Mesh (Freshness + Timing + Quorum)</div>
+        <p class="caption" style="margin-top:0;">
+          Uses PASS/FAIL/TIMEOUT plus quorum-based recovery to demonstrate anti-tamper, anti-replay, and jamming delay.
+        </p>
+        <a class="btn" href="https://codepen.io/Lukas_Cain/pen/qEZGGvg" target="_blank" rel="noopener">OPEN CODEPEN</a>
+      </div>
+
+      <!-- Add more demo cards per vertical here -->
+    </section>
+  </div>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Drift Systems Inc. <br> Systems Architect: Lukas Cain</p>
+      <p style="font-size: 0.8rem; color: #444;">Research protected by pending patents. Confidential &amp; proprietary.</p>
+    </div>
+  </footer>
+</body>
+</html>
