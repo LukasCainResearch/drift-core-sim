@@ -1,154 +1,361 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Drift Systems | Logistics</title>
-  <meta name="description" content="Logistics deployment vertical: time-bounded liveness, anti-replay, and quorum recovery for distributed operations and supply chains." />
-  <link rel="stylesheet" href="../style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drift Systems | Supply Chain Security</title>
+    
+    <script>
+        window.MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']]
+          },
+          svg: {
+            fontCache: 'global'
+          }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💠</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+    <style>
+        :root {
+            /* BRAND PALETTE */
+            --bg0: #000;
+            --bg1: #050505;
+            --panel: rgba(0,20,40,0.5);
+            --border: rgba(0,255,255,0.2);
+            --border-strong: rgba(0,255,255,0.8);
+            --text: #fff;
+            --muted: #a0a0a0;
+            --muted2: #888;
+            --cyan: #00ffff;
+            --mint: #00ffaa;
+            --warn: #ffaa00;
+            --fail: #ff4444;
+            --mono: 'JetBrains Mono', ui-monospace, monospace;
+            --sans: 'Inter', system-ui, sans-serif;
+            --shadow: 0 0 20px rgba(0,255,255,0.10);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: var(--sans);
+            background-color: var(--bg0);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Typography */
+        h1, h2, h3 { font-weight: 700; letter-spacing: -0.02em; margin-bottom: 1rem; color: #fff; }
+        h1 { 
+            font-size: 3rem; line-height: 1.1; 
+            background: linear-gradient(90deg, #fff, var(--cyan)); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+        }
+        h2 { 
+            font-size: 1.8rem; border-left: 4px solid var(--cyan); 
+            padding-left: 1rem; margin-top: 3rem; 
+        }
+        p { margin-bottom: 1.5rem; font-size: 1.05rem; color: var(--muted); }
+        
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+        
+        /* Navigation */
+        nav { padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: var(--sans); font-weight: 900; font-size: 1.2rem; letter-spacing: 1px; color: #fff; text-decoration: none; }
+        .nav-links a { font-family: var(--mono); color: var(--muted); text-decoration: none; margin-left: 20px; font-size: 0.85rem; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--cyan); }
+
+        /* Hero */
+        .hero { padding: 80px 0; text-align: center; }
+        .hero .eyebrow { color: var(--cyan); font-family: var(--mono); font-weight: 700; letter-spacing: 1px; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        
+        .btn { 
+            display: inline-block; padding: 12px 30px; 
+            background: rgba(0, 255, 255, 0.1); color: var(--cyan); 
+            border: 1px solid var(--cyan); font-family: var(--mono); 
+            font-size: 0.85rem; font-weight: 700; text-decoration: none; 
+            transition: all 0.2s; 
+        }
+        .btn:hover { background: var(--cyan); color: #000; box-shadow: 0 0 20px rgba(0,255,255,0.4); }
+
+        /* --- LOGISTICS SIMULATOR STYLES --- */
+        .sim-container {
+            background: var(--bg1); border: 1px solid var(--border); border-radius: 4px;
+            padding: 24px; margin: 40px 0; position: relative;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+        
+        .sim-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+            align-items: start;
+        }
+
+        .package-card {
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
+            padding: 20px; border-radius: 4px; position: relative;
+            transition: border-color 0.3s;
+        }
+        .package-card.valid { border-color: var(--mint); background: rgba(0, 255, 170, 0.05); }
+        .package-card.stale { border-color: var(--fail); background: rgba(255, 68, 68, 0.05); }
+
+        .pkg-header { display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
+        .pkg-id { font-family: var(--mono); font-weight: 700; color: #fff; }
+        .pkg-status { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
+
+        .qr-placeholder {
+            width: 120px; height: 120px; background: #fff; margin: 0 auto 15px auto;
+            display: flex; align-items: center; justify-content: center;
+            font-family: var(--mono); color: #000; font-size: 0.8rem; text-align: center;
+            position: relative;
+        }
+        .qr-overlay {
+            position: absolute; top:0; left:0; right:0; bottom:0;
+            background: rgba(0,0,0,0.8); color: #fff; display: flex; align-items: center; justify-content: center;
+            font-weight: 700; opacity: 0; transition: opacity 0.2s;
+        }
+        
+        .token-display { font-family: var(--mono); font-size: 1.1rem; color: var(--cyan); text-align: center; margin-bottom: 15px; }
+        .token-label { font-size: 0.7rem; color: var(--muted2); display: block; }
+
+        .action-area { display: flex; gap: 10px; justify-content: center; }
+        .sim-btn {
+            font-family: var(--mono); font-size: 0.75rem; padding: 8px 12px;
+            background: #222; border: 1px solid #444; color: #ccc; cursor: pointer;
+            transition: all 0.2s; flex: 1;
+        }
+        .sim-btn:hover { border-color: #fff; color: #fff; }
+        .sim-btn.primary { border-color: var(--cyan); color: var(--cyan); }
+        .sim-btn.primary:hover { background: var(--cyan); color: #000; }
+        .sim-btn.danger { border-color: var(--fail); color: var(--fail); }
+        .sim-btn.danger:hover { background: var(--fail); color: #000; }
+
+        .scanner-log {
+            margin-top: 30px; border-top: 1px dashed #444; padding-top: 15px;
+        }
+        .log-line { font-family: var(--mono); font-size: 0.8rem; margin-bottom: 5px; color: var(--muted2); }
+        .log-line.success { color: var(--mint); }
+        .log-line.error { color: var(--fail); }
+
+        /* --- SECTION STYLES --- */
+        .grid-text { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin: 60px 0; }
+        .feature-card { border: 1px solid var(--border); padding: 24px; background: var(--panel); transition: transform 0.2s; }
+        .feature-card:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+        .feature-card h3 { color: var(--cyan); font-family: var(--mono); font-size: 1rem; margin-bottom: 12px; letter-spacing: 1px; }
+
+        footer { border-top: 1px solid rgba(255,255,255,0.1); padding: 40px 0; margin-top: 80px; text-align: center; font-size: 0.9rem; color: #666; }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2rem; }
+            .grid-text { grid-template-columns: 1fr; }
+            .sim-grid { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
-
 <body>
-  <a class="skip-link" href="#main">Skip to content</a>
 
-  <header class="docs-header">
     <div class="container">
-      <div class="docs-topbar">
-        <a href="../index.html" class="docs-logo" aria-label="Drift Systems home">
-          DRIFT<span class="docs-logo-thin">SYSTEMS</span>
-        </a>
-
-        <nav class="docs-nav" aria-label="Docs navigation">
-          <a href="../index.html">Home</a>
-          <a href="#overview">Overview</a>
-          <a href="#instantiations">Instantiations</a>
-          <a href="#demos">Demos</a>
+        <nav>
+            <a href="../index.html" class="logo">DRIFT<span style="font-weight:300;">SYSTEMS</span></a>
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="#sim">Clone Sim</a>
+                <a href="#specs">Specs</a>
+            </div>
         </nav>
-      </div>
 
-      <div class="docs-hero">
-        <div class="docs-kicker">DEPLOYMENT VERTICAL</div>
-        <h1 class="docs-title">Logistics</h1>
-        <p class="docs-subtitle">
-          Time-bounded liveness and synchronization for distributed operations: reject replay/tamper, classify delay vs compromise,
-          and recover using quorum policy across fleets, hubs, and suppliers.
-        </p>
+        <section class="hero">
+            <span class="eyebrow">SUPPLY CHAIN SECURITY</span>
+            <h1>Anti-Counterfeit &<br>Rolling Label Codes</h1>
+            <p>Static tracking codes are vulnerable to cloning. Drift Systems implements <strong>State-Evolving Identity</strong>. Every scan cryptographically mutates the label's state, rendering previous clones stale and detectable instantly.</p>
+            <br>
+            <a href="#sim" class="btn">ATTEMPT CLONING</a>
+        </section>
 
-        <div class="docs-cta">
-          <a class="btn primary" href="#demos">VIEW DEMOS</a>
-          <a class="btn secondary" href="../index.html#contact">CONTACT</a>
-        </div>
-      </div>
+        <hr style="border: 0; border-top: 1px solid var(--border-color);">
+
+        <section id="sim">
+            <h2>1. The Cloning Attack Simulator</h2>
+            <p>In this simulation, you play the role of an attacker trying to clone a high-value shipping label. [cite_start]Observe how the <strong>Scan-Evolve</strong> property defeats the clone automatically[cite: 76].</p>
+
+            <div class="sim-container">
+                <div class="sim-grid">
+                    
+                    <div class="package-card" id="pkg-legit">
+                        <div class="pkg-header">
+                            <span class="pkg-id">ORIGINAL ITEM</span>
+                            <span class="pkg-status" id="status-legit">ACTIVE</span>
+                        </div>
+                        <div class="qr-placeholder">
+                            <div style="font-size:3rem;">📦</div>
+                            <div class="qr-overlay" id="overlay-legit">SCANNED</div>
+                        </div>
+                        <div class="token-display">
+                            <span class="token-label">CURRENT STATE HASH</span>
+                            <span id="hash-legit">0x8F2A...</span>
+                        </div>
+                        <div class="action-area">
+                            <button class="sim-btn primary" onclick="scanLegit()">SCAN & VERIFY</button>
+                            <button class="sim-btn danger" onclick="cloneLegit()">CLONE STATE</button>
+                        </div>
+                    </div>
+
+                    <div class="package-card" id="pkg-clone">
+                        <div class="pkg-header">
+                            <span class="pkg-id" style="color:var(--fail);">COUNTERFEIT</span>
+                            <span class="pkg-status" id="status-clone">UNKNOWN</span>
+                        </div>
+                        <div class="qr-placeholder">
+                            <div style="font-size:3rem; opacity:0.5;">📦</div>
+                            <div class="qr-overlay" id="overlay-clone">REJECTED</div>
+                        </div>
+                        <div class="token-display">
+                            <span class="token-label">CLONED STATE HASH</span>
+                            <span id="hash-clone">--</span>
+                        </div>
+                        <div class="action-area">
+                            <button class="sim-btn" onclick="scanClone()">ATTEMPT USE</button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="scanner-log" id="scan-log">
+                    <div class="log-line">> SYSTEM READY. WAITING FOR SCAN...</div>
+                </div>
+            </div>
+
+            <p style="font-size: 0.95rem; border-left: 2px solid var(--border); padding-left: 15px; color: var(--muted2);">
+                [cite_start]<strong style="color:var(--text);">How it works:</strong> When you <strong style="color:var(--cyan);">SCAN</strong> the original, its internal state evolves (Rolling Code). If you <strong style="color:var(--fail);">CLONE</strong> the state before the scan, your clone holds the *old* state. When the clone is presented later, the network rejects it as a "Replay/Stale" attempt[cite: 76].
+            </p>
+        </section>
+
+        <section id="specs">
+            <h2>2. Capabilities & Integration</h2>
+            <div class="grid-text">
+                <div class="feature-card">
+                    <h3>Rolling Codes (NFC/RFID)</h3>
+                    <p>Standard static tags (EPC Gen2) are easily cloned. Drift-enabled tags update their nonce on every read power-cycle. [cite_start]A cloner copies the <em>current</em> nonce, but cannot compute the <em>next</em> one without the internal drift recurrence key[cite: 74].</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Offline Authentication</h3>
+                    <p>Scanners can verify authenticity without a continuous cloud connection. [cite_start]By synchronizing the drift state between the reader and the tag, genuine goods are verified mathematically, even in air-gapped warehouses[cite: 78].</p>
+                </div>
+                <div class="feature-card">
+                    <h3>No Global Ledger</h3>
+                    <p>Blockchains are too slow and public for high-volume logistics. Drift tracks custody via point-to-point state handover. [cite_start]Privacy is preserved because only the authorized next-hop scanner can predict the valid next state[cite: 78].</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Forward Security</h3>
+                    <p>Even if a tag is physically dissected and the key extracted, past states cannot be reverse-computed. [cite_start]The "One-Way" nature of the arithmetic drift ensures the history of the supply chain remains immutable[cite: 26].</p>
+                </div>
+            </div>
+        </section>
+
     </div>
-  </header>
 
-  <main id="main" class="docs-main">
-    <div class="container">
-      <hr class="docs-rule" />
-
-      <section id="overview" class="docs-section">
-        <h2 class="docs-h2">1. Overview</h2>
-
-        <div class="docs-grid">
-          <div>
-            <p class="docs-lead"><strong>What it solves:</strong></p>
-            <ul class="docs-list">
-              <li>Replay/stale updates across handoffs (scan events, EDI, telemetry)</li>
-              <li>Tamper detection for on-path message manipulation (status, routing, custody)</li>
-              <li>Delay classification: benign latency vs adversarial disruption</li>
-              <li>Quorum continuity for degraded modes and controlled recovery</li>
-            </ul>
-
-            <p class="docs-note">
-              <strong>How to read the demos:</strong> they demonstrate invariants (freshness, timing, quorum) using tutorial math,
-              not proprietary construction or production keys.
-            </p>
-          </div>
-
-          <aside class="docs-panel" aria-label="Decision invariants">
-            <div class="docs-panel-title">DECISION INVARIANTS</div>
-            <p class="docs-caption">
-              Fresh challenge + strict deadline window + expected/received comparison → PASS/FAIL/TIMEOUT.
-              Policy maps these outcomes to isolate, degrade, reroute, or recover.
-            </p>
-          </aside>
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Drift Systems Inc. <br> Systems Architect: Lukas Cain</p>
+            <p style="font-size: 0.8rem; color: #444;">Export Controlled Technology (EAR99).</p>
         </div>
-      </section>
+    </footer>
 
-      <section id="instantiations" class="docs-section">
-        <h2 class="docs-h2">2. Instantiations</h2>
+    <script>
+    (function() {
+        // Simple mock hashes for demo visual
+        const HASHES = [
+            "0x8F2A...", "0xB49C...", "0x1D7E...", "0x9A3F...", "0xE21B...", "0x5C8D..."
+        ];
+        
+        let currentStateIdx = 0;
+        let clonedStateIdx = -1; // -1 means no clone exists yet
+        
+        const logEl = document.getElementById('scan-log');
+        const hashLegitEl = document.getElementById('hash-legit');
+        const hashCloneEl = document.getElementById('hash-clone');
+        
+        function log(msg, type) {
+            const div = document.createElement('div');
+            div.className = `log-line ${type || ''}`;
+            div.innerText = `> ${msg}`;
+            logEl.insertBefore(div, logEl.firstChild);
+            if(logEl.children.length > 5) logEl.lastChild.remove();
+        }
 
-        <div class="badge-grid docs-left">
-          <div class="badge-card">
-            <div class="badge-topline">
-              <div class="badge-label">Chain of custody</div>
-              <div class="badge-chip chip-orange">Integrity</div>
-            </div>
-            <div class="badge-title">Custody handoff verification</div>
-            <p class="badge-desc">
-              Enforce freshness and timing at transfer points (dock, hub, carrier) to prevent replayed or altered custody events.
-            </p>
-          </div>
+        window.scanLegit = function() {
+            // Visualize scan
+            const overlay = document.getElementById('overlay-legit');
+            overlay.style.opacity = 1;
+            setTimeout(() => overlay.style.opacity = 0, 500);
 
-          <div class="badge-card">
-            <div class="badge-topline">
-              <div class="badge-label">Fleet operations</div>
-              <div class="badge-chip chip-cyan">Mesh</div>
-            </div>
-            <div class="badge-title">Quorum continuity for dispatch</div>
-            <p class="badge-desc">
-              Maintain safe degraded operation under partition (connectivity loss, spoofed nodes) and recover by policy when peers agree.
-            </p>
-          </div>
+            // Logic
+            log(`SCANNED ORIGINAL (State: ${HASHES[currentStateIdx]})`, 'success');
+            log(`... AUTH VALID. STATE EVOLVING...`);
+            
+            // Evolve state
+            currentStateIdx = (currentStateIdx + 1) % HASHES.length;
+            hashLegitEl.innerText = HASHES[currentStateIdx];
+            hashLegitEl.style.color = "var(--mint)";
+            setTimeout(() => hashLegitEl.style.color = "var(--text)", 300);
+        };
 
-          <div class="badge-card">
-            <div class="badge-topline">
-              <div class="badge-label">Warehouse systems</div>
-              <div class="badge-chip chip-blue">Sync</div>
-            </div>
-            <div class="badge-title">Deadline-bounded synchronization</div>
-            <p class="badge-desc">
-              Distinguish late-but-valid events from suspect traffic; route TIMEOUT outcomes into resync workflows instead of silent acceptance.
-            </p>
-          </div>
+        window.cloneLegit = function() {
+            // Copy current state of legit to clone
+            clonedStateIdx = currentStateIdx;
+            
+            hashCloneEl.innerText = HASHES[clonedStateIdx];
+            hashCloneEl.style.color = "var(--fail)";
+            
+            document.getElementById('pkg-clone').classList.remove('stale');
+            document.getElementById('status-clone').innerText = "CLONED";
+            document.getElementById('status-clone').style.color = "var(--fail)";
+            
+            log(`ATTACKER CLONED STATE: ${HASHES[clonedStateIdx]}`, 'error');
+        };
 
-          <div class="badge-card">
-            <div class="badge-topline">
-              <div class="badge-label">Supplier network</div>
-              <div class="badge-chip chip-red">Resilience</div>
-            </div>
-            <div class="badge-title">Policy-based recovery</div>
-            <p class="badge-desc">
-              Use quorum thresholds and recovery rules to isolate compromised edges while keeping the network operational.
-            </p>
-          </div>
-        </div>
-      </section>
+        window.scanClone = function() {
+            if(clonedStateIdx === -1) {
+                log("NO CLONE DATA FOUND. CLONE FIRST.", 'error');
+                return;
+            }
 
-      <section id="demos" class="docs-section">
-        <h2 class="docs-h2">3. Demos</h2>
-        <p class="docs-note">
-          Recommended: open demos in a new tab. Each demo includes on-screen narration and a “What this is / is not” note.
-        </p>
+            // Visualize scan
+            const overlay = document.getElementById('overlay-clone');
+            
+            // Logic Check
+            if(clonedStateIdx === currentStateIdx) {
+                // This implies the Legit has NOT been scanned yet since cloning.
+                // In a real race condition, this *could* work once, but usually the legit item
+                // is scanned at checkpoints.
+                // For the demo, we assume the system expects the NEXT hash, or checking against cloud state
+                // but let's make it strictly simpler:
+                log(`SCANNING CLONE (State: ${HASHES[clonedStateIdx]}) ...`, 'error');
+                log(`WARNING: DUPLICATE STATE DETECTED.`, 'error');
+            } else {
+                // Legit has evolved. Clone is stale.
+                overlay.innerText = "REJECTED";
+                overlay.style.opacity = 1;
+                setTimeout(() => overlay.style.opacity = 0, 1000);
+                
+                log(`SCANNING CLONE (State: ${HASHES[clonedStateIdx]}) ...`, 'error');
+                log(`FAIL: STALE STATE (Expected: ${HASHES[currentStateIdx]})`, 'error');
+                
+                document.getElementById('pkg-clone').classList.add('stale');
+                document.getElementById('status-clone').innerText = "REJECTED";
+            }
+        };
 
-        <div class="docs-panel docs-left">
-          <div class="docs-panel-head">Demo A — Logistics Walkthrough (Freshness + Timing + Quorum)</div>
-          <p class="docs-caption">
-            Demonstrates PASS/FAIL/TIMEOUT outcomes plus quorum-based continuity and recovery. Tutorial abstraction only.
-          </p>
-          <a class="btn primary" href="demo-logistics.html" target="_blank" rel="noopener">OPEN INTERACTIVE DEMO</a>
-          <a class="btn secondary" href="https://codepen.io/Lukas_Cain/pen/RNazovX" target="_blank" rel="noopener">VIEW SOURCE (CODEPEN)</a>
-        </div>
-      </section>
-    </div>
-  </main>
-
-  <footer>
-    <div class="container">
-      <p>&copy; 2025 Drift Systems Inc.<br><span class="tiny">Systems Architect: Lukas Cain</span></p>
-      <p class="tiny">Research protected by pending patents. Confidential &amp; proprietary.</p>
-    </div>
-  </footer>
+    })();
+    </script>
 </body>
 </html>
-
