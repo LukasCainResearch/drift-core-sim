@@ -20,94 +20,126 @@
     </script>
 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💠</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
     <style>
         :root {
-            --bg-color: #050505;
-            --card-bg: #111111;
-            --text-main: #e0e0e0;
-            --text-muted: #a0a0a0;
-            --accent-green: #00ff00; /* Radar Green */
-            --accent-red: #ff3333;
-            --accent-warn: #ffcc00;
-            --border-color: #333;
+            /* BRAND PALETTE RESTORED */
+            --bg0: #000;
+            --bg1: #050505;
+            --panel: rgba(0,20,40,0.5);
+            --border: rgba(0,255,255,0.2);
+            --border-strong: rgba(0,255,255,0.8);
+            --text: #fff;
+            --muted: #a0a0a0;
+            --muted2: #888;
+            --cyan: #00ffff;
+            --mint: #00ffaa;
+            --warn: #ffaa00;
+            --fail: #ff4444;
+            --mono: 'JetBrains Mono', ui-monospace, monospace;
+            --sans: 'Inter', system-ui, sans-serif;
+            --shadow: 0 0 20px rgba(0,255,255,0.10);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
-            font-family: "JetBrains Mono", "Courier New", monospace; /* Terminal aesthetic */
-            background-color: var(--bg-color);
-            color: var(--text-main);
+            font-family: var(--sans);
+            background-color: var(--bg0);
+            color: var(--text);
             line-height: 1.6;
             overflow-x: hidden;
         }
 
+        /* Typography */
         h1, h2, h3 { font-weight: 700; letter-spacing: -0.02em; margin-bottom: 1rem; color: #fff; }
-        h1 { font-size: 3rem; line-height: 1.1; color: var(--accent-green); text-shadow: 0 0 10px rgba(0,255,0,0.4); }
-        h2 { font-size: 1.8rem; border-left: 4px solid var(--accent-green); padding-left: 1rem; margin-top: 3rem; }
-        p { margin-bottom: 1.5rem; font-size: 1rem; color: var(--text-muted); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        h1 { 
+            font-size: 3rem; line-height: 1.1; 
+            background: linear-gradient(90deg, #fff, var(--cyan)); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+        }
+        h2 { 
+            font-size: 1.8rem; border-left: 4px solid var(--cyan); 
+            padding-left: 1rem; margin-top: 3rem; 
+        }
+        p { margin-bottom: 1.5rem; font-size: 1.05rem; color: var(--muted); }
         
         .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
         
-        nav { padding: 20px 0; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-weight: 800; font-size: 1.2rem; letter-spacing: 0.1em; color: #fff; text-decoration: none; }
-        .nav-links a { color: var(--text-muted); text-decoration: none; margin-left: 20px; font-size: 0.9rem; transition: color 0.2s; }
-        .nav-links a:hover { color: var(--accent-green); }
+        /* Navigation */
+        nav { padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: var(--sans); font-weight: 900; font-size: 1.2rem; letter-spacing: 1px; color: #fff; text-decoration: none; }
+        .nav-links a { font-family: var(--mono); color: var(--muted); text-decoration: none; margin-left: 20px; font-size: 0.85rem; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--cyan); }
 
+        /* Hero */
         .hero { padding: 80px 0; text-align: center; }
-        .btn { display: inline-block; padding: 12px 30px; background: rgba(0, 255, 0, 0.1); color: var(--accent-green); border: 1px solid var(--accent-green); font-weight: 700; text-decoration: none; transition: all 0.2s; }
-        .btn:hover { background: var(--accent-green); color: #000; box-shadow: 0 0 20px rgba(0,255,0,0.4); }
+        .hero .eyebrow { color: var(--cyan); font-family: var(--mono); font-weight: 700; letter-spacing: 1px; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        
+        .btn { 
+            display: inline-block; padding: 12px 30px; 
+            background: rgba(0, 255, 255, 0.1); color: var(--cyan); 
+            border: 1px solid var(--cyan); font-family: var(--mono); 
+            font-size: 0.85rem; font-weight: 700; text-decoration: none; 
+            transition: all 0.2s; 
+        }
+        .btn:hover { background: var(--cyan); color: #000; box-shadow: 0 0 20px rgba(0,255,255,0.4); }
 
         /* --- MESH SIMULATOR STYLES --- */
         .sim-container {
-            background: #000; border: 1px solid #444; border-radius: 4px;
-            padding: 20px; margin: 40px 0; position: relative;
-            background-image: linear-gradient(rgba(0, 255, 0, 0.03) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(0, 255, 0, 0.03) 1px, transparent 1px);
-            background-size: 20px 20px;
+            background: var(--bg1); border: 1px solid var(--border); border-radius: 4px;
+            padding: 24px; margin: 40px 0; position: relative;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
         }
         
-        .sim-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px; }
-        .status-led { width: 10px; height: 10px; border-radius: 50%; background: #333; display: inline-block; margin-right: 8px; box-shadow: 0 0 5px #333; }
-        .status-led.ok { background: var(--accent-green); box-shadow: 0 0 8px var(--accent-green); }
-        .status-led.warn { background: var(--accent-warn); box-shadow: 0 0 8px var(--accent-warn); }
-        .status-led.fail { background: var(--accent-red); box-shadow: 0 0 8px var(--accent-red); }
+        .sim-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 14px; }
+        .status-led { width: 10px; height: 10px; border-radius: 50%; background: #333; display: inline-block; margin-right: 8px; }
+        .status-led.ok { background: var(--mint); box-shadow: 0 0 8px var(--mint); }
+        .status-led.warn { background: var(--warn); box-shadow: 0 0 8px var(--warn); }
+        .status-led.fail { background: var(--fail); box-shadow: 0 0 8px var(--fail); }
 
         .nodes-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; text-align: center; }
-        .node { background: #111; border: 1px solid #333; padding: 15px; border-radius: 4px; transition: border-color 0.3s; position: relative; }
-        .node.hq { border-color: #fff; grid-column: span 3; margin-bottom: 20px; }
-        .node h4 { color: #fff; font-size: 0.9rem; margin-bottom: 10px; }
+        .node { 
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); 
+            padding: 18px; border-radius: 4px; transition: border-color 0.3s; position: relative; 
+        }
+        .node.hq { border-color: var(--border-strong); grid-column: span 3; margin-bottom: 20px; background: rgba(0,255,255,0.02); }
+        .node h4 { color: #fff; font-family: var(--mono); font-size: 0.9rem; margin-bottom: 10px; letter-spacing: 1px; }
         
         .packet-log { 
-            font-family: monospace; font-size: 0.8rem; color: #888; 
-            height: 80px; overflow-y: hidden; border-top: 1px solid #222; margin-top: 10px; padding-top: 5px; text-align: left;
+            font-family: var(--mono); font-size: 0.75rem; color: var(--muted2); 
+            height: 80px; overflow-y: hidden; border-top: 1px solid rgba(255,255,255,0.1); 
+            margin-top: 14px; padding-top: 8px; text-align: left;
         }
-        .log-entry { margin-bottom: 2px; }
-        .log-entry.rx { color: var(--accent-green); }
-        .log-entry.tx { color: var(--accent-blue); }
-        .log-entry.err { color: var(--accent-red); }
+        .log-entry { margin-bottom: 3px; }
+        .log-entry.rx { color: var(--mint); }
+        .log-entry.tx { color: var(--cyan); }
+        .log-entry.err { color: var(--fail); }
 
-        .controls { display: flex; gap: 5px; justify-content: center; margin-top: 10px; }
+        .controls { display: flex; gap: 8px; justify-content: center; margin-top: 12px; }
         .control-btn { 
-            font-size: 0.7rem; background: #222; border: 1px solid #444; color: #ccc; 
-            padding: 4px 8px; cursor: pointer; text-transform: uppercase; 
+            font-family: var(--mono); font-size: 0.7rem; 
+            background: transparent; border: 1px solid #444; color: #aaa; 
+            padding: 6px 10px; cursor: pointer; text-transform: uppercase; 
+            transition: all 0.2s;
         }
         .control-btn:hover { border-color: #fff; color: #fff; }
-        .control-btn.jam { color: var(--accent-warn); border-color: var(--accent-warn); }
-        .control-btn.replay { color: var(--accent-red); border-color: var(--accent-red); }
-        .control-btn.active { background: var(--accent-red); color: #000; }
-
-        .connection-line {
-            height: 2px; background: #333; margin: 0 auto 20px auto; width: 80%;
-            position: relative; top: -10px; z-index: 0;
-        }
+        .control-btn.jam:hover { border-color: var(--warn); color: var(--warn); }
+        .control-btn.replay:hover { border-color: var(--fail); color: var(--fail); }
+        
+        .control-btn.jam.active { background: var(--warn); color: #000; border-color: var(--warn); }
+        .control-btn.replay.active { background: var(--fail); color: #000; border-color: var(--fail); }
 
         /* --- SECTION STYLES --- */
         .grid-text { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin: 60px 0; }
-        .feature-card { border: 1px solid #333; padding: 20px; background: rgba(255,255,255,0.02); }
-        .feature-card h3 { color: var(--accent-green); font-size: 1.1rem; margin-bottom: 10px; }
+        .feature-card { border: 1px solid var(--border); padding: 24px; background: var(--panel); transition: transform 0.2s; }
+        .feature-card:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+        .feature-card h3 { color: var(--cyan); font-family: var(--mono); font-size: 1rem; margin-bottom: 12px; letter-spacing: 1px; }
 
-        footer { border-top: 1px solid var(--border-color); padding: 40px 0; margin-top: 80px; text-align: center; font-size: 0.9rem; color: #666; }
+        footer { border-top: 1px solid rgba(255,255,255,0.1); padding: 40px 0; margin-top: 80px; text-align: center; font-size: 0.9rem; color: #666; }
         
         @media (max-width: 768px) {
             h1 { font-size: 2.2rem; }
@@ -121,7 +153,7 @@
 
     <div class="container">
         <nav>
-            <a href="../index.html" class="logo">DRIFT SYSTEMS</a>
+            <a href="../index.html" class="logo">DRIFT<span style="font-weight:300;">SYSTEMS</span></a>
             <div class="nav-links">
                 <a href="../index.html">Home</a>
                 <a href="#sim">Mesh Sim</a>
@@ -130,7 +162,7 @@
         </nav>
 
         <section class="hero">
-            <span style="color: var(--accent-green); font-weight: 600; letter-spacing: 0.1em; font-size: 0.9rem;">CONTESTED ENVIRONMENTS</span>
+            <span class="eyebrow">CONTESTED ENVIRONMENTS</span>
             <h1>Anti-Jam Liveness &<br>Clockless Sync</h1>
             <p>Maintain mesh continuity in GPS-denied environments. Drift Systems replaces timestamp-based authentication with state-based ordering, rendering replay attacks and jamming mathematically distinguishable.</p>
             <br>
@@ -146,21 +178,21 @@
             <div class="sim-container">
                 <div class="sim-header">
                     <div>
-                        <span style="color:#888; font-size:0.8rem;">PROTOCOL STATE:</span>
-                        <span id="mesh-status" style="color:#fff; font-weight:bold;">ACTIVE</span>
+                        <span style="color:var(--muted); font-family:var(--mono); font-size:0.8rem; letter-spacing:1px;">PROTOCOL STATE:</span>
+                        <span id="mesh-status" style="color:#fff; font-family:var(--mono); font-weight:700; margin-left:10px;">ACTIVE</span>
                     </div>
                     <div>
                         <span class="status-led ok" id="system-led"></span>
-                        <span style="font-size:0.8rem; color:var(--accent-green);">SECURE</span>
+                        <span style="font-size:0.8rem; font-family:var(--mono); color:var(--mint); letter-spacing:1px;">SECURE</span>
                     </div>
                 </div>
 
                 <div class="nodes-grid">
                     <div class="node hq" id="node-hq">
                         <h4>COMMAND (HQ)</h4>
-                        <div style="font-size:0.8rem; color:#aaa;">Seq: <span id="hq-seq">100</span></div>
+                        <div style="font-size:0.8rem; color:var(--muted2); font-family:var(--mono); margin-bottom:10px;">Seq: <span id="hq-seq">100</span></div>
                         <div class="controls">
-                            <button class="control-btn" id="btn-ping" style="border-color:var(--accent-green); color:var(--accent-green);">SEND CHALLENGE</button>
+                            <button class="control-btn" id="btn-ping" style="border-color:var(--cyan); color:var(--cyan); width:100%;">SEND CHALLENGE</button>
                         </div>
                         <div class="packet-log" id="log-hq"></div>
                     </div>
@@ -194,8 +226,8 @@
                 </div>
             </div>
             
-            <p style="font-size: 0.9rem; border-left: 2px solid #444; padding-left: 15px; color: #888;">
-                <strong>Instruction:</strong> Click "SEND CHALLENGE" to verify mesh health. Toggle "JAM" to introduce artificial latency (>500ms). Click "REPLAY" to inject a valid-but-stale packet. Notice how the HQ rejects Replays instantly (Bad Seq) but classifies Jamming as a "TIMEOUT".
+            <p style="font-size: 0.95rem; border-left: 2px solid var(--border); padding-left: 15px; color: var(--muted2);">
+                <strong style="color:var(--text);">Instruction:</strong> Click "SEND CHALLENGE" to verify mesh health. Toggle "JAM" to introduce artificial latency (>500ms). Click "REPLAY" to inject a valid-but-stale packet. Notice how the HQ rejects Replays instantly (Bad Seq) but classifies Jamming as a "TIMEOUT".
             </p>
         </section>
 
@@ -290,6 +322,7 @@
             // 1. HQ Sends
             log('hq', 'tx', `BCAST CHALLENGE S=${hqSeq}`);
             statusText.innerText = "POLLING...";
+            statusText.style.color = "#fff";
             statusLed.className = "status-led"; 
             
             // 2. Nodes Process
@@ -326,7 +359,6 @@
             // Log TX from Node
             if(isJamming[id]) {
                 log(id, 'err', `TX BLOCKED (LOW SNR)`);
-                // HQ doesn't receive anything or receives garbage late
                 handleResponse(id, responseSeq, delay); 
             } else if(isReplaying[id]) {
                 log(id, 'tx', `TX RESP S=${responseSeq} (STALE)`);
@@ -362,15 +394,15 @@
 
             if(pass === 3) {
                 statusText.innerText = "SECURE (3/3)";
-                statusText.style.color = "#00ff00";
+                statusText.style.color = "var(--mint)";
                 statusLed.className = "status-led ok";
             } else if(pass >= 1) {
                 statusText.innerText = `DEGRADED (${pass}/3)`;
-                statusText.style.color = "#ffcc00";
+                statusText.style.color = "var(--warn)";
                 statusLed.className = "status-led warn";
             } else {
                 statusText.innerText = "MESH LOSS";
-                statusText.style.color = "#ff3333";
+                statusText.style.color = "var(--fail)";
                 statusLed.className = "status-led fail";
             }
         }
