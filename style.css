@@ -135,7 +135,7 @@ h1 {
 }
 
 .primary { background-color: var(--cyan); color: var(--dark); border: 1px solid var(--cyan); }
-.secondary { border: 1px solid var(--gray); color: var(--white); margin-left: 15px; background: transparent; }
+.secondary { border: 1px solid var(--gray); color: var(--white); background: transparent; }
 .btn:hover { opacity: 0.92; transform: translateY(-1px); }
 .primary:hover { box-shadow: 0 0 16px rgba(0,240,255,0.35); }
 
