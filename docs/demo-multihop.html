@@ -1,0 +1,101 @@
+<!-- demo-multihop.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Drift Systems | Multihop Demo</title>
+  <meta name="description" content="Interactive demo (embedded) for Drift Systems multihop/mesh behavior." />
+  <link rel="stylesheet" href="../style.css">
+
+  <style>
+    .demo-shell { padding: 26px 0 70px; background: var(--navy); }
+    .demo-hero { text-align: center; padding: 44px 0 18px; }
+    .demo-hero .k { color: var(--accent-blue); font-weight: 800; letter-spacing: 0.14em; font-size: 0.78rem; font-family: 'JetBrains Mono', monospace; }
+    .demo-hero h1 { margin: 10px 0 10px; -webkit-text-fill-color: initial; background: none; color: var(--white); font-size: 2.2rem; }
+    .demo-hero p { max-width: 880px; margin: 0 auto; color: var(--gray); font-size: 1.02rem; }
+
+    .demo-frame {
+      margin-top: 18px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(0,0,0,0.25);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 14px 40px rgba(0,0,0,0.45);
+    }
+    .demo-frame iframe {
+      width: 100%;
+      height: min(82vh, 860px);
+      border: 0;
+      display: block;
+      background: #000;
+    }
+
+    .demo-actions { margin-top: 16px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .docs-header { padding: 28px 0 16px; }
+  </style>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="docs-header">
+    <div class="container">
+      <div class="docs-topbar">
+        <a href="../index.html" class="docs-logo" aria-label="Drift Systems home">
+          DRIFT<span class="docs-logo-thin">SYSTEMS</span>
+        </a>
+
+        <nav class="docs-nav" aria-label="Demo navigation">
+          <a href="../index.html">Home</a>
+          <a href="#demo">Demo</a>
+          <a href="#notes">Notes</a>
+          <a href="https://codepen.io/Lukas_Cain/pen/GgZbNzR" target="_blank" rel="noopener">Source</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="demo-shell">
+    <div class="container">
+      <section class="demo-hero" id="demo">
+        <div class="k">INTERACTIVE DEMO</div>
+        <h1>Multihop / Mesh Walkthrough</h1>
+        <p>
+          Embedded CodePen walkthrough for mesh / multihop behavior visualization (tutorial abstraction).
+        </p>
+
+        <div class="demo-actions">
+          <a class="btn primary" href="https://codepen.io/Lukas_Cain/full/GgZbNzR" target="_blank" rel="noopener">OPEN FULLSCREEN</a>
+          <a class="btn secondary" href="https://codepen.io/Lukas_Cain/pen/GgZbNzR" target="_blank" rel="noopener">VIEW SOURCE</a>
+        </div>
+      </section>
+
+      <div class="demo-frame" aria-label="Embedded demo">
+        <iframe
+          title="Multihop Demo (CodePen Embed)"
+          loading="lazy"
+          allow="clipboard-write; fullscreen"
+          referrerpolicy="no-referrer"
+          src="https://codepen.io/Lukas_Cain/embed/GgZbNzR?default-tab=result&theme-id=dark"
+        ></iframe>
+      </div>
+
+      <section id="notes" class="docs-section">
+        <h2 class="docs-h2">Notes</h2>
+        <p class="docs-note">
+          If the Pen renders with a white canvas, that is controlled inside the Pen. To force dark internally, set the Pen’s CSS
+          to `html, body { background: #0a0f1e; }` (or your `--navy`) and ensure no components override it.
+        </p>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Drift Systems Inc.<br><span class="tiny">Systems Architect: Lukas Cain</span></p>
+      <p class="tiny">Research protected by pending patents. Confidential &amp; proprietary.</p>
+    </div>
+  </footer>
+</body>
+</html>
