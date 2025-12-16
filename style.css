@@ -474,3 +474,164 @@ a:hover { opacity: 0.85; }
   .secondary { margin-left: 0; }
   nav ul { justify-content: center; }
 }
+
+/* ===========================
+   DOCS PAGES (shared layer)
+   =========================== */
+
+.skip-link{
+  position:absolute; left:-999px; top:10px;
+  background: var(--cyan); color: #000;
+  padding: 10px 12px;
+  z-index: 9999;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+}
+.skip-link:focus{ left: 10px; }
+
+.docs-header{
+  padding: 36px 0 22px;
+  background: radial-gradient(circle at top right, #1a2340 0%, var(--navy) 60%);
+  border-bottom: 1px solid var(--border);
+}
+.docs-topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+.docs-logo{
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-decoration: none;
+  color: var(--white);
+  font-size: 1.4rem;
+}
+.docs-logo-thin{ font-weight: 300; opacity: 0.95; margin-left: 4px; }
+
+.docs-nav{
+  display:flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.docs-nav a{
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  padding: 8px 10px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.03);
+  color: var(--white);
+  text-decoration: none;
+  transition: transform 0.2s, border-color 0.2s, opacity 0.2s;
+}
+.docs-nav a:hover{
+  border-color: rgba(0,240,255,0.35);
+  transform: translateY(-1px);
+  opacity: 0.95;
+}
+
+.docs-hero{
+  padding: 48px 0 26px;
+  text-align: center;
+}
+.docs-kicker{
+  color: var(--accent-blue);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  font-size: 0.78rem;
+  font-family: 'JetBrains Mono', monospace;
+}
+.docs-title{
+  margin-top: 10px;
+}
+.docs-subtitle{
+  max-width: 780px;
+  margin: 0 auto 22px auto;
+  color: var(--gray);
+  font-size: 1.05rem;
+}
+.docs-cta{
+  display:flex;
+  justify-content:center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Main body */
+.docs-main{
+  padding: 26px 0 70px;
+  background: var(--navy);
+}
+.docs-rule{
+  border: 0;
+  border-top: 1px solid var(--border-color);
+  margin: 0 0 26px 0;
+  opacity: 0.8;
+}
+.docs-section{ margin-top: 34px; }
+.docs-h2{
+  margin: 0 0 14px 0;
+  font-size: 1.4rem;
+}
+.docs-lead{ margin: 0 0 10px 0; }
+
+.docs-grid{
+  display:grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 24px;
+  align-items: start;
+}
+.docs-panel{
+  background: #000;
+  border: 1px solid var(--border);
+  padding: 18px;
+  border-radius: 4px;
+}
+.docs-panel-title{
+  text-align:left;
+  margin-bottom:10px;
+  font-size:0.78rem;
+  color:#94a3b8;
+  font-weight:800;
+  letter-spacing:1px;
+  font-family: 'JetBrains Mono', monospace;
+}
+.docs-panel-head{
+  font-weight: 800;
+  color: var(--white);
+  margin-bottom: 8px;
+}
+.docs-caption{
+  margin: 0;
+  padding-left: 14px;
+  border-left: 2px solid var(--accent-blue);
+  color: var(--text-muted);
+}
+.docs-note{
+  color: var(--text-muted);
+  margin-top: 14px;
+}
+.docs-list{
+  color: var(--text-muted);
+  font-size: 1.02rem;
+  margin: 0 0 0 18px;
+}
+
+.docs-left{ text-align:left; }
+
+/* Outline button for docs, if you want it */
+.btn-outline{
+  border: 1px solid var(--gray);
+  color: var(--white);
+  background: transparent;
+}
+.btn-outline:hover{
+  border-color: rgba(0,240,255,0.35);
+}
+
+/* Responsive */
+@media (max-width: 900px){
+  .docs-grid{ grid-template-columns: 1fr; }
+}
