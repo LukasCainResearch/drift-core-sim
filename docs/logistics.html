@@ -185,7 +185,7 @@
 
         <section id="sim">
             <h2>1. The Cloning Attack Simulator</h2>
-            <p>In this simulation, you play the role of an attacker trying to clone a high-value shipping label. [cite_start]Observe how the <strong>Scan-Evolve</strong> property defeats the clone automatically[cite: 76].</p>
+            <p>In this simulation, you play the role of an attacker trying to clone a high-value shipping label. Observe how the <strong>Scan-Evolve</strong> property defeats the clone automatically.</p>
 
             <div class="sim-container">
                 <div class="sim-grid">
@@ -235,7 +235,7 @@
             </div>
 
             <p style="font-size: 0.95rem; border-left: 2px solid var(--border); padding-left: 15px; color: var(--muted2);">
-                [cite_start]<strong style="color:var(--text);">How it works:</strong> When you <strong style="color:var(--cyan);">SCAN</strong> the original, its internal state evolves (Rolling Code). If you <strong style="color:var(--fail);">CLONE</strong> the state before the scan, your clone holds the *old* state. When the clone is presented later, the network rejects it as a "Replay/Stale" attempt[cite: 76].
+                <strong style="color:var(--text);">How it works:</strong> When you <strong style="color:var(--cyan);">SCAN</strong> the original, its internal state evolves (Rolling Code). If you <strong style="color:var(--fail);">CLONE</strong> the state before the scan, your clone holds the *old* state. When the clone is presented later, the network rejects it as a "Replay/Stale" attempt.
             </p>
         </section>
 
@@ -244,19 +244,19 @@
             <div class="grid-text">
                 <div class="feature-card">
                     <h3>Rolling Codes (NFC/RFID)</h3>
-                    <p>Standard static tags (EPC Gen2) are easily cloned. Drift-enabled tags update their nonce on every read power-cycle. [cite_start]A cloner copies the <em>current</em> nonce, but cannot compute the <em>next</em> one without the internal drift recurrence key[cite: 74].</p>
+                    <p>Standard static tags (EPC Gen2) are easily cloned. Drift-enabled tags update their nonce on every read power-cycle. A cloner copies the <em>current</em> nonce, but cannot compute the <em>next</em> one without the internal drift recurrence key.</p>
                 </div>
                 <div class="feature-card">
                     <h3>Offline Authentication</h3>
-                    <p>Scanners can verify authenticity without a continuous cloud connection. [cite_start]By synchronizing the drift state between the reader and the tag, genuine goods are verified mathematically, even in air-gapped warehouses[cite: 78].</p>
+                    <p>Scanners can verify authenticity without a continuous cloud connection. By synchronizing the drift state between the reader and the tag, genuine goods are verified mathematically, even in air-gapped warehouses.</p>
                 </div>
                 <div class="feature-card">
                     <h3>No Global Ledger</h3>
-                    <p>Blockchains are too slow and public for high-volume logistics. Drift tracks custody via point-to-point state handover. [cite_start]Privacy is preserved because only the authorized next-hop scanner can predict the valid next state[cite: 78].</p>
+                    <p>Blockchains are too slow and public for high-volume logistics. Drift tracks custody via point-to-point state handover. Privacy is preserved because only the authorized next-hop scanner can predict the valid next state.</p>
                 </div>
                 <div class="feature-card">
                     <h3>Forward Security</h3>
-                    <p>Even if a tag is physically dissected and the key extracted, past states cannot be reverse-computed. [cite_start]The "One-Way" nature of the arithmetic drift ensures the history of the supply chain remains immutable[cite: 26].</p>
+                    <p>Even if a tag is physically dissected and the key extracted, past states cannot be reverse-computed. The "One-Way" nature of the arithmetic drift ensures the history of the supply chain remains immutable.</p>
                 </div>
             </div>
         </section>
