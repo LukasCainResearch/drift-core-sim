@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Drift Systems | Semiconductor Demo</title>
+  <meta name="description"
+        content="Interactive semiconductor demo showing FPGA reset, liveness, and deterministic output behavior." />
+  <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="docs-header">
+    <div class="container">
+      <div class="docs-topbar">
+        <a href="semiconductors.html" class="docs-logo">
+          DRIFT<span class="docs-logo-thin">SYSTEMS</span>
+        </a>
+
+        <nav class="docs-nav">
+          <a href="semiconductors.html">Semiconductors</a>
+          <a href="../index.html">Home</a>
+        </nav>
+      </div>
+
+      <div class="docs-hero">
+        <div class="docs-kicker">INTERACTIVE DEMO</div>
+        <h1 class="docs-title">FPGA Liveness & Reset</h1>
+        <p class="docs-subtitle">
+          Observable hardware behavior under deterministic reset and bounded timing.
+        </p>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="docs-main">
+    <div class="container">
+      <section class="docs-section">
+
+        <div class="demoEmbed">
+          <iframe
+            src="https://codepen.io/Lukas_Cain/embed/azNgBOy?default-tab=result&editable=false"
+            title="FPGA Semiconductor Demo"
+            loading="lazy"
+            allowfullscreen>
+          </iframe>
+        </div>
+
+        <ul class="demoBullets">
+          <li>Reset enforces known-good initial state</li>
+          <li>Output transitions occur within bounded cycle windows</li>
+          <li>Delay vs failure is observable at hardware speed</li>
+          <li>No firmware or OS involvement</li>
+        </ul>
+
+        <p class="docs-note">
+          <strong>What this is:</strong> a behavioral demonstration of timing and state invariants.<br>
+          <strong>What this is not:</strong> RTL disclosure, netlist exposure, or implementation detail.
+        </p>
+
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Drift Systems Inc.</p>
+      <p class="tiny">Confidential &amp; proprietary.</p>
+    </div>
+  </footer>
+</body>
+</html>
