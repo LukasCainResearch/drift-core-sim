@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drift Systems | Irreducibility</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💠</text></svg>">
+    <style>
+        :root {
+            --bg-color: #050505;
+            --card-bg: #111111;
+            --text-main: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --accent-purple: #bb86fc;
+            --accent-blue: #4488ff;
+            --border-color: #333;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 { font-weight: 700; letter-spacing: -0.02em; margin-bottom: 1rem; color: #fff; }
+        h1 { font-size: 3.5rem; line-height: 1.1; background: linear-gradient(90deg, #fff, var(--accent-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        h2 { font-size: 2rem; border-left: 4px solid var(--accent-purple); padding-left: 1rem; margin-top: 3rem; }
+        p { margin-bottom: 1.5rem; font-size: 1.1rem; color: var(--text-muted); }
+        
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+        
+        nav { padding: 20px 0; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-weight: 800; font-size: 1.2rem; letter-spacing: 0.1em; color: #fff; text-decoration: none; }
+        .nav-links a { color: var(--text-muted); text-decoration: none; margin-left: 20px; font-size: 0.9rem; transition: color 0.2s; }
+
+        .hero { padding: 80px 0; text-align: center; }
+        .hero p { max-width: 600px; margin: 0 auto 2rem auto; font-size: 1.25rem; }
+        .btn { display: inline-block; padding: 12px 30px; background: var(--accent-purple); color: #000; font-weight: 700; text-decoration: none; border-radius: 2px; }
+
+        .graph-container {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 40px 0;
+            text-align: center;
+        }
+        .diagram-box {
+            border: 1px dashed #444;
+            background: #0a0a0a;
+            padding: 30px;
+            color: #666;
+            font-family: monospace;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .caption { margin-top: 15px; font-size: 0.9rem; color: #888; border-left: 2px solid var(--accent-purple); padding-left: 10px; text-align: left; }
+
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; margin: 60px 0; }
+        .stat-card { background: #1a1a1a; padding: 20px; flex: 1; border-radius: 4px; border-top: 2px solid var(--accent-purple); }
+
+        footer { border-top: 1px solid var(--border-color); padding: 40px 0; margin-top: 80px; text-align: center; font-size: 0.9rem; color: #666; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <nav>
+            <a href="../index.html" class="logo">DRIFT SYSTEMS</a>
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="#nonlocal">Non-Locality</a>
+                <a href="#turing">Irreducibility</a>
+            </div>
+        </nav>
+
+        <section class="hero">
+            <span style="color: var(--accent-purple); font-weight: 600; letter-spacing: 0.1em; font-size: 0.9rem;">COMPUTATIONAL IRREDUCIBILITY</span>
+            <h1>Path-Dependent<br>State Evolution</h1>
+            <p>We leverage Generalized Collatz Maps to create entropy streams where state prediction is formally reducible to the Halting Problem, creating a physical Time-Lock.</p>
+            <br>
+            <a href="Undecidable_Entropy.pdf" class="btn">ANALYZE ARCHITECTURE</a>
+        </section>
+
+        <hr style="border: 0; border-top: 1px solid var(--border-color);">
+
+        <section id="nonlocal">
+            <h2>1. Non-Local State Entanglement</h2>
+            <div class="grid">
+                <div>
+                    <p>Standard cryptographic algorithms (AES, SHA) rely on "Confusion and Diffusion" over multiple rounds. Drift Systems achieves this in a single cycle via <strong>Non-Local Modulo Arithmetic</strong>.</p>
+                    <p>The transition function $S_{t+1} = f(S_t \pmod P)$ forces a global dependency. A single bit flip at the LSB (Least Significant Bit) instantly alters the modulus residue, which reconfigures the arithmetic operation for the entire register.</p>
+                </div>
+                
+                <div class="graph-container" style="margin: 0; background: #000;">
+                    <div class="diagram-box">
+                         <div style="text-align: left;">
+                            <span style="color: var(--accent-purple);">State Register S</span> &rarr; <span style="color: #fff;">Modulo Check</span> &rarr; <span style="color: var(--accent-purple);">Global Feedback</span>
+                        </div>
+                    </div>
+                    <div class="caption">
+                        <strong>Figure 1: Global Feedback.</strong> The modulus check ($n \pmod P$) acts as a global entangler, preventing the state from being decomposed into independent sub-problems.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="turing">
+            <h2>2. Computational Irreducibility</h2>
+            <p>Because the underlying map is <strong>Turing Complete</strong> (Conway, 1972), the sequence is computationally irreducible. There is no shortcut formula.</p>
+            
+            <div class="grid">
+                 <div class="stat-card">
+                    <div class="stat-val">Theorem</div>
+                    <p style="font-size: 0.95rem; margin-top: 10px;"><strong>No Parallel Shortcuts:</strong> To compute state $S_{t+k}$, an adversary must sequentially compute $S_{t+1}, S_{t+2}, \dots, S_{t+k-1}$.</p>
+                </div>
+                 <div class="stat-card" style="border-top-color: var(--accent-blue);">
+                    <div class="stat-val">Application</div>
+                    <p style="font-size: 0.95rem; margin-top: 10px;"><strong>Verifiable Delay Functions (VDF):</strong> This property is critical for preventing "Look-Ahead" attacks in high-frequency trading and consensus protocols.</p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Drift Systems Inc. <br> Systems Architect: Lukas Cain</p>
+        </div>
+    </footer>
+</body>
+</html>
