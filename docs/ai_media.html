@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drift Systems | Media Provenance</title>
+    
+    <script>
+        window.MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']]
+          },
+          svg: {
+            fontCache: 'global'
+          }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💠</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+    <style>
+        :root {
+            /* BRAND PALETTE */
+            --bg0: #000;
+            --bg1: #050505;
+            --panel: rgba(0,20,40,0.5);
+            --border: rgba(0,255,255,0.2);
+            --border-strong: rgba(0,255,255,0.8);
+            --text: #fff;
+            --muted: #a0a0a0;
+            --muted2: #888;
+            --cyan: #00ffff;
+            --mint: #00ffaa;
+            --warn: #ffaa00;
+            --fail: #ff4444;
+            --media: #ff00ff; /* Magenta/Cyberpunk for Media */
+            --mono: 'JetBrains Mono', ui-monospace, monospace;
+            --sans: 'Inter', system-ui, sans-serif;
+            --shadow: 0 0 20px rgba(0,255,255,0.10);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: var(--sans);
+            background-color: var(--bg0);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Typography */
+        h1, h2, h3 { font-weight: 700; letter-spacing: -0.02em; margin-bottom: 1rem; color: #fff; }
+        h1 { 
+            font-size: 3rem; line-height: 1.1; 
+            background: linear-gradient(90deg, #fff, var(--media)); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+        }
+        h2 { 
+            font-size: 1.8rem; border-left: 4px solid var(--media); 
+            padding-left: 1rem; margin-top: 3rem; 
+        }
+        p { margin-bottom: 1.5rem; font-size: 1.05rem; color: var(--muted); }
+        
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+        
+        /* Navigation */
+        nav { padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: var(--sans); font-weight: 900; font-size: 1.2rem; letter-spacing: 1px; color: #fff; text-decoration: none; }
+        .nav-links a { font-family: var(--mono); color: var(--muted); text-decoration: none; margin-left: 20px; font-size: 0.85rem; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--cyan); }
+
+        /* Hero */
+        .hero { padding: 80px 0; text-align: center; }
+        .hero .eyebrow { color: var(--media); font-family: var(--mono); font-weight: 700; letter-spacing: 1px; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        
+        .btn { 
+            display: inline-block; padding: 12px 30px; 
+            background: rgba(255, 0, 255, 0.1); color: var(--media); 
+            border: 1px solid var(--media); font-family: var(--mono); 
+            font-size: 0.85rem; font-weight: 700; text-decoration: none; 
+            transition: all 0.2s; 
+        }
+        .btn:hover { background: var(--media); color: #000; box-shadow: 0 0 20px rgba(255, 0, 255, 0.4); }
+
+        /* --- DEEPFAKE SIMULATOR STYLES --- */
+        .sim-container {
+            background: var(--bg1); border: 1px solid var(--border); border-radius: 4px;
+            padding: 24px; margin: 40px 0; position: relative;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        .video-stream-container {
+            display: flex; align-items: center; justify-content: flex-start; gap: 10px;
+            overflow-x: auto; padding-bottom: 20px; min-height: 180px;
+            background: #111; border: 1px solid #333; padding: 20px;
+            margin-bottom: 20px; position: relative;
+        }
+        
+        /* The frames */
+        .frame {
+            min-width: 100px; height: 120px; background: #222; border: 2px solid #444;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            border-radius: 4px; position: relative; transition: all 0.3s;
+        }
+        .frame.active { border-color: var(--cyan); box-shadow: 0 0 15px rgba(0,255,255,0.2); transform: scale(1.05); z-index: 10; }
+        .frame.fake { border-color: var(--fail); box-shadow: 0 0 15px rgba(255,0,0,0.2); }
+        .frame.verified { border-color: var(--mint); }
+
+        .frame-content { font-size: 2rem; margin-bottom: 10px; }
+        .frame-hash { font-family: var(--mono); font-size: 0.6rem; color: #888; background: #000; padding: 2px 4px; border-radius: 2px; }
+        .frame-status { 
+            position: absolute; top: -10px; right: -10px; font-size: 1.2rem; 
+            opacity: 0; transition: opacity 0.2s; 
+        }
+        .frame.verified .frame-status { opacity: 1; content: '✅'; }
+        .frame.fake .frame-status { opacity: 1; content: '⚠️'; }
+
+        /* The Analyzer UI */
+        .analyzer-dashboard {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+        }
+        .monitor-box {
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 15px;
+        }
+        .monitor-label { font-family: var(--mono); font-size: 0.75rem; color: #888; display: block; margin-bottom: 5px; }
+        .monitor-val { font-family: var(--mono); font-size: 1.1rem; color: #fff; }
+        .monitor-val.fail { color: var(--fail); font-weight: 700; animation: flash 0.5s infinite; }
+        @keyframes flash { 0% { opacity:1; } 50% { opacity:0.5; } 100% { opacity:1; } }
+
+        .controls {
+            display: flex; justify-content: center; gap: 20px; margin-top: 20px;
+        }
+        .media-btn {
+            background: transparent; border: 1px solid var(--border); color: #fff;
+            font-family: var(--mono); padding: 12px 24px; cursor: pointer; font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .media-btn:hover { border-color: var(--media); color: var(--media); }
+        .media-btn.inject { border-color: var(--fail); color: var(--fail); }
+        .media-btn.inject:hover { background: var(--fail); color: #000; }
+
+        /* --- SECTION STYLES --- */
+        .grid-text { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin: 60px 0; }
+        .feature-card { border: 1px solid var(--border); padding: 24px; background: var(--panel); transition: transform 0.2s; }
+        .feature-card:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+        .feature-card h3 { color: var(--cyan); font-family: var(--mono); font-size: 1rem; margin-bottom: 12px; letter-spacing: 1px; }
+
+        footer { border-top: 1px solid rgba(255,255,255,0.1); padding: 40px 0; margin-top: 80px; text-align: center; font-size: 0.9rem; color: #666; }
+        
+        @media (max-width: 900px) {
+            h1 { font-size: 2.2rem; }
+            .grid-text { grid-template-columns: 1fr; }
+            .analyzer-dashboard { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <nav>
+            <a href="../index.html" class="logo">DRIFT<span style="font-weight:300;">SYSTEMS</span></a>
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="#sim">Fake Detector</a>
+                <a href="#specs">Specs</a>
+            </div>
+        </nav>
+
+        <section class="hero">
+            <span class="eyebrow">AI INTEGRITY & MEDIA</span>
+            <h1>Deepfake Defense via<br>Intrinsic Lineage</h1>
+            <p>Metadata can be stripped. Drift embeds provenance directly into the bitstream. By binding video frames to a chaotic arithmetic chain, any spliced or AI-generated content creates a detectable mathematical "tear" in the sequence.</p>
+            <br>
+            <a href="#sim" class="btn">INJECT DEEPFAKE</a>
+        </section>
+
+        <hr style="border: 0; border-top: 1px solid var(--border-color);">
+
+        <section id="sim">
+            <h2>1. The Provenance Simulator</h2>
+            <p>This stream represents a secure video feed (e.g., News Broadcast or Security Cam). Each frame inherits the Drift State ($S_t$) of the previous frame. Try to inject a fake frame and watch the Chain Validator detect the anomaly.</p>
+
+            <div class="sim-container">
+                
+                <div class="video-stream-container" id="video-stream">
+                    </div>
+
+                <div class="analyzer-dashboard">
+                    <div class="monitor-box">
+                        <span class="monitor-label">EXPECTED NEXT STATE (H_next)</span>
+                        <span class="monitor-val" style="color:var(--mint);" id="val-expect">Calculating...</span>
+                    </div>
+                    <div class="monitor-box">
+                        <span class="monitor-label">STATUS</span>
+                        <span class="monitor-val" id="val-status">SECURE STREAM</span>
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <button class="media-btn" id="btn-play" onclick="playStream()">▶ PLAY STREAM</button>
+                    <button class="media-btn inject" onclick="injectFake()">☠ INJECT DEEPFAKE FRAME</button>
+                </div>
+            </div>
+
+            <p style="font-size: 0.95rem; border-left: 2px solid var(--border); padding-left: 15px; color: var(--muted2);">
+                <strong style="color:var(--text);">How it works:</strong> The Deepfake looks visually perfect (😀), but its hidden arithmetic signature is <code>NULL</code> or random. Because it cannot reproduce the proprietary hash $S_{t+1}$ derived from the previous legitimate frame, the Drift Core flags it as a <strong>"SEQUENCE BREAK."</strong>
+            </p>
+        </section>
+
+        <section id="specs">
+            <h2>2. Provenance Capabilities</h2>
+            <div class="grid-text">
+                <div class="feature-card">
+                    <h3>Frame-Level Chain of Custody</h3>
+                    <p>Drift treats every video frame as a block in a lightweight blockchain. Frame 100 contains the drift hash of Frame 99. If an editor cuts 5 seconds of footage, the chain breaks, providing mathematical proof of editing.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Drift-Incompatibility Detection</h3>
+                    <p>Generative AI models create pixels, not arithmetic history. A diffusion model cannot guess the internal state of a hardware drift core. Therefore, AI-generated content is fundamentally "Drift Incompatible" and rejected by player software.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>C2PA / CAI Hardening</h3>
+                    <p>Current standards (C2PA) rely on digital signatures which are heavy and checkable only at the file level. Drift adds a fast, streamable layer of integrity that works for live broadcasts and low-latency Real-Time Protocol (RTP).</p>
+                </div>
+                <div class="feature-card">
+                    <h3>No Visible Watermarks</h3>
+                    <p>Unlike QR codes or noisy watermarks that degrade image quality, Drift binds the metadata to the frame timing and header structure. It is invisible to the viewer but obvious to the decoder.</p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Drift Systems Inc. <br> Systems Architect: Lukas Cain</p>
+            <p style="font-size: 0.8rem; color: #444;">Export Controlled Technology (EAR99).</p>
+        </div>
+    </footer>
+
+    <script>
+    (function() {
+        const streamContainer = document.getElementById('video-stream');
+        const valExpect = document.getElementById('val-expect');
+        const valStatus = document.getElementById('val-status');
+        const btnPlay = document.getElementById('btn-play');
+        
+        let isPlaying = false;
+        let timer = null;
+        let frameCount = 0;
+        let lastHash = 0x1A2B;
+        let pendingFake = false;
+
+        // Simple Drift Function (Mock)
+        function nextHash(h) {
+            return ((h * 3 + 1) ^ (h >> 1)) & 0xFFFF;
+        }
+
+        function createFrame(isFake) {
+            const el = document.createElement('div');
+            el.className = 'frame';
+            
+            // State Logic
+            let currentHash, expectedHash;
+            expectedHash = nextHash(lastHash);
+            
+            if(isFake) {
+                // Fake has random hash, breaks chain
+                currentHash = Math.floor(Math.random() * 0xFFFF);
+                el.className += ' fake';
+                el.innerHTML = `
+                    <div class="frame-status">⚠️</div>
+                    <div class="frame-content">🤖</div>
+                    <div class="frame-hash" style="color:var(--fail)">0x${currentHash.toString(16)}</div>
+                `;
+            } else {
+                // Valid inherits
+                currentHash = expectedHash;
+                lastHash = currentHash;
+                el.innerHTML = `
+                    <div class="frame-status">✅</div>
+                    <div class="frame-content">😀</div>
+                    <div class="frame-hash">0x${currentHash.toString(16)}</div>
+                `;
+            }
+
+            streamContainer.appendChild(el);
+            streamContainer.scrollLeft = streamContainer.scrollWidth;
+
+            // Limit DOM
+            if(streamContainer.children.length > 8) streamContainer.firstChild.remove();
+
+            // Highlight Active
+            Array.from(streamContainer.children).forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+
+            return { isFake, currentHash, expectedHash };
+        }
+
+        function step() {
+            frameCount++;
+            
+            // Check if user requested injection
+            let injectNow = pendingFake;
+            pendingFake = false;
+
+            let data = createFrame(injectNow);
+
+            // Update UI
+            valExpect.innerText = `0x${data.expectedHash.toString(16).toUpperCase()}`;
+            
+            if(data.isFake) {
+                // Detected!
+                valStatus.innerHTML = "❌ SEQUENCE BREAK DETECTED";
+                valStatus.className = "monitor-val fail";
+                // Pause to show error
+                stopStream();
+                btnPlay.innerText = "RESUME STREAM";
+            } else {
+                valStatus.innerHTML = "SECURE STREAM (Linked)";
+                valStatus.className = "monitor-val";
+            }
+        }
+
+        window.playStream = function() {
+            if(isPlaying) return;
+            isPlaying = true;
+            btnPlay.innerText = "STREAMING...";
+            btnPlay.classList.add('active');
+            
+            // Reset UI if error state
+            valStatus.className = "monitor-val";
+            
+            timer = setInterval(step, 800);
+        };
+
+        function stopStream() {
+            isPlaying = false;
+            clearInterval(timer);
+            btnPlay.classList.remove('active');
+        }
+
+        window.injectFake = function() {
+            if(!isPlaying) {
+                alert("Start the stream first!");
+                return;
+            }
+            pendingFake = true;
+        };
+
+        // Init one frame
+        createFrame(false);
+
+    })();
+    </script>
+</body>
+</html>
