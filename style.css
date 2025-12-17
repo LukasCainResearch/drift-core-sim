@@ -344,3 +344,43 @@ footer{
   .card, nav a, .btn, .btn-outline, .btn-solid{ transition:none !important; }
   .card:hover, nav a:hover, .btn:hover, .btn-outline:hover, .btn-solid:hover{ transform:none !important; }
 }
+
+/* --- Defense Table Styles --- */
+.table-responsive {
+  overflow-x: auto;
+  margin-top: 20px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.02);
+}
+.spec-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  text-align: left;
+}
+.spec-table th, .spec-table td {
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.spec-table th {
+  color: var(--muted);
+  font-weight: 400;
+  letter-spacing: 1px;
+  border-bottom: 2px solid rgba(255,255,255,0.2);
+}
+.spec-table td {
+  color: #fff;
+}
+/* Highlight Column for Drift */
+.spec-table .highlight {
+  color: var(--cyan);
+  background: rgba(0, 255, 255, 0.05);
+  font-weight: 700;
+  border-left: 1px solid rgba(0,255,255,0.1);
+  border-right: 1px solid rgba(0,255,255,0.1);
+}
+/* Responsive adjustments for table */
+@media (max-width: 700px) {
+  .spec-table th, .spec-table td { padding: 10px; font-size: 0.8rem; }
+}
