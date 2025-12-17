@@ -9,8 +9,9 @@
   --muted2:#888;
   --cyan:#00ffff;
   --mint:#00ffaa;
-  --warn:#ffaa00;
-  --fail:#ff4444;
+  --warn:#ffaa00; /* Orange */
+  --fail:#ff4444; /* Red */
+  --purple:#d500f9;
   --compute: #ff0055;
   --mono: 'JetBrains Mono', ui-monospace, monospace;
   --sans: 'Inter', system-ui, sans-serif;
@@ -58,6 +59,7 @@ nav a{
 }
 nav a:hover{ border-color: rgba(0,255,255,0.35); color: #fff; box-shadow: 0 0 14px rgba(0,255,255,0.08); transform: translateY(-1px); }
 
+/* Status Badge (Hero) - Uses Mint */
 .status-badge{
   display:inline-block;
   font-family: var(--mono);
@@ -69,6 +71,7 @@ nav a:hover{ border-color: rgba(0,255,255,0.35); color: #fff; box-shadow: 0 0 14
   margin-bottom: 18px;
   background: rgba(0,255,170,0.05);
 }
+
 .hero h1{
   font-size: clamp(2.2rem, 4vw, 3.1rem);
   margin: 0 0 14px 0;
@@ -223,10 +226,9 @@ section { padding: 72px 0; }
   line-height: 1.5;
 }
 .icon{
-  font-size: 2.5rem;
   color: var(--cyan);
   margin-bottom: 0.9rem;
-  text-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
+  display: inline-block;
 }
 
 /* Vertical chips + bullets */
@@ -241,12 +243,13 @@ section { padding: 72px 0; }
   background: rgba(0,255,255,0.06);
 }
 
-/* Standardized FIRST-badge theme colors */
-.chip-trl { border-color: rgba(0,255,170,0.35); color: var(--mint); background: rgba(0,255,170,0.08); }     /* TRL-* */
-.chip-ip  { border-color: rgba(68,136,255,0.45); color: #66a3ff; background: rgba(68,136,255,0.10); }       /* IP LICENSING */
-.chip-vol { border-color: rgba(255,170,0,0.40); color: var(--warn); background: rgba(255,170,0,0.10); }      /* HIGH VOLUME / FRAUD / etc. */
-.chip-ret { border-color: rgba(0,255,255,0.30); color: var(--cyan); background: rgba(0,255,255,0.06); }      /* RETROFIT / ULTRA LOW LATENCY */
-.chip-cryo{ border-color: rgba(255,0,255,0.40); color: #ff00ff; background: rgba(255,0,255,0.10); }          /* EXTREME ENV (purple) */
+/* --- COHERENT COLOR SYSTEM FOR VERTICALS --- */
+.chip-mint   { border-color: rgba(0,255,170,0.35); color: var(--mint); background: rgba(0,255,170,0.08); }    /* TRL */
+.chip-cyan   { border-color: rgba(0,255,255,0.30); color: var(--cyan); background: rgba(0,255,255,0.06); }    /* IP / Tech */
+.chip-orange { border-color: rgba(255,170,0,0.40); color: var(--warn); background: rgba(255,170,0,0.10); }    /* High Vol / Money */
+.chip-purple { border-color: rgba(213,0,249,0.40); color: var(--purple); background: rgba(213,0,249,0.10); }  /* Extreme / Quantum */
+.chip-red    { border-color: rgba(255,68,68,0.40); color: var(--fail); background: rgba(255,68,68,0.10); }    /* Safety */
+
 
 .bullets{
   text-align:left;
@@ -259,7 +262,7 @@ section { padding: 72px 0; }
 }
 .actions{ display:flex; justify-content:center; gap: 12px; flex-wrap:wrap; margin-top:auto; }
 
-/* Buttons */
+/* Standard Outline Button (Cyan) */
 .btn-outline{
   font-family: var(--mono);
   font-size: 0.82rem;
@@ -274,6 +277,7 @@ section { padding: 72px 0; }
 }
 .btn-outline:hover{ background: var(--cyan); color:#000; box-shadow: 0 0 15px rgba(0,255,255,0.6); }
 
+/* Solid Button (Cyan) */
 .btn-solid{
   font-family: var(--mono);
   font-size: 0.82rem;
@@ -289,21 +293,36 @@ section { padding: 72px 0; }
 }
 .btn-solid:hover{ background: var(--mint); border-color: var(--mint); box-shadow: 0 0 15px rgba(0,255,170,0.55); }
 
-/* Research: revert card look, keep mint accents, orange button only */
-.research-card{ border-color: rgba(0,255,170,0.35); }
-.research-card:hover{ border-color: rgba(0,255,170,0.85); box-shadow: 0 0 20px rgba(0,255,170,0.10); }
-.icon-mint{ color: var(--mint); text-shadow: 0 0 10px rgba(0,255,170,0.35); }
-.mint{ color: var(--mint); }
-
-/* Orange outline button (requested) */
-.btn-outline.warn{
-  color: var(--warn);
-  border-color: var(--warn);
+/* --- MATH FOUNDATION CARDS (Updated to match Screenshot) --- */
+.research-card {
+  /* No special border color by default, uses .card logic */
 }
-.btn-outline.warn:hover{
+.research-card .icon-foundation {
+  color: var(--mint); 
+  /* Icons handled via SVG currentColor */
+}
+.research-card h5.foundation-title {
+  color: var(--mint);
+  margin-top: 10px;
+}
+
+/* Orange/Amber Button for Research Cards */
+.btn-outline-orange {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  letter-spacing: 1px;
+  color: var(--warn);
+  border: 1px solid var(--warn);
+  padding: 12px 18px;
+  text-decoration: none;
+  display:inline-block;
+  transition: all 0.25s ease;
+  background: transparent;
+}
+.btn-outline-orange:hover {
   background: var(--warn);
   color: #000;
-  box-shadow: 0 0 15px rgba(255,170,0,0.45);
+  box-shadow: 0 0 15px rgba(255, 170, 0, 0.6);
 }
 
 /* Footer */
