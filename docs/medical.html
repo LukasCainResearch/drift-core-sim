@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drift Systems | Bio-Telemetry & IMDs</title>
+    
+    <script>
+        window.MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']]
+          },
+          svg: {
+            fontCache: 'global'
+          }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💠</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+    <style>
+        :root {
+            /* BRAND PALETTE */
+            --bg0: #000;
+            --bg1: #050505;
+            --panel: rgba(0,20,40,0.5);
+            --border: rgba(0,255,255,0.2);
+            --border-strong: rgba(0,255,255,0.8);
+            --text: #fff;
+            --muted: #a0a0a0;
+            --muted2: #888;
+            --cyan: #00ffff;
+            --mint: #00ffaa;
+            --warn: #ffaa00;
+            --fail: #ff4444;
+            --vital: #ff3366; /* Vital Sign Pink/Red */
+            --mono: 'JetBrains Mono', ui-monospace, monospace;
+            --sans: 'Inter', system-ui, sans-serif;
+            --shadow: 0 0 20px rgba(0,255,255,0.10);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: var(--sans);
+            background-color: var(--bg0);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Typography */
+        h1, h2, h3 { font-weight: 700; letter-spacing: -0.02em; margin-bottom: 1rem; color: #fff; }
+        h1 { 
+            font-size: 3rem; line-height: 1.1; 
+            background: linear-gradient(90deg, #fff, var(--vital)); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+        }
+        h2 { 
+            font-size: 1.8rem; border-left: 4px solid var(--vital); 
+            padding-left: 1rem; margin-top: 3rem; 
+        }
+        p { margin-bottom: 1.5rem; font-size: 1.05rem; color: var(--muted); }
+        
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+        
+        /* Navigation */
+        nav { padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: var(--sans); font-weight: 900; font-size: 1.2rem; letter-spacing: 1px; color: #fff; text-decoration: none; }
+        .nav-links a { font-family: var(--mono); color: var(--muted); text-decoration: none; margin-left: 20px; font-size: 0.85rem; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--cyan); }
+
+        /* Hero */
+        .hero { padding: 80px 0; text-align: center; }
+        .hero .eyebrow { color: var(--vital); font-family: var(--mono); font-weight: 700; letter-spacing: 1px; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        
+        .btn { 
+            display: inline-block; padding: 12px 30px; 
+            background: rgba(255, 51, 102, 0.1); color: var(--vital); 
+            border: 1px solid var(--vital); font-family: var(--mono); 
+            font-size: 0.85rem; font-weight: 700; text-decoration: none; 
+            transition: all 0.2s; 
+        }
+        .btn:hover { background: var(--vital); color: #000; box-shadow: 0 0 20px rgba(255, 51, 102,0.4); }
+
+        /* --- BATTERY SIMULATOR STYLES --- */
+        .sim-container {
+            background: var(--bg1); border: 1px solid var(--border); border-radius: 4px;
+            padding: 24px; margin: 40px 0; position: relative;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        .bio-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+        }
+
+        .device-panel {
+            background: #111; border: 1px solid #333; padding: 20px; border-radius: 6px;
+            position: relative; overflow: hidden;
+        }
+        .device-panel.stress { border-color: var(--fail); box-shadow: inset 0 0 20px rgba(255,0,0,0.1); }
+
+        .panel-header {
+            font-family: var(--mono); font-size: 0.8rem; color: #888; border-bottom: 1px solid #333;
+            margin-bottom: 15px; padding-bottom: 5px; display: flex; justify-content: space-between;
+        }
+
+        .heart-rate {
+            height: 60px; display: flex; align-items: center; justify-content: center;
+            font-family: var(--mono); font-size: 1.5rem; color: var(--vital);
+        }
+        .bpm-val { font-weight: 900; margin-right: 5px; }
+        .ecg-line {
+            width: 100px; height: 2px; background: #333; position: relative; margin-left: 10px;
+        }
+        .ecg-line::after {
+            content: ''; position: absolute; width: 4px; height: 4px; background: var(--vital);
+            border-radius: 50%; animation: ecg 1s infinite linear;
+        }
+        @keyframes ecg { 0% { left: 0; opacity:0; } 10% { opacity:1; } 90% { opacity:1; } 100% { left: 100%; opacity:0; } }
+
+        .battery-meter {
+            margin-top: 20px; background: #222; height: 20px; border-radius: 2px; position: relative;
+            border: 1px solid #444;
+        }
+        .battery-level {
+            height: 100%; background: var(--mint); width: 100%; transition: width 0.2s, background 0.3s;
+        }
+        .battery-text {
+            position: absolute; width: 100%; text-align: center; top: 0; line-height: 18px;
+            font-family: var(--mono); font-size: 0.7rem; color: #fff; text-shadow: 0 0 2px #000;
+        }
+
+        .cpu-state {
+            margin-top: 15px; display: flex; justify-content: space-between; align-items: center;
+            font-family: var(--mono); font-size: 0.8rem;
+        }
+        .state-indicator {
+            padding: 4px 8px; border-radius: 2px; font-weight: 700; font-size: 0.7rem;
+        }
+        .cpu-sleep { background: #003300; color: #00ff00; border: 1px solid #005500; }
+        .cpu-wake { background: #550000; color: #ff5555; border: 1px solid #ff0000; animation: blink 0.2s infinite; }
+        
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
+
+        .attack-log {
+            font-family: var(--mono); font-size: 0.7rem; color: var(--muted2); margin-top: 15px;
+            height: 60px; overflow: hidden; border-top: 1px dashed #333; padding-top: 5px;
+        }
+
+        .controls {
+            margin-top: 30px; display: flex; justify-content: center; gap: 20px;
+        }
+        .atk-btn {
+            background: transparent; border: 1px solid var(--fail); color: var(--fail);
+            font-family: var(--mono); padding: 12px 24px; cursor: pointer; font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .atk-btn:hover { background: var(--fail); color: #000; box-shadow: 0 0 20px rgba(255, 68, 68, 0.4); }
+        .atk-btn.active { background: var(--fail); color: #000; }
+
+        /* --- SECTION STYLES --- */
+        .grid-text { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin: 60px 0; }
+        .feature-card { border: 1px solid var(--border); padding: 24px; background: var(--panel); transition: transform 0.2s; }
+        .feature-card:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+        .feature-card h3 { color: var(--cyan); font-family: var(--mono); font-size: 1rem; margin-bottom: 12px; letter-spacing: 1px; }
+
+        footer { border-top: 1px solid rgba(255,255,255,0.1); padding: 40px 0; margin-top: 80px; text-align: center; font-size: 0.9rem; color: #666; }
+        
+        @media (max-width: 900px) {
+            .bio-grid { grid-template-columns: 1fr; }
+            h1 { font-size: 2.2rem; }
+            .grid-text { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <nav>
+            <a href="../index.html" class="logo">DRIFT<span style="font-weight:300;">SYSTEMS</span></a>
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="#sim">Battery Sim</a>
+                <a href="#specs">Specs</a>
+            </div>
+        </nav>
+
+        <section class="hero">
+            <span class="eyebrow">BIO-TELEMETRY & IMPLANTS</span>
+            <h1>Denial-of-Sleep<br>Protection</h1>
+            <p>Implantable devices are vulnerable to "Battery Drain" attacks. Drift Systems utilizes ultra-low power logic (nanowatts) to filter incoming commands, ensuring the main CPU only wakes for cryptographically valid requests.</p>
+            <br>
+            <a href="#sim" class="btn">TEST BATTERY RESILIENCE</a>
+        </section>
+
+        <hr style="border: 0; border-top: 1px solid var(--border-color);">
+
+        <section id="sim">
+            <h2>1. The "Battery Drain" Simulator</h2>
+            <p>Attackers can flood an IMD (Implantable Medical Device) with garbage requests. In standard systems, the CPU wakes up to verify (and reject) each packet, draining the battery. In Drift systems, the pre-CPU logic gate drops the packet instantly.</p>
+
+            <div class="sim-container">
+                <div class="bio-grid">
+                    
+                    <div class="device-panel" id="panel-std">
+                        <div class="panel-header">
+                            <span>DEVICE A: STANDARD RF</span>
+                            <span id="status-std" style="color:var(--muted);">IDLE</span>
+                        </div>
+                        <div class="heart-rate">
+                            <span class="bpm-val">60</span> BPM <div class="ecg-line"></div>
+                        </div>
+                        <div class="cpu-state">
+                            <span>CPU STATUS:</span>
+                            <span class="state-indicator cpu-sleep" id="cpu-std">SLEEP (1 µA)</span>
+                        </div>
+                        <div class="battery-meter">
+                            <div class="battery-level" id="bat-std" style="width: 100%;"></div>
+                            <div class="battery-text" id="bat-text-std">100% (5.0 Yrs)</div>
+                        </div>
+                        <div class="attack-log" id="log-std">System Nominal.</div>
+                    </div>
+
+                    <div class="device-panel" id="panel-drift">
+                        <div class="panel-header">
+                            <span>DEVICE B: DRIFT GATE</span>
+                            <span id="status-drift" style="color:var(--muted);">IDLE</span>
+                        </div>
+                        <div class="heart-rate">
+                            <span class="bpm-val">60</span> BPM <div class="ecg-line"></div>
+                        </div>
+                        <div class="cpu-state">
+                            <span>CPU STATUS:</span>
+                            <span class="state-indicator cpu-sleep" id="cpu-drift">SLEEP (1 µA)</span>
+                        </div>
+                        <div class="battery-meter">
+                            <div class="battery-level" id="bat-drift" style="width: 100%;"></div>
+                            <div class="battery-text" id="bat-text-drift">100% (5.0 Yrs)</div>
+                        </div>
+                        <div class="attack-log" id="log-drift">System Nominal.</div>
+                    </div>
+
+                </div>
+
+                <div class="controls">
+                    <button class="atk-btn" id="btn-flood" onclick="toggleFlood()">⚠️ START FLOOD ATTACK (WAKE-UP SPAM)</button>
+                </div>
+            </div>
+
+            <p style="font-size: 0.95rem; border-left: 2px solid var(--border); padding-left: 15px; color: var(--muted2);">
+                <strong style="color:var(--text);">Observation:</strong> Under attack, Device A (Standard) flashes <strong>"CPU: WAKE"</strong> repeatedly, causing the battery to plummet (Red). Device B (Drift) keeps the CPU in <strong>"SLEEP"</strong> because the Drift Gate filters the noise before it hits the processor rail.
+            </p>
+        </section>
+
+        <section id="specs">
+            <h2>2. Clinical Capabilities</h2>
+            <div class="grid-text">
+                <div class="feature-card">
+                    [cite_start]<h3>Zero-Power Wake-Up [cite: 18, 63]</h3>
+                    <p>Our combinatorial logic gate operates on nanowatts. It verifies the incoming "Drift Sequence" before enabling the main power rail. This physically prevents attackers from exhausting the battery via RF flooding.</p>
+                </div>
+                <div class="feature-card">
+                    [cite_start]<h3>Programmer Binding [cite: 27]</h3>
+                    <p>Medical wands (in-clinic programmers) establish a session-based drift state. This prevents "Drive-by" programming attacks or replay of previous adjustment commands, ensuring only the authorized physician can alter therapy.</p>
+                </div>
+                <div class="feature-card">
+                    [cite_start]<h3>Telemetry Integrity [cite: 57]</h3>
+                    <p>Drift envelopes ensure that patient data (IEGM, Holter) is not spoofed or replayed. This prevents misdiagnosis caused by malicious injection of false cardiac rhythms into the monitoring backend.</p>
+                </div>
+                <div class="feature-card">
+                    [cite_start]<h3>Emergency Glass-Break [cite: 64]</h3>
+                    <p>Drift supports "Quorum-Based" override. In an ambulance, paramedics can utilize a specific "Emergency Drift" sequence that alerts the network but allows immediate therapy adjustment without cloud keys.</p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Drift Systems Inc. <br> Systems Architect: Lukas Cain</p>
+            <p style="font-size: 0.8rem; color: #444;">Export Controlled Technology (EAR99).</p>
+        </div>
+    </footer>
+
+    <script>
+    (function() {
+        let attacking = false;
+        let batStd = 100;
+        let batDrift = 100;
+        let timer = null;
+
+        const btnFlood = document.getElementById('btn-flood');
+        
+        // Standard Elements
+        const elCpuStd = document.getElementById('cpu-std');
+        const elBatStd = document.getElementById('bat-std');
+        const elBatTextStd = document.getElementById('bat-text-std');
+        const elLogStd = document.getElementById('log-std');
+        const elPanelStd = document.getElementById('panel-std');
+
+        // Drift Elements
+        const elCpuDrift = document.getElementById('cpu-drift');
+        const elBatDrift = document.getElementById('bat-drift');
+        const elBatTextDrift = document.getElementById('bat-text-drift');
+        const elLogDrift = document.getElementById('log-drift');
+
+        window.toggleFlood = function() {
+            attacking = !attacking;
+            
+            if(attacking) {
+                btnFlood.classList.add('active');
+                btnFlood.innerText = "🛑 STOP FLOOD ATTACK";
+                startSim();
+            } else {
+                btnFlood.classList.remove('active');
+                btnFlood.innerText = "⚠️ START FLOOD ATTACK (WAKE-UP SPAM)";
+                stopSim();
+            }
+        };
+
+        function startSim() {
+            // Logs
+            elLogStd.innerText = "> PACKET RX... WAKING CPU...\n> INVALID SIGNATURE (DROP)";
+            elLogDrift.innerText = "> PACKET RX... GATE CHECK FAIL.\n> CPU SLEEP MAINTAINED.";
+            
+            timer = setInterval(() => {
+                // Device A: Standard (CPU Wakes up to check crypto)
+                // Cost: High
+                batStd -= 1.5; 
+                elCpuStd.className = "state-indicator cpu-wake";
+                elCpuStd.innerText = "WAKE (15 mA)";
+                elPanelStd.classList.add('stress');
+
+                // Device B: Drift (Gate rejects, CPU sleeps)
+                // Cost: Near Zero
+                batDrift -= 0.05;
+                elCpuDrift.className = "state-indicator cpu-sleep";
+                elCpuDrift.innerText = "SLEEP (1 µA)";
+
+                updateUI();
+
+                if(batStd <= 0) {
+                    batStd = 0;
+                    elCpuStd.innerText = "DEAD";
+                    elLogStd.innerText = "> CRITICAL FAILURE. BATTERY DEPLETED.";
+                    clearInterval(timer);
+                }
+
+            }, 200);
+        }
+
+        function stopSim() {
+            clearInterval(timer);
+            elCpuStd.className = "state-indicator cpu-sleep";
+            elCpuStd.innerText = "SLEEP (1 µA)";
+            elPanelStd.classList.remove('stress');
+            
+            elLogStd.innerText = "Attack Ceased.";
+            elLogDrift.innerText = "Attack Ceased.";
+        }
+
+        function updateUI() {
+            // Standard
+            elBatStd.style.width = batStd + "%";
+            elBatTextStd.innerText = batStd.toFixed(1) + "%";
+            if(batStd < 30) elBatStd.style.background = "var(--fail)";
+            else if(batStd < 60) elBatStd.style.background = "var(--warn)";
+
+            // Drift
+            elBatDrift.style.width = batDrift + "%";
+            elBatTextDrift.innerText = batDrift.toFixed(1) + "%";
+        }
+
+    })();
+    </script>
+</body>
+</html>
