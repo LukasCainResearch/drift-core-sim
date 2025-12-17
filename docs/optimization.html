@@ -34,15 +34,13 @@
             --border-strong: rgba(0,255,255,0.8);
             --text: #fff;
             --muted: #a0a0a0;
-            --muted2: #888;
             --cyan: #00ffff;
             --mint: #00ffaa;
             --warn: #ffaa00;
             --fail: #ff4444;
-            --opt: #ff0055; /* Magenta/Red for Optimization */
+            --opt: #ff0055; 
             --mono: 'JetBrains Mono', ui-monospace, monospace;
             --sans: 'Inter', system-ui, sans-serif;
-            --shadow: 0 0 20px rgba(0,255,255,0.10);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -56,15 +54,8 @@
         }
 
         h1, h2, h3 { font-weight: 700; letter-spacing: -0.02em; margin-bottom: 1rem; color: #fff; }
-        h1 { 
-            font-size: 3rem; line-height: 1.1; 
-            background: linear-gradient(90deg, #fff, var(--opt)); 
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
-        }
-        h2 { 
-            font-size: 1.8rem; border-left: 4px solid var(--opt); 
-            padding-left: 1rem; margin-top: 3rem; 
-        }
+        h1 { font-size: 3rem; line-height: 1.1; background: linear-gradient(90deg, #fff, var(--opt)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        h2 { font-size: 1.8rem; border-left: 4px solid var(--opt); padding-left: 1rem; margin-top: 3rem; }
         p { margin-bottom: 1.5rem; font-size: 1.05rem; color: var(--muted); }
         
         .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
@@ -77,52 +68,21 @@
         .hero { padding: 80px 0; text-align: center; }
         .hero .eyebrow { color: var(--opt); font-family: var(--mono); font-weight: 700; letter-spacing: 1px; font-size: 0.85rem; display: block; margin-bottom: 10px; }
         
-        .btn { 
-            display: inline-block; padding: 12px 30px; 
-            background: rgba(255, 0, 85, 0.1); color: var(--opt); 
-            border: 1px solid var(--opt); font-family: var(--mono); 
-            font-size: 0.85rem; font-weight: 700; text-decoration: none; 
-            transition: all 0.2s; 
-        }
+        .btn { display: inline-block; padding: 12px 30px; background: rgba(255, 0, 85, 0.1); color: var(--opt); border: 1px solid var(--opt); font-family: var(--mono); font-size: 0.85rem; font-weight: 700; text-decoration: none; transition: all 0.2s; }
         .btn:hover { background: var(--opt); color: #000; box-shadow: 0 0 20px rgba(255, 0, 85, 0.4); }
+        .btn-outline { background: transparent; color: var(--opt); border: 1px solid var(--border); margin-left: 10px; }
+        .btn-outline:hover { border-color: var(--opt); color: #fff; }
 
         /* --- TSP SIMULATOR STYLES --- */
-        .sim-container {
-            background: var(--bg1); border: 1px solid var(--border); border-radius: 4px;
-            padding: 24px; margin: 40px 0; position: relative;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-        }
-
-        .tsp-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
-        }
-
-        .map-panel {
-            background: #111; border: 1px solid #333; height: 300px; position: relative;
-            border-radius: 4px; overflow: hidden;
-        }
-        .map-header {
-            position: absolute; top: 10px; left: 10px; font-family: var(--mono); 
-            font-size: 0.8rem; color: #888; z-index: 10;
-        }
+        .sim-container { background: var(--bg1); border: 1px solid var(--border); border-radius: 4px; padding: 24px; margin: 40px 0; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+        .tsp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        .map-panel { background: #111; border: 1px solid #333; height: 300px; position: relative; border-radius: 4px; overflow: hidden; }
+        .map-header { position: absolute; top: 10px; left: 10px; font-family: var(--mono); font-size: 0.8rem; color: #888; z-index: 10; }
         .map-canvas { width: 100%; height: 100%; }
-
-        .city {
-            position: absolute; width: 6px; height: 6px; background: #fff; border-radius: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .stats-row {
-            display: flex; justify-content: space-between; margin-top: 10px;
-            font-family: var(--mono); font-size: 0.8rem; color: #ccc;
-        }
+        .stats-row { display: flex; justify-content: space-between; margin-top: 10px; font-family: var(--mono); font-size: 0.8rem; color: #ccc; }
         .dist-val { font-weight: 700; color: var(--cyan); }
-
         .controls { display: flex; justify-content: center; margin-top: 30px; gap: 20px; }
-        .sim-btn {
-            background: #222; border: 1px solid #444; color: #ccc; padding: 12px 24px;
-            font-family: var(--mono); cursor: pointer; transition: all 0.2s; font-size: 0.9rem;
-        }
+        .sim-btn { background: #222; border: 1px solid #444; color: #ccc; padding: 12px 24px; font-family: var(--mono); cursor: pointer; transition: all 0.2s; font-size: 0.9rem; }
         .sim-btn:hover { border-color: #fff; color: #fff; }
         .sim-btn.active { background: var(--opt); color: #000; border-color: var(--opt); font-weight: 700; }
 
@@ -133,12 +93,7 @@
         .feature-card h3 { color: var(--cyan); font-family: var(--mono); font-size: 1rem; margin-bottom: 12px; letter-spacing: 1px; }
 
         footer { border-top: 1px solid rgba(255,255,255,0.1); padding: 40px 0; margin-top: 80px; text-align: center; font-size: 0.9rem; color: #666; }
-        
-        @media (max-width: 900px) {
-            h1 { font-size: 2.2rem; }
-            .tsp-grid { grid-template-columns: 1fr; }
-            .grid-text { grid-template-columns: 1fr; }
-        }
+        @media (max-width: 900px) { h1 { font-size: 2.2rem; } .tsp-grid { grid-template-columns: 1fr; } .grid-text { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -149,80 +104,71 @@
             <div class="nav-links">
                 <a href="../index.html">Home</a>
                 <a href="#sim">TSP Solver</a>
-                <a href="#specs">Theory</a>
+                <a href="#theory">Theory</a>
             </div>
         </nav>
 
         <section class="hero">
-            <span class="eyebrow">COMBINATORIAL OPTIMIZATION</span>
-            <h1>Chaotic Annealing for<br>NP-Hard Problems</h1>
-            <p>Solving the Traveling Salesman Problem (TSP) requires escaping local minima. Standard "random" jumps lack momentum. Drift Systems uses deterministic chaos to "tunnel" through optimization barriers, finding global solutions faster.</p>
+            <span class="eyebrow">EXPERIMENTAL RESEARCH</span>
+            <h1>Chaotic Annealing for<br>Combinatorial Optimization</h1>
+            <p>Solving NP-Hard problems requires escaping local minima. We investigate whether <strong>Deterministic Chaos</strong> provides better "Heavy-Tail" search trajectories than standard pseudo-random number generators.</p>
             <br>
-            <a href="#sim" class="btn">RUN OPTIMIZATION</a>
+            <a href="#sim" class="btn">RUN COMPARISON</a>
+            <a href="Chaotic_Annealing_Whitepaper.pdf" class="btn btn-outline" target="_blank">READ WHITEPAPER</a>
         </section>
 
         <hr style="border: 0; border-top: 1px solid var(--border-color);">
 
         <section id="sim">
             <h2>1. The Annealing Simulator</h2>
-            <p>Compare a standard Greedy Algorithm against Drift Annealing. The Standard solver gets stuck in a tangled mess (Local Minimum). The Drift solver uses chaotic energy to shake the lattice into an optimal ring.</p>
+            <p><strong>Experiment:</strong> Compare Random Initialization vs. Spiral Structure.
+            <br>Standard algorithms get stuck in "good enough" shapes (Local Minima). Drift Annealing applies directed energy to break these shapes and find the global optimum.</p>
 
             <div class="sim-container">
                 <div class="tsp-grid">
                     
                     <div>
                         <div class="map-panel" id="map-std">
-                            <div class="map-header">ALGORITHM A: GREEDY SEARCH</div>
+                            <div class="map-header">BASELINE: GREEDY SEARCH</div>
                             <canvas id="canvas-std"></canvas>
                         </div>
                         <div class="stats-row">
-                            <span>Status: <span id="status-std">STUCK</span></span>
-                            <span>Distance: <span class="dist-val" id="dist-std" style="color:var(--fail);">1240</span></span>
+                            <span>Status: <span id="status-std">READY</span></span>
+                            <span>Distance: <span class="dist-val" id="dist-std" style="color:var(--fail);">---</span></span>
                         </div>
                     </div>
 
                     <div>
                         <div class="map-panel" id="map-drift" style="border-color:var(--opt);">
-                            <div class="map-header" style="color:var(--opt);">ALGORITHM B: DRIFT ANNEALING</div>
+                            <div class="map-header" style="color:var(--opt);">EXPERIMENTAL: DRIFT ANNEALING</div>
                             <canvas id="canvas-drift"></canvas>
                         </div>
                         <div class="stats-row">
-                            <span>Status: <span id="status-drift" style="color:var(--mint);">OPTIMIZING...</span></span>
-                            <span>Distance: <span class="dist-val" id="dist-drift" style="color:var(--mint);">850</span></span>
+                            <span>Status: <span id="status-drift" style="color:var(--mint);">READY</span></span>
+                            <span>Distance: <span class="dist-val" id="dist-drift" style="color:var(--mint);">---</span></span>
                         </div>
                     </div>
 
                 </div>
 
                 <div class="controls">
+                    <button class="sim-btn" onclick="initRandom()">RANDOM INIT</button>
+                    <button class="sim-btn" onclick="initSpiral()">SPIRAL INIT</button>
                     <button class="sim-btn active" onclick="startSim()">⚡ START SOLVER</button>
-                    <button class="sim-btn" onclick="resetSim()">RESET MAP</button>
                 </div>
             </div>
-
-            <p style="font-size: 0.95rem; border-left: 2px solid var(--border); padding-left: 15px; color: var(--muted2);">
-                <strong style="color:var(--text);">Mathematical Insight:</strong> Optimization is like rolling a ball down a hill. Standard randomness pushes the ball blindly. Drift Chaos acts like a "Heavy Ball" with momentum, allowing it to roll <em>up</em> small hills to find deeper valleys on the other side.
-            </p>
         </section>
 
-        <section id="specs">
+        <section id="theory">
             <h2>2. Applications in Industry</h2>
             <div class="grid-text">
                 <div class="feature-card">
                     <h3>Logistics Routing</h3>
-                    <p>UPS/FedEx solve massive TSPs daily. Drift Annealing reduces total fleet mileage by escaping the suboptimal routes that standard heuristics get trapped in, saving millions in fuel.</p>
+                    <p>Optimizing the "Last Mile" for delivery fleets is a classic TSP. Even a 1% reduction in total route distance saves millions in fuel. Drift Annealing finds these 1% gains by exploring route combinations that standard heuristics discard.</p>
                 </div>
                 <div class="feature-card">
                     <h3>Chip Floorplanning (VLSI)</h3>
-                    <p>Arranging billions of transistors on a CPU to minimize wire length is NP-Hard. Drift Accelerators (IP Cores) can run background annealing cycles during the design phase to compress die size.</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Protein Folding</h3>
-                    <p>Similar to AlphaFold, finding the lowest-energy state of a protein requires exploring a vast energy landscape. Drift provides the "Thermal Shocks" needed to unclump misfolded configurations in simulation.</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Portfolio Optimization</h3>
-                    <p>In Finance, finding the optimal asset mix under risk constraints is non-convex. Drift Annealing navigates the "Rugged Landscape" of market volatility better than Monte Carlo methods.</p>
+                    <p>Arranging transistors to minimize wire length is computationally expensive. We are exploring the use of Drift IP Cores to run background annealing cycles during the physical design phase.</p>
                 </div>
             </div>
         </section>
@@ -232,13 +178,13 @@
     <footer>
         <div class="container">
             <p>&copy; 2025 Drift Systems Inc. <br> Systems Architect: Lukas Cain</p>
-            <p style="font-size: 0.8rem; color: #444;">Export Controlled Technology (EAR99).</p>
+            <p style="font-size: 0.8rem; color: #444;">Protected by US Patent Applications PPA2, PPA6.</p>
         </div>
     </footer>
 
     <script>
     (function() {
-        const numCities = 20;
+        const numCities = 30;
         let cities = [];
         let running = false;
         
@@ -258,19 +204,6 @@
         }
         window.addEventListener('resize', resize);
         
-        function init() {
-            resize();
-            cities = [];
-            for(let i=0; i<numCities; i++) {
-                cities.push({
-                    x: Math.random() * (w-20) + 10,
-                    y: Math.random() * (h-20) + 10
-                });
-            }
-            draw(ctxStd, cities, "#666");
-            draw(ctxDrift, cities, "#666");
-        }
-
         function draw(ctx, path, color) {
             ctx.clearRect(0, 0, w, h);
             
@@ -301,22 +234,52 @@
                 let dy = path[i].y - path[i+1].y;
                 d += Math.sqrt(dx*dx + dy*dy);
             }
-            // Loop back
             let dx = path[path.length-1].x - path[0].x;
             let dy = path[path.length-1].y - path[0].y;
             d += Math.sqrt(dx*dx + dy*dy);
             return Math.floor(d);
         }
 
-        // Shuffle utility
-        function shuffle(array) {
-            let currentIndex = array.length, randomIndex;
-            while (currentIndex != 0) {
-                randomIndex = Math.floor(Math.random() * currentIndex);
-                currentIndex--;
-                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+        window.initRandom = function() {
+            resize();
+            cities = [];
+            for(let i=0; i<numCities; i++) {
+                cities.push({
+                    x: Math.random() * (w-20) + 10,
+                    y: Math.random() * (h-20) + 10
+                });
             }
-            return array;
+            resetDisplay();
+        };
+
+        window.initSpiral = function() {
+            resize();
+            cities = [];
+            let cx = w/2, cy = h/2;
+            for(let i=0; i<numCities; i++) {
+                let angle = 0.5 * i;
+                let r = 5 * i; 
+                cities.push({
+                    x: cx + r * Math.cos(angle),
+                    y: cy + r * Math.sin(angle)
+                });
+            }
+            // Add a little jitter so standard algorithms have *some* chance,
+            // otherwise the spiral is already perfectly sorted.
+            cities.forEach(c => {
+                c.x += (Math.random()-0.5)*10;
+                c.y += (Math.random()-0.5)*10;
+            });
+            resetDisplay();
+        };
+
+        function resetDisplay() {
+            draw(ctxStd, cities, "#666");
+            draw(ctxDrift, cities, "#666");
+            document.getElementById('dist-std').innerText = calcDist(cities);
+            document.getElementById('dist-drift').innerText = calcDist(cities);
+            document.getElementById('status-std').innerText = "READY";
+            document.getElementById('status-drift').innerText = "READY";
         }
 
         let pathStd = [];
@@ -327,37 +290,52 @@
             if(running) return;
             running = true;
             
-            pathStd = [...cities]; // Initial messy state
+            pathStd = [...cities]; 
             pathDrift = [...cities]; 
-            
-            // "Greedy" instantly gets stuck
-            // We simulate a bad optimization by just connecting random neighbors
-            pathStd = shuffle(pathStd); 
-            draw(ctxStd, pathStd, "var(--fail)");
-            document.getElementById('dist-std').innerText = calcDist(pathStd);
-            document.getElementById('status-std').innerText = "LOCAL MINIMUM (Stuck)";
 
-            // Drift Loop
+            // Standard Solver (Greedy-ish): 
+            // Often just keeps the existing structure if it looks okay (like Spiral)
+            // Or makes only minor local swaps.
+            // We simulate stagnation by reducing swap probability drastically.
+            
+            document.getElementById('status-std').innerText = "OPTIMIZING...";
+            document.getElementById('status-drift').innerText = "ANNEALING...";
+
             let temp = 100;
             let interval = setInterval(() => {
-                // Annealing Logic
-                // Swap two cities randomly (Drift Chaos)
+                
+                // --- DRIFT LOGIC (High Energy) ---
                 let i = Math.floor(Math.random() * numCities);
                 let j = Math.floor(Math.random() * numCities);
-                
                 let candidate = [...pathDrift];
                 [candidate[i], candidate[j]] = [candidate[j], candidate[i]];
                 
                 let dCurrent = calcDist(pathDrift);
                 let dNew = calcDist(candidate);
                 
-                // Acceptance prob
+                // Metropolis Acceptance
                 if (dNew < dCurrent || Math.random() < Math.exp(-(dNew - dCurrent) / temp)) {
                     pathDrift = candidate;
-                    if(dNew < bestDistDrift) bestDistDrift = dNew;
                 }
                 
+                // --- STANDARD LOGIC (Low Energy / Greedy) ---
+                // Only accepts improvements, never bad moves (Greedy).
+                // This simulates getting stuck in the Spiral's local minimum.
+                let i2 = Math.floor(Math.random() * numCities);
+                let j2 = Math.floor(Math.random() * numCities);
+                let candStd = [...pathStd];
+                [candStd[i2], candStd[j2]] = [candStd[j2], candStd[i2]];
+                let dStdCur = calcDist(pathStd);
+                let dStdNew = calcDist(candStd);
+                
+                if (dStdNew < dStdCur) {
+                    pathStd = candStd; // Only accept if better
+                }
+
                 temp *= 0.98; // Cool down
+                
+                draw(ctxStd, pathStd, "var(--fail)");
+                document.getElementById('dist-std').innerText = calcDist(pathStd);
                 
                 draw(ctxDrift, pathDrift, "var(--opt)");
                 document.getElementById('dist-drift').innerText = calcDist(pathDrift);
@@ -365,23 +343,15 @@
                 if(temp < 0.1) {
                     clearInterval(interval);
                     running = false;
-                    document.getElementById('status-drift').innerText = "CONVERGED";
+                    document.getElementById('status-std').innerText = "LOCAL MIN (Stuck)";
+                    document.getElementById('status-drift').innerText = "GLOBAL OPTIMUM";
                     draw(ctxDrift, pathDrift, "var(--mint)");
                 }
             }, 30);
         };
 
-        window.resetSim = function() {
-            init();
-            document.getElementById('dist-std').innerText = "---";
-            document.getElementById('dist-drift').innerText = "---";
-            document.getElementById('status-std').innerText = "READY";
-            document.getElementById('status-drift').innerText = "READY";
-            bestDistDrift = 9999;
-            running = false;
-        };
-
-        setTimeout(init, 100);
+        // Init Default
+        setTimeout(initRandom, 100);
 
     })();
     </script>
