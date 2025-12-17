@@ -595,6 +595,46 @@
             </div>
           </article>
 
+          <article class="card" role="listitem">
+            <div>
+              <div class="top-chips">
+                <span class="chip chip-vol">HIGH VOLUME</span>
+                <span class="chip">GAMING & ANTI-CHEAT</span>
+              </div>
+              <div class="icon" aria-hidden="true">🎮</div>
+              <h3 style="margin:0 0 10px 0;">Telemetry Integrity</h3>
+              <p>Privacy-preserving anti-cheat. Binds input telemetry to drift state to detect aimbots without kernel drivers.</p>
+              <ul class="bullets">
+                <li>Input lineage prevents synthetic mouse movement (Aimbots)</li>
+                <li>Lag-switch protection via timing budget enforcement</li>
+                <li>Non-invasive integrity for eSports tournaments</li>
+              </ul>
+            </div>
+            <div class="actions">
+              <a href="docs/gaming.html" class="btn-solid">[ OVERVIEW ]</a>
+            </div>
+          </article>
+
+          <article class="card" role="listitem">
+            <div>
+              <div class="top-chips">
+                <span class="chip chip-trl">EXTREME ENV</span>
+                <span class="chip">QUANTUM & CRYO</span>
+              </div>
+              <div class="icon" aria-hidden="true">❄️</div>
+              <h3 style="margin:0 0 10px 0;">Cryo-Stable Entropy</h3>
+              <p>Pure digital chaos that operates at milli-Kelvin temperatures where thermal TRNGs freeze.</p>
+              <ul class="bullets">
+                <li>Maintains high entropy at 0.01 Kelvin (Dilution Fridge)</li>
+                <li>Low thermal dissipation prevents Qubit decoherence</li>
+                <li>Secure control plane for quantum error correction</li>
+              </ul>
+            </div>
+            <div class="actions">
+              <a href="docs/quantum.html" class="btn-solid">[ OVERVIEW ]</a>
+            </div>
+          </article>
+
         </div>
 
         <div class="section-header" id="research">
@@ -826,6 +866,16 @@
             else if (lower.includes('bank') || lower.includes('credit') || lower.includes('card') || lower.includes('fraud') || lower.includes('pay')) {
                 response = "We eliminate card skimming with Rolling CVV codes and secure real-time payments.";
                 url = "docs/banking.html";
+            }
+            // 11. GAMING
+            else if (lower.includes('game') || lower.includes('cheat') || lower.includes('aim') || lower.includes('tele') || lower.includes('esport')) {
+                response = "We detect Aimbots and macros by binding input telemetry to a verified arithmetic lineage.";
+                url = "docs/gaming.html";
+            }
+            // 12. QUANTUM
+            else if (lower.includes('quant') || lower.includes('cryo') || lower.includes('cold') || lower.includes('freeze') || lower.includes('zero')) {
+                response = "Drift is cryo-stable. We generate entropy at milli-Kelvin temperatures where thermal TRNGs fail.";
+                url = "docs/quantum.html";
             }
 
             addMsg(response, false, url);
