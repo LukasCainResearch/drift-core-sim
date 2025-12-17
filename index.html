@@ -244,7 +244,6 @@
     .chip-ret { border-color: rgba(0,255,255,0.30); color: var(--cyan); background: rgba(0,255,255,0.06); }
     .chip-cryo { border-color: rgba(255,0,255,0.40); color: #ff00ff; background: rgba(255,0,255,0.10); }
 
-
     .bullets{
       text-align:left;
       max-width: 520px;
@@ -283,7 +282,7 @@
       font-weight: 700;
     }
     .btn-solid:hover{ background: var(--mint); border-color: var(--mint); box-shadow: 0 0 15px rgba(0,255,170,0.55); }
-    
+
     /* Footer */
     footer{
       border-top: 1px solid #222;
@@ -321,13 +320,13 @@
           <ul>
             <li><a href="#verticals">VERTICALS</a></li>
             <li><a href="#research">RESEARCH</a></li>
-            <li><a href="#docs">DOCUMENTS</a></li>
+            <li><a href="#documents">DOCUMENTS</a></li>
             <li><a href="#contact">CONTACT</a></li>
           </ul>
         </nav>
       </div>
 
-      <div class="hero" id="docs">
+      <div class="hero">
         <div class="status-badge">TRL-6 PROTOTYPE (DEC 2025)</div>
 
         <h1>THE STANDARD FOR<br>LOW-POWER ENTROPY.</h1>
@@ -363,9 +362,35 @@
           <div class="metric-card">
             <h2>0.00002</h2>
             <p>CORRELATION</p>
-            <span class="sub">NIST SP 800-22 Compliant</span>
+            <span class="sub">NIST SP 800-22 tested (report in docs)</span>
           </div>
         </div>
+
+        <p class="tiny" style="max-width: 920px; margin: 16px auto 0; line-height:1.55; text-align:center;">
+          Evaluation notes: metrics shown are from the current TRL-6 prototype build (Dec 2025) under documented test conditions.
+          Full methodology, datasets, and statistical test outputs are provided in the docs package.
+        </p>
+      </div>
+    </section>
+
+    <section class="section-black" id="documents" aria-label="Documents">
+      <div class="container center">
+        <div class="section-header" style="margin-top:0;">
+          <h4>DOCUMENTS FOR EVALUATION</h4>
+          <p class="lead" style="max-width: 860px;">
+            Primary technical artifacts intended for architecture review, integration planning, and validation.
+          </p>
+        </div>
+
+        <div class="cta-group" aria-label="Primary documents" style="justify-content:center;">
+          <a href="docs/Drift_Primer.pdf" target="_blank" rel="noopener" class="btn primary">DRIFT TECH PRIMER</a>
+          <a href="docs/Drift_Architecture_Whitepaper.pdf" target="_blank" rel="noopener" class="btn secondary">WHITE PAPER</a>
+          <a href="docs/" class="btn secondary">DOCS INDEX</a>
+        </div>
+
+        <p class="tiny" style="max-width: 900px; margin: 18px auto 0; line-height:1.5;">
+          Suggested review order: Primer → Architecture White Paper → Proof artifacts (Lean) → Test reports (SP 800-22, datasets, parameters).
+        </p>
       </div>
     </section>
 
@@ -383,7 +408,7 @@
           <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px 30px; text-align: left;">
             <div><strong>D</strong>eterministic Dynamics</div>
             <div><strong>O</strong>ne-Cycle Latency</div>
-             <div><strong>C</strong>haotic Coverage</div>
+            <div><strong>C</strong>haotic Coverage</div>
             <div><strong>M</strong>ission Integrity</div>
             <div><strong>I</strong>rreducibility</div>
             <div><strong>L</strong>ow-Power Logic</div>
@@ -402,11 +427,11 @@
         </div>
 
         <div class="grid-2" role="list">
-          
+
           <article class="card" role="listitem">
             <div>
               <div class="top-chips">
-                <span class="chip chip-trl">TRL-5 VALIDATED</span>
+                <span class="chip chip-trl">TRL-6 PROTOTYPE</span>
                 <span class="chip">DEFENSE</span>
               </div>
               <svg class="icon" aria-hidden="true" style="width:48px; height:48px; fill:none; stroke:currentColor; stroke-width:1.1;" viewBox="0 0 24 24">
@@ -495,7 +520,7 @@
               <a href="docs/infrastructure.html#demos" class="btn-outline">[ DEMOS ]</a>
             </div>
           </article>
-          
+
           <article class="card" role="listitem">
             <div>
               <div class="top-chips">
@@ -563,7 +588,7 @@
               <a href="docs/medical.html" class="btn-solid">[ OVERVIEW ]</a>
             </div>
           </article>
-          
+
           <article class="card" role="listitem">
             <div>
               <div class="top-chips">
@@ -609,7 +634,7 @@
             </div>
           </article>
 
-           <article class="card" role="listitem">
+          <article class="card" role="listitem">
             <div>
               <div class="top-chips">
                 <span class="chip chip-ret">ULTRA LOW LATENCY</span>
@@ -676,6 +701,7 @@
           </article>
 
         </div>
+
         <div class="section-header" id="research">
           <h4>RIGOROUS MATHEMATICAL FOUNDATIONS</h4>
           <p class="lead" style="max-width: 760px;">
@@ -684,7 +710,7 @@
         </div>
 
         <div class="grid-2" role="list" aria-label="Research links">
-          
+
           <article class="card" role="listitem" style="border-color: var(--mint);">
             <div>
               <svg class="icon" aria-hidden="true" style="color: var(--mint); width:48px; height:48px; fill:none; stroke:currentColor; stroke-width:1.1;" viewBox="0 0 24 24">
@@ -706,7 +732,7 @@
             </div>
             <a href="docs/convergence.html" target="_blank" rel="noopener" class="btn-outline" style="color:var(--mint); border-color:var(--mint);">[ RESEARCH PDF ]</a>
           </article>
-          
+
           <article class="card" role="listitem">
             <div>
               <svg class="icon" aria-hidden="true" style="color: var(--mint); width:48px; height:48px; fill:none; stroke:currentColor; stroke-width:1.1;" viewBox="0 0 24 24">
@@ -742,7 +768,7 @@
             </div>
             <a href="docs/irreducibility.html" target="_blank" rel="noopener" class="btn-outline" style="color:var(--mint); border-color:var(--mint);">[ ANALYZE ARCHITECTURE ]</a>
           </article>
-          
+
           <article class="card" role="listitem">
             <div>
               <svg class="icon" aria-hidden="true" style="color: var(--mint); width:48px; height:48px; fill:none; stroke:currentColor; stroke-width:1.1;" viewBox="0 0 24 24">
@@ -775,18 +801,20 @@
     <div class="container">
       <p style="margin:0;">
         &copy; 2025 Drift Systems Inc. All Rights Reserved.<br />
-        <span class="tiny">NIST SP 800-22 Compliant. Export Controlled Technology (EAR99).</span>
+        <span class="tiny">NIST SP 800-22 tested (see report). Subject to U.S. export regulations.</span>
       </p>
     </div>
   </footer>
 
   <div id="drift-widget" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; font-family: 'JetBrains Mono', monospace;">
-    
-    <div id="drift-chat-window" style="display: none; width: 350px; height: 500px; background: #050505; border: 1px solid #333; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); flex-direction: column; overflow: hidden;">
-        
+
+    <div id="drift-chat-window" role="dialog" aria-label="Drift Guide" aria-live="polite"
+         style="display: none; width: 350px; height: 500px; background: #050505; border: 1px solid #333; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); flex-direction: column; overflow: hidden;">
+
         <div style="background: #111; padding: 15px; border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center;">
             <span style="color: #fff; font-weight: 700; letter-spacing: 1px;">DRIFT GUIDE</span>
-            <button onclick="toggleWidget()" style="background: none; border: none; color: #666; cursor: pointer; font-size: 1.2rem;">&times;</button>
+            <button onclick="toggleWidget()" aria-label="Close Drift Guide"
+                    style="background: none; border: none; color: #666; cursor: pointer; font-size: 1.2rem;">&times;</button>
         </div>
 
         <div id="chat-messages" style="flex-grow: 1; padding: 15px; overflow-y: auto; color: #ccc; font-size: 0.85rem; display: flex; flex-direction: column; gap: 12px;">
@@ -797,11 +825,13 @@
 
         <div style="padding: 15px; background: #111; border-top: 1px solid #333; display: flex; gap: 10px;">
             <input type="text" id="user-input" placeholder="Type your industry..." style="flex-grow: 1; background: #000; border: 1px solid #444; color: #fff; padding: 8px; border-radius: 4px; font-family: inherit; font-size: 0.85rem;">
-            <button onclick="handleSend()" style="background: #00ffff; color: #000; border: none; padding: 8px 12px; border-radius: 4px; font-weight: 700; cursor: pointer;">></button>
+            <button onclick="handleSend()" aria-label="Send message"
+                    style="background: #00ffff; color: #000; border: none; padding: 8px 12px; border-radius: 4px; font-weight: 700; cursor: pointer;">&gt;</button>
         </div>
     </div>
 
-    <button id="widget-toggle-btn" onclick="toggleWidget()" style="width: 50px; height: 50px; background: #00ffff; border: none; border-radius: 50%; box-shadow: 0 0 20px rgba(0,255,255,0.3); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; transition: transform 0.2s;">
+    <button id="widget-toggle-btn" aria-label="Open Drift Guide" aria-expanded="false"
+            onclick="toggleWidget()" style="width: 50px; height: 50px; background: #00ffff; border: none; border-radius: 50%; box-shadow: 0 0 20px rgba(0,255,255,0.3); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; transition: transform 0.2s;">
         💠
     </button>
 
@@ -814,17 +844,20 @@
     const input = document.getElementById('user-input');
 
     function toggleWidget() {
-        if (widget.style.display === 'none') {
+        const isOpen = widget.style.display !== 'none';
+        if (!isOpen) {
             widget.style.display = 'flex';
             toggleBtn.style.transform = 'scale(0)';
+            toggleBtn.setAttribute('aria-expanded', 'true');
             setTimeout(() => input.focus(), 100);
         } else {
             widget.style.display = 'none';
             toggleBtn.style.transform = 'scale(1)';
+            toggleBtn.setAttribute('aria-expanded', 'false');
         }
     }
 
-    input.addEventListener('keypress', function (e) {
+    input.addEventListener('keydown', function (e) {
         if (e.key === 'Enter') handleSend();
     });
 
@@ -834,7 +867,7 @@
         div.style.borderRadius = '4px';
         div.style.maxWidth = '90%';
         div.style.lineHeight = '1.4';
-        
+
         if (isUser) {
             div.style.alignSelf = 'flex-end';
             div.style.background = '#004444'; // Dark Cyan
@@ -845,7 +878,7 @@
             div.style.background = '#222';
             div.style.borderLeft = '2px solid #00ffaa'; // Mint
             div.innerHTML = `<strong>DRIFT:</strong> ${text}`;
-            
+
             if(link) {
                 const btn = document.createElement('a');
                 btn.href = link;
@@ -870,10 +903,10 @@
     function handleSend() {
         const text = input.value.trim();
         if (!text) return;
-        
+
         addMsg(text, true);
         input.value = '';
-        
+
         // Simulating AI "Thinking"
         setTimeout(() => {
             const lower = text.toLowerCase();
@@ -881,7 +914,7 @@
             let url = null;
 
             // --- ROUTING LOGIC ---
-            
+
             // 1. DEFENSE
             if (lower.includes('defense') || lower.includes('army') || lower.includes('jam') || lower.includes('radio') || lower.includes('drone')) {
                 response = "For contested environments (EW/Jamming), we provide clockless anti-replay and quorum recovery.";
@@ -937,7 +970,7 @@
                 response = "We detect Aimbots and macros by binding input telemetry to a verified arithmetic lineage.";
                 url = "docs/gaming.html";
             }
-            // 12. COMPUTE / OPTIMIZATION (Updated)
+            // 12. COMPUTE / OPTIMIZATION
             else if (lower.includes('compute') || lower.includes('opt') || lower.includes('tsp') || lower.includes('fold') || lower.includes('solve')) {
                 response = "Drift Compute Engine solves NP-Hard problems (TSP, VLSI, Folding) using Chaotic Annealing.";
                 url = "docs/compute.html";
