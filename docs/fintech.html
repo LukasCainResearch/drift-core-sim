@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drift Systems | Ultra-Low Latency Fintech</title>
+    
+    <script>
+        window.MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']]
+          },
+          svg: {
+            fontCache: 'global'
+          }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💠</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+    <style>
+        :root {
+            /* BRAND PALETTE */
+            --bg0: #000;
+            --bg1: #050505;
+            --panel: rgba(0,20,40,0.5);
+            --border: rgba(0,255,255,0.2);
+            --border-strong: rgba(0,255,255,0.8);
+            --text: #fff;
+            --muted: #a0a0a0;
+            --muted2: #888;
+            --cyan: #00ffff;
+            --mint: #00ffaa;
+            --warn: #ffaa00;
+            --fail: #ff4444;
+            --gold: #ffd700; /* Fintech/Money accent */
+            --mono: 'JetBrains Mono', ui-monospace, monospace;
+            --sans: 'Inter', system-ui, sans-serif;
+            --shadow: 0 0 20px rgba(0,255,255,0.10);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: var(--sans);
+            background-color: var(--bg0);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Typography */
+        h1, h2, h3 { font-weight: 700; letter-spacing: -0.02em; margin-bottom: 1rem; color: #fff; }
+        h1 { 
+            font-size: 3rem; line-height: 1.1; 
+            background: linear-gradient(90deg, #fff, var(--gold)); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+        }
+        h2 { 
+            font-size: 1.8rem; border-left: 4px solid var(--gold); 
+            padding-left: 1rem; margin-top: 3rem; 
+        }
+        p { margin-bottom: 1.5rem; font-size: 1.05rem; color: var(--muted); }
+        
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+        
+        /* Navigation */
+        nav { padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: var(--sans); font-weight: 900; font-size: 1.2rem; letter-spacing: 1px; color: #fff; text-decoration: none; }
+        .nav-links a { font-family: var(--mono); color: var(--muted); text-decoration: none; margin-left: 20px; font-size: 0.85rem; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--cyan); }
+
+        /* Hero */
+        .hero { padding: 80px 0; text-align: center; }
+        .hero .eyebrow { color: var(--gold); font-family: var(--mono); font-weight: 700; letter-spacing: 1px; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        
+        .btn { 
+            display: inline-block; padding: 12px 30px; 
+            background: rgba(255, 215, 0, 0.1); color: var(--gold); 
+            border: 1px solid var(--gold); font-family: var(--mono); 
+            font-size: 0.85rem; font-weight: 700; text-decoration: none; 
+            transition: all 0.2s; 
+        }
+        .btn:hover { background: var(--gold); color: #000; box-shadow: 0 0 20px rgba(255,215,0,0.4); }
+
+        /* --- TRADE SIMULATOR STYLES --- */
+        .sim-container {
+            background: var(--bg1); border: 1px solid var(--border); border-radius: 4px;
+            padding: 24px; margin: 40px 0; position: relative;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        .trade-desk {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+        }
+
+        .order-book {
+            background: #111; border: 1px solid #333; border-radius: 4px; overflow: hidden;
+        }
+        .book-header {
+            background: #222; padding: 10px; font-family: var(--mono); font-size: 0.8rem; color: #888;
+            display: flex; justify-content: space-between; border-bottom: 1px solid #444;
+        }
+        .book-rows { height: 200px; overflow-y: auto; padding: 5px; }
+        .row { 
+            display: grid; grid-template-columns: 1fr 1fr 1fr; 
+            font-family: var(--mono); font-size: 0.8rem; padding: 4px 8px; margin-bottom: 2px;
+            color: #ccc; border-left: 2px solid transparent; animation: flashRow 0.3s;
+        }
+        @keyframes flashRow { 0% { background: rgba(255,255,255,0.1); } 100% { background: transparent; } }
+        
+        .row.buy { color: var(--mint); }
+        .row.sell { color: var(--fail); }
+        .row.bot { border-left-color: var(--fail); background: rgba(255,0,0,0.05); }
+        .row.user { border-left-color: var(--gold); background: rgba(255,215,0,0.05); }
+
+        .latency-monitor {
+            background: #111; border: 1px solid #333; padding: 20px; border-radius: 4px;
+            display: flex; flex-direction: column; gap: 20px;
+        }
+        
+        .metric-group { font-family: var(--mono); font-size: 0.8rem; }
+        .metric-label { color: #888; display: block; margin-bottom: 5px; }
+        .metric-val { font-size: 1.2rem; color: var(--cyan); font-weight: 700; }
+        
+        .log-console {
+            background: #000; border: 1px solid #333; height: 120px; overflow-y: hidden;
+            padding: 10px; font-family: var(--mono); font-size: 0.7rem; color: var(--muted2);
+        }
+        .log-msg { margin-bottom: 4px; }
+        .log-msg.rej { color: var(--fail); }
+        .log-msg.acc { color: var(--mint); }
+
+        .controls {
+            margin-top: 20px; display: flex; justify-content: center; gap: 20px;
+        }
+        .trade-btn {
+            background: transparent; border: 1px solid var(--border); color: #fff;
+            font-family: var(--mono); padding: 12px 24px; cursor: pointer; font-size: 0.9rem;
+            transition: all 0.2s; flex: 1;
+        }
+        .trade-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+        .trade-btn.buy { border-color: var(--gold); color: var(--gold); font-weight: 700; }
+        .trade-btn.buy:hover { background: var(--gold); color: #000; }
+
+        /* --- SECTION STYLES --- */
+        .grid-text { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin: 60px 0; }
+        .feature-card { border: 1px solid var(--border); padding: 24px; background: var(--panel); transition: transform 0.2s; }
+        .feature-card:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+        .feature-card h3 { color: var(--cyan); font-family: var(--mono); font-size: 1rem; margin-bottom: 12px; letter-spacing: 1px; }
+
+        footer { border-top: 1px solid rgba(255,255,255,0.1); padding: 40px 0; margin-top: 80px; text-align: center; font-size: 0.9rem; color: #666; }
+        
+        @media (max-width: 900px) {
+            .trade-desk { grid-template-columns: 1fr; }
+            h1 { font-size: 2.2rem; }
+            .grid-text { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <nav>
+            <a href="../index.html" class="logo">DRIFT<span style="font-weight:300;">SYSTEMS</span></a>
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="#sim">Trade Sim</a>
+                <a href="#specs">Specs</a>
+            </div>
+        </nav>
+
+        <section class="hero">
+            <span class="eyebrow">HIGH-FREQUENCY TRADING</span>
+            <h1>Serialization Against<br>Front-Running</h1>
+            <p>Prevent latency arbitrage and flash crashes. Drift Systems embeds a hardware-enforced sequence into every trade packet, creating a mathematically provable order of events that software timestamps cannot spoof.</p>
+            <br>
+            <a href="#sim" class="btn">SIMULATE ORDER BOOK</a>
+        </section>
+
+        <hr style="border: 0; border-top: 1px solid var(--border-color);">
+
+        <section id="sim">
+            <h2>1. The "Front-Running" Defense</h2>
+            <p>Attackers try to spot your large buy order and insert their own order <em>milliseconds</em> before yours to drive up the price. Drift's <strong>Sequence Locking</strong> defeats this by rejecting any packet that arrives "out of turn," regardless of its timestamp.</p>
+
+            <div class="sim-container">
+                <div class="trade-desk">
+                    
+                    <div class="order-book">
+                        <div class="book-header">
+                            <span>TYPE</span><span>PRICE</span><span>SEQ ID</span>
+                        </div>
+                        <div class="book-rows" id="book-rows">
+                            </div>
+                    </div>
+
+                    <div class="latency-monitor">
+                        <div class="metric-group">
+                            <span class="metric-label">CURRENT HARDWARE SEQ</span>
+                            <span class="metric-val" id="hw-seq">2,048,591</span>
+                        </div>
+                        <div class="metric-group">
+                            <span class="metric-label">ENGINE STATUS</span>
+                            <span class="metric-val" style="color:var(--mint);">MATCHING</span>
+                        </div>
+                        <div class="log-console" id="trade-log">
+                            <div class="log-msg">> Exchange Ready.</div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="controls">
+                    <button class="trade-btn buy" onclick="placeUserOrder()">PLACE LARGE BUY (INSTITUTIONAL)</button>
+                    <button class="trade-btn" style="border-color:var(--fail); color:var(--fail);" onclick="triggerBot()">TRIGGER FRONT-RUN BOT</button>
+                </div>
+            </div>
+
+            <p style="font-size: 0.95rem; border-left: 2px solid var(--border); padding-left: 15px; color: var(--muted2);">
+                <strong style="color:var(--text);">Instruction:</strong> Click "PLACE LARGE BUY". This generates a valid trade with Seq $S_t$. Immediately click "TRIGGER BOT" to simulate an HFT algo trying to cut in line. <br>
+                <strong>Outcome:</strong> The Bot might have a faked "earlier" timestamp, but it lacks the correct cryptographic Sequence Pre-image ($S_{t-1}$). The Exchange rejects the Bot as an "Out-of-Order" anomaly.
+            </p>
+        </section>
+
+        <section id="specs">
+            <h2>2. Exchange-Grade Capabilities</h2>
+            <div class="grid-text">
+                <div class="feature-card">
+                    <h3>Nanosecond Serialization</h3>
+                    <p>Drift operates at the FPGA register level (1 clock cycle). It assigns a unique, monotonic identity to every packet entering the matching engine. This creates a "Physics-based" truth for trade ordering that cannot be altered by software.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Flash Crash Prevention</h3>
+                    <p>Rogue algorithms often enter "feedback loops," spamming orders infinitely. Drift enforces an <strong>Entropy Budget</strong>. An algorithm is physically throttled by the rate at which it can generate valid Drift Proofs, acting as a hardware circuit breaker.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Audit Trail & Compliance</h3>
+                    <p>Regulators (SEC/ESMA) require proof of "Best Execution." Drift logs provide a mathematically verifiable chain of custody for every order. It proves <em>exactly</em> when an order arrived relative to others, eliminating "Black Box" ambiguity.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Fairness (Anti-Spoofing)</h3>
+                    <p>Spoofing involves placing fake orders to move the market, then canceling them. Drift binds the "Cancel" command to the specific state of the "Order." If the market state has drifted, the cancel fails, forcing the spoofer to execute (and lose money).</p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Drift Systems Inc. <br> Systems Architect: Lukas Cain</p>
+            <p style="font-size: 0.8rem; color: #444;">Export Controlled Technology (EAR99).</p>
+        </div>
+    </footer>
+
+    <script>
+    (function() {
+        const bookEl = document.getElementById('book-rows');
+        const logEl = document.getElementById('trade-log');
+        const seqEl = document.getElementById('hw-seq');
+        
+        let currentSeq = 2048591;
+        let basePrice = 142.50;
+
+        // Init some dummy rows
+        addRow('SELL', (basePrice + 0.05).toFixed(2), currentSeq - 5, 'market');
+        addRow('SELL', (basePrice + 0.02).toFixed(2), currentSeq - 3, 'market');
+        addRow('BUY', (basePrice - 0.01).toFixed(2), currentSeq - 2, 'market');
+
+        function addRow(type, price, seq, source) {
+            const row = document.createElement('div');
+            let sourceClass = source === 'user' ? 'user' : (source === 'bot' ? 'bot' : '');
+            let typeClass = type === 'BUY' ? 'buy' : 'sell';
+            
+            row.className = `row ${typeClass} ${sourceClass}`;
+            row.innerHTML = `
+                <span>${type}</span><span>$${price}</span><span>#${seq}</span>
+            `;
+            bookEl.insertBefore(row, bookEl.firstChild);
+            // Limit
+            if(bookEl.children.length > 8) bookEl.lastChild.remove();
+        }
+
+        function log(msg, type) {
+            const l = document.createElement('div');
+            l.className = `log-msg ${type || ''}`;
+            l.innerText = `> ${msg}`;
+            logEl.insertBefore(l, logEl.firstChild);
+        }
+
+        window.placeUserOrder = function() {
+            currentSeq++;
+            seqEl.innerText = currentSeq.toLocaleString();
+            
+            // User gets the valid next Sequence
+            let userSeq = currentSeq;
+            let price = basePrice.toFixed(2);
+            
+            // Visual latency simulation
+            setTimeout(() => {
+                addRow('BUY', price, userSeq, 'user');
+                log(`INSTITUTIONAL BUY ACCEPTED (#${userSeq})`, 'acc');
+            }, 500); // 500ms network travel
+        };
+
+        window.triggerBot = function() {
+            // Bot tries to guess the sequence or use an old one to jump ahead
+            // In this sim, the bot arrives "faster" (200ms) but has WRONG Sequence logic
+            
+            let botPrice = (basePrice + 0.01).toFixed(2); // Front-running price
+            
+            setTimeout(() => {
+                // The Bot tries to insert itself.
+                // Case: The Hardware Sequencer sees the User's packet processed first logic-wise (even if visually close)
+                // OR: The Bot fails to sign with the *exact* microsecond sequence state.
+                
+                log(`HFT BOT DETECTED (Spoofed Time)`, 'rej');
+                log(`REJECT: SEQ MISMATCH (Expected #${currentSeq+1}, Got NULL)`, 'rej');
+                
+                // Visual rejection
+                const row = document.createElement('div');
+                row.className = `row bot`;
+                row.style.textDecoration = "line-through";
+                row.style.opacity = "0.5";
+                row.innerHTML = `<span>BUY</span><span>$${botPrice}</span><span>REJECTED</span>`;
+                bookEl.insertBefore(row, bookEl.firstChild);
+                
+            }, 200); // Arrives "before" the user visually, but is rejected logic-wise
+        };
+
+    })();
+    </script>
+</body>
+</html>
