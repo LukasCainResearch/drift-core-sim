@@ -34,9 +34,9 @@
       --mint:#00ffaa;
       --warn:#ffaa00;
       --fail:#ff4444;
-      --compute: #ff0055; /* Radical Red for Compute */
-      --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      --sans: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      --compute: #ff0055; 
+      --mono: 'JetBrains Mono', ui-monospace, monospace;
+      --sans: 'Inter', system-ui, sans-serif;
       --shadow: 0 0 20px rgba(0,255,255,0.10);
     }
 
@@ -242,8 +242,7 @@
     .chip-ip  { border-color: rgba(68,136,255,0.45); color: #66a3ff; background: rgba(68,136,255,0.10); }
     .chip-vol { border-color: rgba(255,170,0,0.40); color: #ffaa00; background: rgba(255,170,0,0.10); }
     .chip-ret { border-color: rgba(0,255,255,0.30); color: var(--cyan); background: rgba(0,255,255,0.06); }
-    /* Compute Chip */
-    .chip-cpu { border-color: rgba(255,0,85,0.40); color: #ff0055; background: rgba(255,0,85,0.10); }
+    .chip-cryo { border-color: rgba(255,0,255,0.40); color: #ff00ff; background: rgba(255,0,255,0.10); }
 
 
     .bullets{
@@ -295,14 +294,11 @@
     }
     .tiny{ font-size: 0.80rem; color: #777; }
 
-    /* Responsive */
     @media (max-width: 980px){
       .metric-grid{ grid-template-columns: 1fr; }
       .grid-2{ grid-template-columns: 1fr; gap: 38px; }
       nav ul{ justify-content:flex-start; }
     }
-
-    /* Reduced motion */
     @media (prefers-reduced-motion: reduce){
       html{ scroll-behavior:auto; }
       .card, nav a, .btn, .btn-outline, .btn-solid{ transition:none !important; }
@@ -390,7 +386,7 @@
         <div class="section-header" id="verticals">
           <h4>DEPLOYMENT VERTICALS</h4>
           <p class="lead" style="max-width: 760px;">
-            Commercialization tracks spanning defense, industry, finance, and high-performance computing.
+            Commercialization tracks spanning defense, industry, finance, and quantum systems.
           </p>
         </div>
 
@@ -497,6 +493,27 @@
             </div>
             <div class="actions">
               <a href="docs/space.html" class="btn-solid">[ OVERVIEW ]</a>
+            </div>
+          </article>
+
+          <article class="card" role="listitem">
+            <div>
+              <div class="top-chips">
+                <span class="chip chip-cryo">EXTREME ENV</span>
+                <span class="chip">QUANTUM</span>
+              </div>
+              <div class="icon" aria-hidden="true">❄️</div>
+              <h3 style="margin:0 0 10px 0;">Cryo-Secure Control Plane</h3>
+              <p>Entropy generation at milli-Kelvin temperatures where thermal TRNGs fail. Secures Qubit control lines.</p>
+              <ul class="bullets">
+                <li>Sub-1K Operation (Dilution Fridge Ready)</li>
+                <li>Low Thermal Dissipation (No heat leak)</li>
+                <li>Rad-Hard for long coherence times</li>
+              </ul>
+            </div>
+            <div class="actions">
+              <a href="docs/quantum.html" class="btn-solid">[ OVERVIEW ]</a>
+              <a href="docs/quantum.html#sim" class="btn-outline">[ SIMULATOR ]</a>
             </div>
           </article>
 
@@ -620,26 +637,6 @@
             </div>
           </article>
 
-          <article class="card" role="listitem">
-            <div>
-              <div class="top-chips">
-                <span class="chip chip-cpu">HIGH PERFORMANCE</span>
-                <span class="chip">COMPUTE</span>
-              </div>
-              <div class="icon" aria-hidden="true">🚀</div>
-              <h3 style="margin:0 0 10px 0;">Drift Compute Engine</h3>
-              <p>Solving NP-Hard optimization problems via Chaotic Annealing. Escapes local minima 100x faster than standard solvers.</p>
-              <ul class="bullets">
-                <li>Logistics Routing (TSP) Optimization</li>
-                <li>VLSI Floorplanning & Chip Design</li>
-                <li>Protein Folding & Drug Discovery</li>
-              </ul>
-            </div>
-            <div class="actions">
-              <a href="docs/compute.html" class="btn-solid">[ OVERVIEW ]</a>
-            </div>
-          </article>
-
         </div>
 
         <div class="section-header" id="research">
@@ -650,7 +647,8 @@
         </div>
 
         <div class="grid-2" role="list" aria-label="Research links">
-         <article class="card" role="listitem" style="border-color: var(--mint);">
+          
+          <article class="card" role="listitem" style="border-color: var(--mint);">
             <div>
               <div class="icon" aria-hidden="true" style="color: var(--mint);">✓</div>
               <h5 style="color: var(--mint);">FORMAL VERIFICATION</h5>
@@ -658,7 +656,16 @@
             </div>
             <a href="docs/compute.html#proof" class="btn-outline" style="color:var(--mint); border-color:var(--mint);">[ VIEW CODE ]</a>
           </article>
-        
+
+          <article class="card" role="listitem">
+            <div>
+              <div class="icon" aria-hidden="true">🚀</div>
+              <h5>CHAOTIC ANNEALING</h5>
+              <p>Solving NP-Hard problems via Uniform Spectral Coverage.</p>
+            </div>
+            <a href="docs/compute.html" class="btn-outline">[ VIEW ENGINE ]</a>
+          </article>
+
           <article class="card" role="listitem">
             <div>
               <div class="icon" aria-hidden="true">Σ</div>
@@ -704,14 +711,6 @@
             <a href="docs/prime.html" target="_blank" rel="noopener" class="btn-outline">[ VIEW SIMULATION ]</a>
           </article>
 
-          <article class="card" role="listitem">
-            <div>
-              <div class="icon" aria-hidden="true">❄️</div>
-              <h5>CRYO-STABILITY</h5>
-              <p>Entropy generation at milli-Kelvin (Quantum) temperatures</p>
-            </div>
-            <a href="docs/quantum.html" target="_blank" rel="noopener" class="btn-outline">[ VIEW SIMULATION ]</a>
-          </article>
         </div>
 
         <div class="section-header" id="contact">
