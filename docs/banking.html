@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drift Systems | Banking & Payments</title>
+    
+    <script>
+        window.MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']]
+          },
+          svg: {
+            fontCache: 'global'
+          }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💠</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+    <style>
+        :root {
+            /* BRAND PALETTE */
+            --bg0: #000;
+            --bg1: #050505;
+            --panel: rgba(0,20,40,0.5);
+            --border: rgba(0,255,255,0.2);
+            --border-strong: rgba(0,255,255,0.8);
+            --text: #fff;
+            --muted: #a0a0a0;
+            --muted2: #888;
+            --cyan: #00ffff;
+            --mint: #00ffaa;
+            --warn: #ffaa00;
+            --fail: #ff4444;
+            --cash: #00d455; /* Money Green */
+            --mono: 'JetBrains Mono', ui-monospace, monospace;
+            --sans: 'Inter', system-ui, sans-serif;
+            --shadow: 0 0 20px rgba(0,255,255,0.10);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: var(--sans);
+            background-color: var(--bg0);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 { font-weight: 700; letter-spacing: -0.02em; margin-bottom: 1rem; color: #fff; }
+        h1 { 
+            font-size: 3rem; line-height: 1.1; 
+            background: linear-gradient(90deg, #fff, var(--cash)); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+        }
+        h2 { 
+            font-size: 1.8rem; border-left: 4px solid var(--cash); 
+            padding-left: 1rem; margin-top: 3rem; 
+        }
+        p { margin-bottom: 1.5rem; font-size: 1.05rem; color: var(--muted); }
+        
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+        
+        nav { padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: var(--sans); font-weight: 900; font-size: 1.2rem; letter-spacing: 1px; color: #fff; text-decoration: none; }
+        .nav-links a { font-family: var(--mono); color: var(--muted); text-decoration: none; margin-left: 20px; font-size: 0.85rem; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--cyan); }
+
+        /* Hero */
+        .hero { padding: 80px 0; text-align: center; }
+        .hero .eyebrow { color: var(--cash); font-family: var(--mono); font-weight: 700; letter-spacing: 1px; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        
+        .btn { 
+            display: inline-block; padding: 12px 30px; 
+            background: rgba(0, 212, 85, 0.1); color: var(--cash); 
+            border: 1px solid var(--cash); font-family: var(--mono); 
+            font-size: 0.85rem; font-weight: 700; text-decoration: none; 
+            transition: all 0.2s; 
+        }
+        .btn:hover { background: var(--cash); color: #000; box-shadow: 0 0 20px rgba(0, 212, 85, 0.4); }
+
+        /* --- CVV SIMULATOR STYLES --- */
+        .sim-container {
+            background: var(--bg1); border: 1px solid var(--border); border-radius: 4px;
+            padding: 24px; margin: 40px 0; position: relative;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        .payment-desk {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;
+        }
+
+        /* The Card */
+        .credit-card {
+            background: linear-gradient(135deg, #111, #222); border: 1px solid #444; border-radius: 12px;
+            height: 200px; position: relative; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex; flex-direction: column; justify-content: space-between; overflow: hidden;
+        }
+        .credit-card::before {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.05), transparent);
+            animation: shine 4s infinite linear;
+        }
+        @keyframes shine { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+
+        .card-chip { width: 40px; height: 30px; background: linear-gradient(to bottom right, #ffcc00, #aa8800); border-radius: 4px; margin-bottom: 20px; }
+        .card-number { font-family: var(--mono); font-size: 1.2rem; letter-spacing: 2px; color: #ccc; text-shadow: 0 1px 2px #000; }
+        .card-name { font-family: var(--mono); font-size: 0.9rem; color: #888; text-transform: uppercase; }
+        
+        .cvv-display {
+            position: absolute; right: 25px; bottom: 25px;
+            background: #000; border: 1px solid var(--cash); color: var(--cash);
+            padding: 5px 10px; font-family: var(--mono); font-size: 1.1rem;
+            border-radius: 4px; min-width: 60px; text-align: center;
+            box-shadow: 0 0 10px rgba(0, 212, 85, 0.2);
+        }
+        .cvv-timer {
+            position: absolute; bottom: -20px; right: 0; width: 100%; height: 2px; background: var(--cash);
+            animation: drain 5s linear infinite;
+        }
+        @keyframes drain { 0% { width: 100%; } 100% { width: 0%; } }
+
+        /* The Terminal */
+        .terminal {
+            background: #111; border: 1px solid #333; padding: 20px; border-radius: 6px;
+            display: flex; flex-direction: column; gap: 15px;
+        }
+        .terminal-screen {
+            background: #000; border: 1px solid #444; height: 100px; padding: 15px;
+            font-family: var(--mono); font-size: 0.8rem; color: #ccc; overflow: hidden;
+        }
+        .term-line { margin-bottom: 5px; }
+        .term-success { color: var(--mint); }
+        .term-fail { color: var(--fail); }
+
+        .controls {
+            display: flex; gap: 10px;
+        }
+        .pay-btn {
+            flex: 1; padding: 12px; background: #222; border: 1px solid #444; color: #fff;
+            font-family: var(--mono); cursor: pointer; transition: all 0.2s; font-size: 0.8rem;
+        }
+        .pay-btn:hover { border-color: var(--cash); color: var(--cash); }
+        .pay-btn.steal { border-color: var(--fail); color: var(--fail); }
+        .pay-btn.steal:hover { background: var(--fail); color: #000; }
+
+        /* --- SECTION STYLES --- */
+        .grid-text { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin: 60px 0; }
+        .feature-card { border: 1px solid var(--border); padding: 24px; background: var(--panel); transition: transform 0.2s; }
+        .feature-card:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+        .feature-card h3 { color: var(--cyan); font-family: var(--mono); font-size: 1rem; margin-bottom: 12px; letter-spacing: 1px; }
+
+        footer { border-top: 1px solid rgba(255,255,255,0.1); padding: 40px 0; margin-top: 80px; text-align: center; font-size: 0.9rem; color: #666; }
+        
+        @media (max-width: 900px) {
+            h1 { font-size: 2.2rem; }
+            .payment-desk { grid-template-columns: 1fr; }
+            .grid-text { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <nav>
+            <a href="../index.html" class="logo">DRIFT<span style="font-weight:300;">SYSTEMS</span></a>
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="#sim">Rolling CVV</a>
+                <a href="#specs">Specs</a>
+            </div>
+        </nav>
+
+        <section class="hero">
+            <span class="eyebrow">BANKING & PAYMENTS</span>
+            <h1>Rolling CVV &<br>Instant Finality</h1>
+            <p>Static credit card numbers are a security liability. Drift Systems enables <strong>Dynamic Authentication</strong> where the CVV code evolves every few seconds based on a deterministic arithmetic path, rendering stolen card data useless.</p>
+            <br>
+            <a href="#sim" class="btn">TRY ROLLING CVV</a>
+        </section>
+
+        <hr style="border: 0; border-top: 1px solid var(--border-color);">
+
+        <section id="sim">
+            <h2>1. The Skimming Defense Simulator</h2>
+            <p>Standard cards have a static CVV (printed on the back). If a waiter skims it, they can use it forever. With Drift, the CVV is a <strong>Time-Based Drift Code</strong>. Try to act as a thief using "Old" data.</p>
+
+            <div class="sim-container">
+                <div class="payment-desk">
+                    
+                    <div class="credit-card">
+                        <div>
+                            <div class="card-chip"></div>
+                            <div class="card-number">**** **** **** 4242</div>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+                            <div class="card-name">JOHN DOE</div>
+                            <div class="cvv-display">
+                                <span id="live-cvv">...</span>
+                                <div class="cvv-timer" id="timer-bar"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="terminal">
+                        <div class="terminal-screen" id="term-screen">
+                            <div class="term-line">POS TERMINAL READY...</div>
+                            <div class="term-line">WAITING FOR AUTH...</div>
+                        </div>
+                        
+                        <div class="controls">
+                            <button class="pay-btn" onclick="payNow()">✅ PAY (Live Code)</button>
+                            <button class="pay-btn steal" onclick="stealPay()">☠ REPLAY OLD CODE</button>
+                        </div>
+                        <div style="font-size:0.7rem; color:#666; text-align:center;">
+                            "Replay" simulates a hacker using a code stolen 10 seconds ago.
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <p style="font-size: 0.95rem; border-left: 2px solid var(--border); padding-left: 15px; color: var(--muted2);">
+                <strong style="color:var(--text);">Observation:</strong> The "Live Code" is accepted instantly. The "Old Code" is rejected by the backend because the Drift State ($S_t$) has evolved to $S_{t+1}$. The stolen data expired before it could be used.
+            </p>
+        </section>
+
+        <section id="specs">
+            <h2>2. Financial Services Capabilities</h2>
+            <div class="grid-text">
+                <div class="feature-card">
+                    <h3>Dynamic Auth (Card Not Present)</h3>
+                    <p>For e-commerce, the "Static CVV" is replaced by a drift code generated by the banking app or a specialized EMV chip. This eliminates CNP (Card Not Present) fraud, as the auth code is valid for only one transaction window.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Instant Payment Finality (RTP)</h3>
+                    <p>Real-Time Payments (FedNow/SEPA) are irreversible. Drift binds the "Sender Intent" (Recipient + Amount) to the device's drift state at the exact moment of signing. This prevents malware from swapping the recipient address milliseconds before execution.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Offline Transaction Signing</h3>
+                    <p>Hardware wallets and POS terminals can generate valid, non-replayable transaction signatures even when offline. The drift sequence ensures that queued offline transactions are processed in the exact order they occurred once connectivity is restored.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>ISO 20022 Integrity</h3>
+                    <p>Drift headers can be embedded into standard ISO 20022 financial messaging fields. This provides an immutable "Audit Envelope" for inter-bank transfers that survives passing through legacy middleware.</p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Drift Systems Inc. <br> Systems Architect: Lukas Cain</p>
+            <p style="font-size: 0.8rem; color: #444;">Export Controlled Technology (EAR99).</p>
+        </div>
+    </footer>
+
+    <script>
+    (function() {
+        const liveCvvEl = document.getElementById('live-cvv');
+        const timerBar = document.getElementById('timer-bar');
+        const termScreen = document.getElementById('term-screen');
+        
+        let currentCvv = 0;
+        let stolenCvv = null;
+        
+        // Drift function proxy
+        function nextCode() {
+            return Math.floor(100 + Math.random() * 899);
+        }
+
+        function log(msg, type) {
+            const div = document.createElement('div');
+            div.className = `term-line ${type || ''}`;
+            div.innerText = `> ${msg}`;
+            termScreen.appendChild(div);
+            termScreen.scrollTop = termScreen.scrollHeight;
+        }
+
+        // Cycle the CVV every 5 seconds
+        function cycle() {
+            // Save old as stolen before updating
+            stolenCvv = currentCvv; 
+            
+            // Update
+            currentCvv = nextCode();
+            liveCvvEl.innerText = currentCvv;
+            
+            // Reset Animation
+            timerBar.style.animation = 'none';
+            timerBar.offsetHeight; /* trigger reflow */
+            timerBar.style.animation = 'drain 5s linear infinite';
+        }
+
+        setInterval(cycle, 5000);
+        cycle(); // Init
+
+        window.payNow = function() {
+            log(`AUTH REQ: CVV [${currentCvv}]...`);
+            setTimeout(() => {
+                log("Card Validated. APPROVED.", "term-success");
+            }, 600);
+        };
+
+        window.stealPay = function() {
+            if(!stolenCvv) stolenCvv = 999;
+            log(`AUTH REQ: CVV [${stolenCvv}]...`);
+            setTimeout(() => {
+                log("ERR: CVV EXPIRED / STALE.", "term-fail");
+                log("Fraud Alert Triggered.", "term-fail");
+            }, 600);
+        };
+
+    })();
+    </script>
+</body>
+</html>
