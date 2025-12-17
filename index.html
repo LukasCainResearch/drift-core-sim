@@ -384,12 +384,13 @@
         <div class="section-header" id="verticals">
           <h4>DEPLOYMENT VERTICALS</h4>
           <p class="lead" style="max-width: 760px;">
-            Commercialization tracks spanning defense, industry, and aerospace.
+            Commercialization tracks spanning defense, industry, finance, and aerospace.
             Each vertical leverages the core invariants: freshness, timing budgets, and recovery.
           </p>
         </div>
 
         <div class="grid-2" role="list">
+          
           <article class="card" role="listitem">
             <div>
               <div class="top-chips">
@@ -429,26 +430,6 @@
             <div class="actions">
               <a href="docs/semiconductor.html" class="btn-solid">[ OVERVIEW ]</a>
               <a href="docs/semiconductor.html#demos" class="btn-outline">[ DEMOS ]</a>
-            </div>
-          </article>
-
-          <article class="card" role="listitem">
-            <div>
-              <div class="top-chips">
-                <span class="chip chip-ip">GENERATIVE AI</span>
-                <span class="chip">MEDIA PROVENANCE</span>
-              </div>
-              <div class="icon" aria-hidden="true">👁️</div>
-              <h3 style="margin:0 0 10px 0;">Deepfake Defense &amp; C2PA</h3>
-              <p>Intrinsic frame-level lineage for video and audio. Detects splicing and AI generation without fragile metadata.</p>
-              <ul class="bullets">
-                <li>Mathematically provable capture-to-display chain of custody</li>
-                <li>Drift-incompatibility detection for spliced/edited frames</li>
-                <li>Replaces removable watermarks with arithmetic binding</li>
-              </ul>
-            </div>
-            <div class="actions">
-              <a href="docs/ai_media.html" class="btn-solid">[ OVERVIEW ]</a>
             </div>
           </article>
 
@@ -534,14 +515,54 @@
             </div>
           </article>
           
+          <article class="card" role="listitem">
+            <div>
+              <div class="top-chips">
+                <span class="chip chip-vol">AUTONOMOUS</span>
+                <span class="chip">AUTOMOTIVE / V2X</span>
+              </div>
+              <div class="icon" aria-hidden="true">🚘</div>
+              <h3 style="margin:0 0 10px 0;">Trustless Platooning & V2V</h3>
+              <p>Physics-aware signal validation for autonomous fleets. Prevents GPS spoofing and ghost commands.</p>
+              <ul class="bullets">
+                <li>Rejects spoofed braking commands via drift envelopes</li>
+                <li>GPS-denied fleet synchronization</li>
+                <li>Immutable "Black Box" audit trails for liability</li>
+              </ul>
+            </div>
+            <div class="actions">
+              <a href="docs/automotive.html" class="btn-solid">[ OVERVIEW ]</a>
+            </div>
+          </article>
+
+          <article class="card" role="listitem">
+            <div>
+              <div class="top-chips">
+                <span class="chip chip-ip">GENERATIVE AI</span>
+                <span class="chip">MEDIA PROVENANCE</span>
+              </div>
+              <div class="icon" aria-hidden="true">👁️</div>
+              <h3 style="margin:0 0 10px 0;">Deepfake Defense &amp; C2PA</h3>
+              <p>Intrinsic frame-level lineage for video and audio. Detects splicing and AI generation without fragile metadata.</p>
+              <ul class="bullets">
+                <li>Mathematically provable capture-to-display chain of custody</li>
+                <li>Drift-incompatibility detection for spliced/edited frames</li>
+                <li>Replaces removable watermarks with arithmetic binding</li>
+              </ul>
+            </div>
+            <div class="actions">
+              <a href="docs/ai_media.html" class="btn-solid">[ OVERVIEW ]</a>
+            </div>
+          </article>
+
            <article class="card" role="listitem">
             <div>
               <div class="top-chips">
                 <span class="chip chip-ret">ULTRA LOW LATENCY</span>
-                <span class="chip">FINTECH</span>
+                <span class="chip">HFT & EXCHANGES</span>
               </div>
               <div class="icon" aria-hidden="true">⚡</div>
-              <h3 style="margin:0 0 10px 0;">HFT &amp; Trade Serialization</h3>
+              <h3 style="margin:0 0 10px 0;">Trade Serialization</h3>
               <p>Hardware-enforced ordering and anti-spoofing for high-frequency trading pipelines.</p>
               <ul class="bullets">
                 <li>Nanosecond-precision trade serialization (prevents front-running)</li>
@@ -554,12 +575,32 @@
             </div>
           </article>
 
+          <article class="card" role="listitem">
+            <div>
+              <div class="top-chips">
+                <span class="chip chip-vol">FRAUD PREVENTION</span>
+                <span class="chip">BANKING</span>
+              </div>
+              <div class="icon" aria-hidden="true">💳</div>
+              <h3 style="margin:0 0 10px 0;">Rolling CVV & Payments</h3>
+              <p>Dynamic authentication for cards and real-time payments. Eliminates skimming and replay attacks.</p>
+              <ul class="bullets">
+                <li>CVV codes that evolve every 30 seconds (Drift-Synced)</li>
+                <li>Prevents "Authorized Push Payment" fraud via intent binding</li>
+                <li>Offline transaction signing for CBDC/Crypto wallets</li>
+              </ul>
+            </div>
+            <div class="actions">
+              <a href="docs/banking.html" class="btn-solid">[ OVERVIEW ]</a>
+            </div>
+          </article>
+
         </div>
 
         <div class="section-header" id="research">
           <h4>RIGOROUS MATHEMATICAL FOUNDATIONS</h4>
           <p class="lead" style="max-width: 760px;">
-            Drift Systems is built on <strong>Arithmetic Dynamics over &#8484;<sub>2</sub></strong>. We provide algebraic proofs of stability, coverage, and complexity without relying on unproven physical assumptions.
+            Drift Systems is built on <strong>Arithmetic Dynamics over ℤ₂</strong>. We provide algebraic proofs of stability, coverage, and complexity without relying on unproven physical assumptions.
           </p>
         </div>
 
@@ -633,6 +674,7 @@
       </p>
     </div>
   </footer>
+
   <div id="drift-widget" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; font-family: 'JetBrains Mono', monospace;">
     
     <div id="drift-chat-window" style="display: none; width: 350px; height: 500px; background: #050505; border: 1px solid #333; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); flex-direction: column; overflow: hidden;">
@@ -658,9 +700,9 @@
         💠
     </button>
 
-</div>
+  </div>
 
-<script>
+  <script>
     const widget = document.getElementById('drift-chat-window');
     const toggleBtn = document.getElementById('widget-toggle-btn');
     const msgArea = document.getElementById('chat-messages');
@@ -730,7 +772,7 @@
         // Simulating AI "Thinking"
         setTimeout(() => {
             const lower = text.toLowerCase();
-            let response = "I specialize in arithmetic stability. Could you clarify your industry? (e.g., Defense, Medical, Logistics)";
+            let response = "I specialize in arithmetic stability. Could you clarify your industry? (e.g., Defense, Banking, AI, Auto)";
             let url = null;
 
             // --- ROUTING LOGIC ---
@@ -760,8 +802,8 @@
                 response = "Our architecture is Radiation-Hardened by design, self-healing from Single Event Upsets (SEUs) in 1 cycle.";
                 url = "docs/space.html";
             }
-            // 6. FINTECH
-            else if (lower.includes('fin') || lower.includes('trad') || lower.includes('hft') || lower.includes('bank')) {
+            // 6. FINTECH / HFT
+            else if (lower.includes('hft') || lower.includes('trad') || lower.includes('exchange') || lower.includes('front')) {
                 response = "We prevent Front-Running and spoofing via hardware-enforced trade serialization.";
                 url = "docs/fintech.html";
             }
@@ -775,10 +817,20 @@
                 response = "Our IP Core provides high-coverage BIST (Built-In Self-Test) and hardware trojan detection.";
                 url = "docs/semiconductor.html";
             }
+            // 9. AUTOMOTIVE
+            else if (lower.includes('car') || lower.includes('truck') || lower.includes('auto') || lower.includes('v2x') || lower.includes('fleet')) {
+                response = "For autonomous fleets, we provide V2V spoofing protection and GPS-denied synchronization.";
+                url = "docs/automotive.html";
+            }
+            // 10. BANKING
+            else if (lower.includes('bank') || lower.includes('credit') || lower.includes('card') || lower.includes('fraud') || lower.includes('pay')) {
+                response = "We eliminate card skimming with Rolling CVV codes and secure real-time payments.";
+                url = "docs/banking.html";
+            }
 
             addMsg(response, false, url);
         }, 600);
     }
-</script>
+  </script>
 </body>
 </html>
