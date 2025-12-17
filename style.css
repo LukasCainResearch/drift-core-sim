@@ -345,42 +345,60 @@ footer{
   .card:hover, nav a:hover, .btn:hover, .btn-outline:hover, .btn-solid:hover{ transform:none !important; }
 }
 
-/* --- Defense Table Styles --- */
+/* --- Defense Table Styles (Updated) --- */
 .table-responsive {
   overflow-x: auto;
-  margin-top: 20px;
-  border: 1px solid rgba(255,255,255,0.1);
-  background: rgba(255,255,255,0.02);
+  margin-top: 24px;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(0,255,255,0.15);
+  border-radius: 4px;
 }
+
 .spec-table {
   width: 100%;
   border-collapse: collapse;
   font-family: var(--mono);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   text-align: left;
+  table-layout: fixed; /* CRITICAL: Forces columns to respect width % */
 }
-.spec-table th, .spec-table td {
-  padding: 16px 20px;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-}
+
+/* Header Styling - The "Pop" */
 .spec-table th {
-  color: var(--muted);
-  font-weight: 400;
-  letter-spacing: 1px;
-  border-bottom: 2px solid rgba(255,255,255,0.2);
+  color: var(--cyan);            /* Change to var(--warn) for ORANGE */
+  border-bottom: 2px solid var(--cyan); 
+  padding: 18px 20px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 700;
+  vertical-align: bottom;
 }
+
+/* Cell Styling */
 .spec-table td {
-  color: #fff;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.9);
+  vertical-align: top;
+  line-height: 1.4;
 }
-/* Highlight Column for Drift */
+
+/* Column Width Control (Fixes Alignment) */
+.spec-table th:nth-child(1) { width: 18%; } /* Parameter */
+.spec-table th:nth-child(2) { width: 22%; } /* DOC-MIL */
+.spec-table th:nth-child(3) { width: 18%; } /* AES */
+.spec-table th:nth-child(4) { width: 42%; } /* Advantage */
+
+/* Highlight Column for Drift Core */
 .spec-table .highlight {
   color: var(--cyan);
-  background: rgba(0, 255, 255, 0.05);
+  background: rgba(0, 255, 255, 0.04);
   font-weight: 700;
-  border-left: 1px solid rgba(0,255,255,0.1);
-  border-right: 1px solid rgba(0,255,255,0.1);
+  border-left: 1px solid rgba(0,255,255,0.08);
+  border-right: 1px solid rgba(0,255,255,0.08);
 }
-/* Responsive adjustments for table */
-@media (max-width: 700px) {
-  .spec-table th, .spec-table td { padding: 10px; font-size: 0.8rem; }
+
+/* Mobile Tweak */
+@media (max-width: 768px) {
+  .spec-table { min-width: 600px; } /* Allows scrolling on small screens */
 }
