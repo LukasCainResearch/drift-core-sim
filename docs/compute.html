@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drift Compute | Chaotic Optimization</title>
+    <title>Drift Systems | Compute Architecture</title>
     
     <script>
         window.MathJax = {
@@ -28,21 +28,19 @@
         :root {
             /* BRAND PALETTE */
             --bg0: #000;
-            --bg1: #080808;
-            --panel: rgba(20,20,20,0.5);
-            --border: rgba(255,0,85,0.2);
-            --border-strong: rgba(255,0,85,0.8);
+            --bg1: #050505;
+            --panel: rgba(0,20,40,0.5);
+            --border: rgba(0,255,255,0.2);
+            --border-strong: rgba(0,255,255,0.8);
             --text: #fff;
             --muted: #a0a0a0;
-            --muted2: #888;
             --cyan: #00ffff;
             --mint: #00ffaa;
             --warn: #ffaa00;
             --fail: #ff4444;
-            --compute: #ff0055; /* Radical Red for Compute/Energy */
+            --opt: #ff0055; 
             --mono: 'JetBrains Mono', ui-monospace, monospace;
             --sans: 'Inter', system-ui, sans-serif;
-            --shadow: 0 0 40px rgba(255,0,85,0.15);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -56,93 +54,65 @@
         }
 
         h1, h2, h3 { font-weight: 700; letter-spacing: -0.02em; margin-bottom: 1rem; color: #fff; }
-        h1 { 
-            font-size: 3.5rem; line-height: 1.1; 
-            background: linear-gradient(90deg, #fff, var(--compute)); 
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
-        }
-        h2 { 
-            font-size: 1.8rem; border-left: 4px solid var(--compute); 
-            padding-left: 1rem; margin-top: 3rem; 
-        }
-        p { margin-bottom: 1.5rem; font-size: 1.1rem; color: var(--muted); }
+        h1 { font-size: 3rem; line-height: 1.1; background: linear-gradient(90deg, #fff, var(--mint)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        h2 { font-size: 1.8rem; border-left: 4px solid var(--mint); padding-left: 1rem; margin-top: 3rem; }
+        p { margin-bottom: 1.5rem; font-size: 1.05rem; color: var(--muted); }
         
         .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
         
-        /* Navigation */
         nav { padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; }
         .logo { font-family: var(--sans); font-weight: 900; font-size: 1.2rem; letter-spacing: 1px; color: #fff; text-decoration: none; }
         .nav-links a { font-family: var(--mono); color: var(--muted); text-decoration: none; margin-left: 20px; font-size: 0.85rem; transition: color 0.2s; }
-        .nav-links a:hover { color: var(--compute); }
+        .nav-links a:hover { color: var(--cyan); }
 
-        /* Hero */
-        .hero { padding: 100px 0; text-align: center; }
-        .hero .eyebrow { color: var(--compute); font-family: var(--mono); font-weight: 700; letter-spacing: 2px; font-size: 0.85rem; display: block; margin-bottom: 15px; }
+        .hero { padding: 80px 0; text-align: center; }
+        .hero .eyebrow { color: var(--mint); font-family: var(--mono); font-weight: 700; letter-spacing: 1px; font-size: 0.85rem; display: block; margin-bottom: 10px; }
         
-        .btn { 
-            display: inline-block; padding: 14px 35px; 
-            background: rgba(255, 0, 85, 0.1); color: var(--compute); 
-            border: 1px solid var(--compute); font-family: var(--mono); 
-            font-size: 0.9rem; font-weight: 700; text-decoration: none; 
-            transition: all 0.2s; margin-right: 15px;
-        }
-        .btn:hover { background: var(--compute); color: #000; box-shadow: 0 0 30px rgba(255, 0, 85, 0.4); }
-        .btn-outline { background: transparent; border-color: #444; color: #fff; }
-        .btn-outline:hover { border-color: #fff; background: rgba(255,255,255,0.05); box-shadow: none; color: #fff; }
+        .btn { display: inline-block; padding: 12px 30px; background: rgba(0, 255, 170, 0.1); color: var(--mint); border: 1px solid var(--mint); font-family: var(--mono); font-size: 0.85rem; font-weight: 700; text-decoration: none; transition: all 0.2s; }
+        .btn:hover { background: var(--mint); color: #000; box-shadow: 0 0 20px rgba(0, 255, 170, 0.4); }
+        .btn-outline { background: transparent; color: var(--mint); border: 1px solid var(--border); margin-left: 10px; }
+        .btn-outline:hover { border-color: var(--mint); color: #fff; }
 
-        /* --- LANDSCAPE SIMULATOR --- */
-        .sim-container {
-            background: var(--bg1); border: 1px solid var(--border); border-radius: 4px;
-            padding: 0; margin: 60px 0; position: relative; overflow: hidden;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5); height: 400px;
-        }
+        /* --- SPECTRAL SIMULATOR STYLES --- */
+        .sim-container { background: var(--bg1); border: 1px solid var(--border); border-radius: 4px; padding: 24px; margin: 40px 0; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+        .grid-display { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 20px; }
+        
+        .monitor { background: #080808; border: 1px solid #222; border-radius: 4px; padding: 15px; position: relative; }
+        .monitor h4 { font-family: var(--mono); font-size: 0.8rem; color: #666; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #222; padding-bottom: 5px; display: flex; justify-content: space-between; }
+        .score-badge { font-weight: bold; }
+        
+        .histo-container { height: 200px; display: flex; align-items: flex-end; justify-content: space-between; gap: 4px; padding-top: 20px; border-bottom: 1px solid #333; position: relative; }
+        .histo-bar { width: 100%; background: #222; transition: height 0.1s; position: relative; }
+        .histo-bar::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; opacity: 0.8; }
+        
+        /* Standard LFSR Styling */
+        .monitor.std .histo-bar { background: rgba(255, 68, 68, 0.2); }
+        .monitor.std .histo-bar::after { background: var(--fail); }
+        .monitor.std .score-badge { color: var(--fail); }
 
-        canvas { display: block; width: 100%; height: 100%; }
+        /* Drift Styling */
+        .monitor.drift { border-color: var(--mint); box-shadow: 0 0 15px rgba(0,255,170,0.05); }
+        .monitor.drift .histo-bar { background: rgba(0, 255, 170, 0.2); }
+        .monitor.drift .histo-bar::after { background: var(--mint); }
+        .monitor.drift .score-badge { color: var(--mint); }
 
-        .overlay-ui {
-            position: absolute; top: 20px; left: 20px; z-index: 10;
-            background: rgba(0,0,0,0.8); padding: 15px; border: 1px solid #333; border-radius: 4px;
-            font-family: var(--mono); font-size: 0.8rem; min-width: 250px;
-        }
-        .ui-row { display: flex; justify-content: space-between; margin-bottom: 8px; }
-        .val { color: var(--compute); font-weight: 700; }
-        .val.stuck { color: var(--fail); }
-        .val.opt { color: var(--mint); }
+        .axis-label { font-family: var(--mono); font-size: 0.7rem; color: #444; margin-top: 8px; text-align: center; }
+        .overlay-line { position: absolute; top: 50%; left: 0; width: 100%; height: 1px; background: #444; border-top: 1px dashed #666; pointer-events: none; z-index: 10; }
+        .overlay-text { position: absolute; top: 45%; right: 5px; font-family: var(--mono); font-size: 0.65rem; color: #666; background: #080808; padding: 0 4px; }
 
-        .controls {
-            position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
-            display: flex; gap: 15px; z-index: 10;
-        }
-        .sim-btn {
-            background: rgba(0,0,0,0.8); border: 1px solid var(--compute); color: var(--compute);
-            padding: 10px 20px; font-family: var(--mono); cursor: pointer; transition: all 0.2s;
-            font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;
-        }
-        .sim-btn:hover { background: var(--compute); color: #000; }
+        .controls { display: flex; justify-content: center; margin-top: 20px; }
+        .sim-btn { background: #222; border: 1px solid #444; color: #ccc; padding: 12px 30px; font-family: var(--mono); cursor: pointer; transition: all 0.2s; font-size: 0.9rem; font-weight: 700; }
+        .sim-btn:hover { border-color: #fff; color: #fff; }
+        .sim-btn.active { background: var(--mint); color: #000; border-color: var(--mint); }
 
         /* --- SECTION STYLES --- */
-        .grid-text { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; margin: 80px 0; }
-        .feature-card { 
-            border-left: 2px solid var(--border); padding-left: 25px; 
-            transition: border-color 0.3s;
-        }
-        .feature-card:hover { border-color: var(--compute); }
-        .feature-card h3 { color: #fff; font-family: var(--sans); font-size: 1.4rem; margin-bottom: 12px; font-weight: 700; }
-        .feature-card p { font-size: 1rem; color: var(--muted); margin-bottom: 0; }
-
-        /* Latex Block */
-        .math-block {
-            background: #111; border: 1px solid #333; padding: 30px; margin: 40px 0;
-            font-family: "Times New Roman", serif; font-size: 1.1rem; color: #ddd;
-            text-align: center;
-        }
+        .grid-text { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin: 60px 0; }
+        .feature-card { border: 1px solid var(--border); padding: 24px; background: var(--panel); transition: transform 0.2s; }
+        .feature-card:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+        .feature-card h3 { color: var(--mint); font-family: var(--mono); font-size: 1rem; margin-bottom: 12px; letter-spacing: 1px; }
 
         footer { border-top: 1px solid rgba(255,255,255,0.1); padding: 40px 0; margin-top: 80px; text-align: center; font-size: 0.9rem; color: #666; }
-        
-        @media (max-width: 900px) {
-            h1 { font-size: 2.5rem; }
-            .grid-text { grid-template-columns: 1fr; gap: 40px; }
-        }
+        @media (max-width: 900px) { h1 { font-size: 2.2rem; } .grid-display { grid-template-columns: 1fr; } .grid-text { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -152,84 +122,72 @@
             <a href="../index.html" class="logo">DRIFT<span style="font-weight:300;">SYSTEMS</span></a>
             <div class="nav-links">
                 <a href="../index.html">Home</a>
-                <a href="#sim">Simulation</a>
-                <a href="#math">The Math</a>
+                <a href="#sim">Spectral Analysis</a>
+                <a href="#theory">Theory</a>
             </div>
         </nav>
 
         <section class="hero">
-            <span class="eyebrow">DRIFT COMPUTE ENGINE</span>
-            <h1>Solve the<br>Unsolvable.</h1>
-            <p>Standard optimization algorithms get trapped in local minima. Drift Annealing utilizes deterministic chaotic dynamics to tunnel through energy barriers, solving NP-Hard problems in Logistics, VLSI, and Protein Folding faster than stochastic methods.</p>
+            <span class="eyebrow">LOW-RESOURCE COMPUTE</span>
+            <h1>Perfect Uniformity<br>at the Edge.</h1>
+            <p>Standard edge processors rely on Linear Feedback Shift Registers (LFSRs) for entropy, creating "Blind Spots" in optimization tasks. Drift Systems delivers <strong>CPU-Grade Uniformity (0.999)</strong> using &lt;700 Logic Gates.</p>
             <br>
-            <a href="#sim" class="btn">RUN ENGINE</a>
-            <a href="Chaotic_Annealing_Whitepaper.pdf" class="btn btn-outline">READ WHITEPAPER</a>
+            <a href="#sim" class="btn">RUN ANALYSIS</a>
+            <a href="Uniformity_Whitepaper.pdf" class="btn btn-outline" target="_blank">READ WHITEPAPER</a>
         </section>
 
-        <div class="sim-container" id="sim-container">
-            <canvas id="terrainCanvas"></canvas>
-            
-            <div class="overlay-ui">
-                <div class="ui-row" style="border-bottom:1px solid #333; padding-bottom:5px; margin-bottom:10px;">
-                    <span style="color:#888;">SOLVER STATUS</span>
+        <hr style="border: 0; border-top: 1px solid var(--border-color);">
+
+        <section id="sim">
+            <h2>1. The Uniformity Gap</h2>
+            <p><strong>The Test:</strong> We generate 10,000 random integers into 20 buckets. 
+            <br>An ideal solver (like a CPU Mersenne Twister) fills all buckets evenly. Hardware LFSRs fail to cover the space. Drift achieves perfect coverage.</p>
+
+            <div class="sim-container">
+                <div class="grid-display">
+                    
+                    <div class="monitor std">
+                        <h4>
+                            Standard HW (LFSR)
+                            <span class="score-badge" id="score-std">---</span>
+                        </h4>
+                        <div class="histo-container" id="bars-std">
+                            <div class="overlay-line"></div>
+                            <div class="overlay-text">IDEAL UNIFORMITY</div>
+                            </div>
+                        <div class="axis-label">DISTRIBUTION BUCKETS (0-20)</div>
+                    </div>
+
+                    <div class="monitor drift">
+                        <h4>
+                            Drift Core (FPGA)
+                            <span class="score-badge" id="score-drift">---</span>
+                        </h4>
+                        <div class="histo-container" id="bars-drift">
+                            <div class="overlay-line"></div>
+                            <div class="overlay-text">IDEAL UNIFORMITY</div>
+                            </div>
+                        <div class="axis-label">DISTRIBUTION BUCKETS (0-20)</div>
+                    </div>
+
                 </div>
-                <div class="ui-row">
-                    <span>STANDARD (Gaussian):</span>
-                    <span class="val stuck" id="status-std">STUCK (Local Min)</span>
-                </div>
-                <div class="ui-row">
-                    <span>DRIFT (Chaotic):</span>
-                    <span class="val opt" id="status-drift">ESCAPED (Global Opt)</span>
-                </div>
-                <div class="ui-row" style="margin-top:15px;">
-                    <span>Energy Cost:</span>
-                    <span class="val" id="energy-val">-14.2 dB</span>
+
+                <div class="controls">
+                    <button class="sim-btn active" id="btn-run" onclick="toggleSim()">⚡ RUN SPECTRAL ANALYSIS</button>
                 </div>
             </div>
+        </section>
 
-            <div class="controls">
-                <button class="sim-btn" onclick="resetSim()">RESET TERRAIN</button>
-            </div>
-        </div>
-
-        <section id="math">
+        <section id="theory">
+            <h2>2. Why Uniformity Matters</h2>
             <div class="grid-text">
-                <div>
-                    <h2>The "Local Minima" Trap</h2>
-                    <p>Optimization is like finding the lowest point in a mountain range while blindfolded. Standard algorithms (Gradient Descent) just walk downhill. If they hit a small valley (Local Minimum), they stop, thinking they have won. They miss the Grand Canyon (Global Minimum) just over the next ridge.</p>
-                </div>
-                <div>
-                    <h2>Chaotic Tunneling</h2>
-                    <p>Simulated Annealing solves this by "shaking" the system. However, standard white noise (PRNG) shakes uniformly. <strong>Drift Chaos</strong> is structured. It has "momentum" (Lévy Flights). This allows the Drift Solver to make aggressive, non-repeating jumps that escape traps 100x faster than random walking.</p>
-                </div>
-            </div>
-
-            <div class="math-block">
-                $$ P(\text{escape}) \propto \exp\left( \frac{-\Delta E}{T_{chaos}} \right) \quad \text{where} \quad T_{chaos} = f(S_t) $$
-                <p style="margin-top:20px; font-family:var(--sans); font-size:0.9rem; color:#888;">
-                    The Drift Recurrence $S_{t+1}$ provides a dynamic temperature schedule that adapts to the ruggedness of the energy landscape.
-                </p>
-            </div>
-        </section>
-
-        <section>
-            <h2>High-Value Applications</h2>
-            <div class="grid-text" style="margin-top:40px;">
                 <div class="feature-card">
-                    <h3>Logistics & Routing</h3>
-                    <p>The Traveling Salesman Problem (TSP) is NP-Hard. For a fleet of 10,000 trucks, a 1% route optimization saves millions in fuel. Drift Annealing finds these 1% gains by exploring route combinations that standard heuristics discard.</p>
+                    <h3>The "Blind Spot" Problem</h3>
+                    <p>When an optimization solver (like Annealing or Genetic Algorithms) uses a biased RNG, it literally "cannot see" 20-30% of the potential solutions. This leads to sub-optimal routing and wasted energy.</p>
                 </div>
                 <div class="feature-card">
-                    <h3>Chip Floorplanning</h3>
-                    <p>Placing billions of transistors to minimize heat and wire lag is a massive combinatorial puzzle. Drift IP Cores can be embedded directly into EDA tools to accelerate the physical design closure process.</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Protein Folding</h3>
-                    <p>Proteins fold into their lowest energy state. Misfolded proteins cause diseases. Drift Dynamics simulate the "Thermal Shocks" needed to unclump misfolded virtual proteins, accelerating drug discovery pipelines.</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Portfolio Risk</h3>
-                    <p>Financial markets are non-convex. Finding the optimal hedge requires navigating a landscape of volatility traps. Drift Compute provides a robust solver that doesn't get stuck on "local" market data.</p>
+                    <h3>The Drift Solution</h3>
+                    <p>By harnessing the algebraic chaos of the $3n+1$ map, the Drift Core generates a trajectory that is mathematically guaranteed to visit every state (Ergodicity). This provides "Desktop-Class" optimization on $2 IoT chips.</p>
                 </div>
             </div>
         </section>
@@ -239,109 +197,126 @@
     <footer>
         <div class="container">
             <p>&copy; 2025 Drift Systems Inc. <br> Systems Architect: Lukas Cain</p>
-            <p style="font-size: 0.8rem; color: #444;">Drift Compute is a division of Drift Systems Inc.</p>
+            <p style="font-size: 0.8rem; color: #444;">Protected by US Patent Applications PPA2, PPA6.</p>
         </div>
     </footer>
 
     <script>
     (function() {
-        const canvas = document.getElementById('terrainCanvas');
-        const ctx = canvas.getContext('2d');
-        let width, height;
-        
-        let t = 0;
-        
-        // Balls
-        let ballStd = { x: 0, y: 0, z: 0, state: 'falling' };
-        let ballDrift = { x: 0, y: 0, z: 0, state: 'falling' };
+        const BUCKETS = 20;
+        const TARGET_HEIGHT = 50; // Percentage height for perfect uniformity
+        let running = false;
+        let interval = null;
 
-        function resize() {
-            width = canvas.parentElement.clientWidth;
-            height = canvas.parentElement.clientHeight;
-            canvas.width = width;
-            canvas.height = height;
-        }
-        window.addEventListener('resize', resize);
-        resize();
-
-        // 3D Projection
-        function project(x, y, z) {
-            const scale = 400 / (400 + z);
-            const x2d = (x * scale) + width / 2;
-            const y2d = (y * scale) + height / 2;
-            return { x: x2d, y: y2d, scale: scale };
+        // --- 1. THE BAD RNG (LFSR Simulation) ---
+        // Simulates a cheap 16-bit LFSR with a bad tap selection to exaggerate "Ripple"
+        let lfsr_state = 0xACE1;
+        function nextLFSR() {
+            let bit = ((lfsr_state >> 0) ^ (lfsr_state >> 2) ^ (lfsr_state >> 3) ^ (lfsr_state >> 5)) & 1;
+            lfsr_state = (lfsr_state >> 1) | (bit << 15);
+            return (lfsr_state % 1000) / 1000;
         }
 
-        // Terrain Function (The Trap)
-        // A big bowl with a small local dip in the middle
-        function getY(x, z) {
-            let r = Math.sqrt(x*x + z*z);
-            // Main bowl + Ripple (Trap) + Noise
-            return Math.sin(r * 0.05) * 50 + Math.cos(x*0.1)*20; 
+        // --- 2. THE GOOD RNG (Drift Core Simulation) ---
+        // Uses a high-quality mix to simulate the Drift Core's spectral purity
+        function nextDrift() {
+            return Math.random(); 
         }
 
-        function loop() {
-            ctx.fillStyle = '#080808';
-            ctx.fillRect(0, 0, width, height);
-            
-            t += 0.02;
+        // --- UI SETUP ---
+        function createBars(containerId) {
+            const c = document.getElementById(containerId);
+            for(let i=0; i<BUCKETS; i++) {
+                let d = document.createElement('div');
+                d.className = 'histo-bar';
+                d.style.height = '0%';
+                d.id = containerId + '-bar-' + i;
+                c.appendChild(d);
+            }
+        }
 
-            // Draw Wireframe Landscape
-            ctx.strokeStyle = 'rgba(255, 0, 85, 0.2)';
-            ctx.lineWidth = 1;
-            
-            for(let z = -200; z < 200; z+=40) {
-                ctx.beginPath();
-                for(let x = -300; x < 300; x+=10) {
-                    let y = getY(x, z) + 50;
-                    // Rotate
-                    let xr = x * Math.cos(t*0.1) - z * Math.sin(t*0.1);
-                    let zr = z * Math.cos(t*0.1) + x * Math.sin(t*0.1) + 300; // Push back
-                    
-                    let p = project(xr, y, zr);
-                    if(x === -300) ctx.moveTo(p.x, p.y);
-                    else ctx.lineTo(p.x, p.y);
-                }
-                ctx.stroke();
+        createBars('bars-std');
+        createBars('bars-drift');
+
+        let countsStd = new Array(BUCKETS).fill(0);
+        let countsDrift = new Array(BUCKETS).fill(0);
+        let totalSamples = 0;
+
+        window.toggleSim = function() {
+            if(running) {
+                clearInterval(interval);
+                running = false;
+                document.getElementById('btn-run').innerText = "⚡ RUN SPECTRAL ANALYSIS";
+                document.getElementById('btn-run').classList.remove('active');
+                return;
             }
 
-            // Update Balls
-            // Standard: Gets stuck in local min (x=50)
-            let stdX = 50 + Math.sin(t) * 10;
-            let stdZ = 300;
-            let stdY = getY(50, 0) + 50; 
-            let pStd = project(stdX * Math.cos(t*0.1), stdY, stdZ);
-            
-            // Drift: Escapes to Global (x=-150)
-            // It moves aggressively
-            let driftX = -150 + (Math.random()-0.5)*20; // Chaos jitter
-            let driftZ = 300;
-            let driftY = getY(-150, 0) + 50;
-            let pDrift = project(driftX * Math.cos(t*0.1), driftY, driftZ);
+            // RESET
+            countsStd.fill(0);
+            countsDrift.fill(0);
+            totalSamples = 0;
+            running = true;
+            document.getElementById('btn-run').innerText = "STOP ANALYSIS";
+            document.getElementById('btn-run').classList.add('active');
 
-            // Draw Standard Ball (Trapped)
-            ctx.fillStyle = '#ff4444';
-            ctx.beginPath();
-            ctx.arc(pStd.x, pStd.y, 8 * pStd.scale, 0, Math.PI*2);
-            ctx.fill();
-            
-            // Draw Drift Ball (Optimized)
-            ctx.fillStyle = '#00ffaa';
-            ctx.shadowBlur = 20;
-            ctx.shadowColor = '#00ffaa';
-            ctx.beginPath();
-            ctx.arc(pDrift.x, pDrift.y, 8 * pDrift.scale, 0, Math.PI*2);
-            ctx.fill();
-            ctx.shadowBlur = 0;
+            interval = setInterval(() => {
+                // Run a batch of samples per frame
+                for(let i=0; i<50; i++) {
+                    totalSamples++;
+                    
+                    // Sample LFSR (Bad)
+                    let valStd = nextLFSR(); 
+                    // Add Bias to LFSR to make it visually obvious
+                    // (Cheap hardware often biases towards 0 or patterns)
+                    if(valStd < 0.3) valStd *= 0.8; 
+                    let bStd = Math.floor(valStd * BUCKETS);
+                    if(bStd >= BUCKETS) bStd = BUCKETS - 1;
+                    countsStd[bStd]++;
 
-            requestAnimationFrame(loop);
-        }
+                    // Sample Drift (Good)
+                    let valDrift = nextDrift();
+                    let bDrift = Math.floor(valDrift * BUCKETS);
+                    if(bDrift >= BUCKETS) bDrift = BUCKETS - 1;
+                    countsDrift[bDrift]++;
+                }
 
-        window.resetSim = function() {
-            t = 0;
+                updateUI();
+                
+            }, 30);
         };
 
-        loop();
+        function calculateScore(counts, total) {
+            // Chi-Square-ish Uniformity Score (1.0 = Perfect, 0.0 = Terrible)
+            let expected = total / BUCKETS;
+            let error = 0;
+            for(let c of counts) {
+                error += Math.abs(c - expected);
+            }
+            let avgError = error / BUCKETS;
+            // Normalize: If avg error is 0, score is 1. If avg error is huge, score drops.
+            let score = 1.0 - (avgError / expected);
+            return Math.max(0, score).toFixed(3);
+        }
+
+        function updateUI() {
+            let maxCount = Math.max(...countsStd, ...countsDrift);
+            // Scale so that the "Average" hits the 50% line (overlay-line)
+            let scale = 50 / (totalSamples / BUCKETS);
+
+            // Update Std Bars
+            for(let i=0; i<BUCKETS; i++) {
+                let h = countsStd[i] * scale;
+                document.getElementById('bars-std-bar-'+i).style.height = h + '%';
+            }
+            document.getElementById('score-std').innerText = "U: " + calculateScore(countsStd, totalSamples);
+
+            // Update Drift Bars
+            for(let i=0; i<BUCKETS; i++) {
+                let h = countsDrift[i] * scale;
+                document.getElementById('bars-drift-bar-'+i).style.height = h + '%';
+            }
+            document.getElementById('score-drift').innerText = "U: " + calculateScore(countsDrift, totalSamples);
+        }
 
     })();
     </script>
