@@ -172,11 +172,6 @@ section { padding: 72px 0; }
     color: #fff;
     opacity: 0.9;
 }
-/* Keep the first letter Cyan for emphasis */
-.docmil-grid strong {
-    color: var(--cyan);
-}
-
 
 /* Headers shared */
 .section-header{
