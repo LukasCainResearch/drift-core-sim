@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>Drift Systems | TRL-6 Prototype</title>
-  <meta name="description" content="Cryptographic-grade non-linearity at linear-grade speed. Native digital chaos for IoT, Defense, and AI. TRL-6 prototype (Dec 2025)." />
+  <meta name="description" content="Cryptographic-grade non-linearity at linear-grade speed. Native digital chaos for IoT, Defense, and Compute. TRL-6 prototype (Dec 2025)." />
   <meta name="theme-color" content="#000000" />
 
   <meta property="og:title" content="Drift Systems | TRL-6 Prototype" />
-  <meta property="og:description" content="Cryptographic-grade non-linearity at linear-grade speed. Native digital chaos for IoT, Defense, and AI." />
+  <meta property="og:description" content="Cryptographic-grade non-linearity at linear-grade speed. Native digital chaos for IoT, Defense, and Compute." />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="logo.png" />
   <meta name="twitter:card" content="summary_large_image" />
@@ -32,6 +32,9 @@
       --muted2:#888;
       --cyan:#00ffff;
       --mint:#00ffaa;
+      --warn:#ffaa00;
+      --fail:#ff4444;
+      --compute: #ff0055; /* Radical Red for Compute */
       --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       --sans: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       --shadow: 0 0 20px rgba(0,255,255,0.10);
@@ -239,6 +242,9 @@
     .chip-ip  { border-color: rgba(68,136,255,0.45); color: #66a3ff; background: rgba(68,136,255,0.10); }
     .chip-vol { border-color: rgba(255,170,0,0.40); color: #ffaa00; background: rgba(255,170,0,0.10); }
     .chip-ret { border-color: rgba(0,255,255,0.30); color: var(--cyan); background: rgba(0,255,255,0.06); }
+    /* Compute Chip */
+    .chip-cpu { border-color: rgba(255,0,85,0.40); color: #ff0055; background: rgba(255,0,85,0.10); }
+
 
     .bullets{
       text-align:left;
@@ -278,7 +284,7 @@
       font-weight: 700;
     }
     .btn-solid:hover{ background: var(--mint); border-color: var(--mint); box-shadow: 0 0 15px rgba(0,255,170,0.55); }
-
+    
     /* Footer */
     footer{
       border-top: 1px solid #222;
@@ -331,7 +337,7 @@
         <h1>THE STANDARD FOR<br>LOW-POWER ENTROPY.</h1>
         <p class="subtitle">
           Cryptographic-grade non-linearity at linear-grade speed.<br>
-          Native silicon architecture for IoT, Defense, and AI.
+          Native silicon architecture for IoT, Defense, and Compute.
         </p>
 
         <div class="cta-group" aria-label="Primary documents">
@@ -373,8 +379,8 @@
         <p class="lead" style="margin-top: 0;">We do not simulate chaos; we engineer it.</p>
         <p class="lead">
           Drift Systems replaces inefficient analog randomness with <strong>Deterministic Digital Chaos</strong>.
-          By utilizing the non-linear properties of arithmetic drift recurrence and forced topology constraints,
-          we generate maximum entropy without the thermal overhead of TRNGs.
+          By utilizing the non-linear properties of arithmetic drift recurrence,
+          we generate maximum entropy for security and optimization workloads.
         </p>
 
         <div class="code-block" aria-label="Core update rule">
@@ -384,8 +390,7 @@
         <div class="section-header" id="verticals">
           <h4>DEPLOYMENT VERTICALS</h4>
           <p class="lead" style="max-width: 760px;">
-            Commercialization tracks spanning defense, industry, finance, and aerospace.
-            Each vertical leverages the core invariants: freshness, timing budgets, and recovery.
+            Commercialization tracks spanning defense, industry, finance, and high-performance computing.
           </p>
         </div>
 
@@ -618,20 +623,20 @@
           <article class="card" role="listitem">
             <div>
               <div class="top-chips">
-                <span class="chip chip-trl">EXTREME ENV</span>
-                <span class="chip">QUANTUM & CRYO</span>
+                <span class="chip chip-cpu">HIGH PERFORMANCE</span>
+                <span class="chip">COMPUTE</span>
               </div>
-              <div class="icon" aria-hidden="true">❄️</div>
-              <h3 style="margin:0 0 10px 0;">Cryo-Stable Entropy</h3>
-              <p>Pure digital chaos that operates at milli-Kelvin temperatures where thermal TRNGs freeze.</p>
+              <div class="icon" aria-hidden="true">🚀</div>
+              <h3 style="margin:0 0 10px 0;">Drift Compute Engine</h3>
+              <p>Solving NP-Hard optimization problems via Chaotic Annealing. Escapes local minima 100x faster than standard solvers.</p>
               <ul class="bullets">
-                <li>Maintains high entropy at 0.01 Kelvin (Dilution Fridge)</li>
-                <li>Low thermal dissipation prevents Qubit decoherence</li>
-                <li>Secure control plane for quantum error correction</li>
+                <li>Logistics Routing (TSP) Optimization</li>
+                <li>VLSI Floorplanning & Chip Design</li>
+                <li>Protein Folding & Drug Discovery</li>
               </ul>
             </div>
             <div class="actions">
-              <a href="docs/quantum.html" class="btn-solid">[ OVERVIEW ]</a>
+              <a href="docs/compute.html" class="btn-solid">[ OVERVIEW ]</a>
             </div>
           </article>
 
@@ -689,16 +694,16 @@
             </div>
             <a href="docs/prime.html" target="_blank" rel="noopener" class="btn-outline">[ VIEW SIMULATION ]</a>
           </article>
-        </div>
 
-        <article class="card" role="listitem">
+          <article class="card" role="listitem">
             <div>
-              <div class="icon" aria-hidden="true">🎯</div>
-              <h5>CHAOTIC OPTIMIZATION</h5>
-              <p>Solving Traveling Salesman (TSP) and NP-Hard problems via Drift Annealing</p>
+              <div class="icon" aria-hidden="true">❄️</div>
+              <h5>CRYO-STABILITY</h5>
+              <p>Entropy generation at milli-Kelvin (Quantum) temperatures</p>
             </div>
-            <a href="docs/optimization.html" target="_blank" rel="noopener" class="btn-outline">[ VIEW SOLVER ]</a>
+            <a href="docs/quantum.html" target="_blank" rel="noopener" class="btn-outline">[ VIEW SIMULATION ]</a>
           </article>
+        </div>
 
         <div class="section-header" id="contact">
           <h4>CONTACT</h4>
@@ -821,7 +826,7 @@
         // Simulating AI "Thinking"
         setTimeout(() => {
             const lower = text.toLowerCase();
-            let response = "I specialize in arithmetic stability. Could you clarify your industry? (e.g., Defense, Banking, AI, Auto)";
+            let response = "I specialize in arithmetic stability. Could you clarify your industry? (e.g., Defense, Banking, AI, Compute)";
             let url = null;
 
             // --- ROUTING LOGIC ---
@@ -881,7 +886,12 @@
                 response = "We detect Aimbots and macros by binding input telemetry to a verified arithmetic lineage.";
                 url = "docs/gaming.html";
             }
-            // 12. QUANTUM
+            // 12. COMPUTE / OPTIMIZATION (Updated)
+            else if (lower.includes('compute') || lower.includes('opt') || lower.includes('tsp') || lower.includes('fold') || lower.includes('solve')) {
+                response = "Drift Compute Engine solves NP-Hard problems (TSP, VLSI, Folding) using Chaotic Annealing.";
+                url = "docs/compute.html";
+            }
+            // 13. QUANTUM
             else if (lower.includes('quant') || lower.includes('cryo') || lower.includes('cold') || lower.includes('freeze') || lower.includes('zero')) {
                 response = "Drift is cryo-stable. We generate entropy at milli-Kelvin temperatures where thermal TRNGs fail.";
                 url = "docs/quantum.html";
