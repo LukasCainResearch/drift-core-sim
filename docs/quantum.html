@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drift Systems | Quantum & Cryogenic</title>
+    
+    <script>
+        window.MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']]
+          },
+          svg: {
+            fontCache: 'global'
+          }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💠</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+    <style>
+        :root {
+            /* BRAND PALETTE */
+            --bg0: #000;
+            --bg1: #020a12;
+            --panel: rgba(0,20,40,0.5);
+            --border: rgba(0,255,255,0.2);
+            --border-strong: rgba(0,255,255,0.8);
+            --text: #fff;
+            --muted: #a0a0a0;
+            --muted2: #888;
+            --cyan: #00ffff;
+            --mint: #00ffaa;
+            --warn: #ffaa00;
+            --fail: #ff4444;
+            --ice: #aaddff; /* Cryo Blue */
+            --mono: 'JetBrains Mono', ui-monospace, monospace;
+            --sans: 'Inter', system-ui, sans-serif;
+            --shadow: 0 0 20px rgba(0,136,255,0.20);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: var(--sans);
+            background-color: var(--bg0);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Typography */
+        h1, h2, h3 { font-weight: 700; letter-spacing: -0.02em; margin-bottom: 1rem; color: #fff; }
+        h1 { 
+            font-size: 3rem; line-height: 1.1; 
+            background: linear-gradient(90deg, #fff, var(--ice)); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+        }
+        h2 { 
+            font-size: 1.8rem; border-left: 4px solid var(--ice); 
+            padding-left: 1rem; margin-top: 3rem; 
+        }
+        p { margin-bottom: 1.5rem; font-size: 1.05rem; color: var(--muted); }
+        
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+        
+        /* Navigation */
+        nav { padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: var(--sans); font-weight: 900; font-size: 1.2rem; letter-spacing: 1px; color: #fff; text-decoration: none; }
+        .nav-links a { font-family: var(--mono); color: var(--muted); text-decoration: none; margin-left: 20px; font-size: 0.85rem; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--cyan); }
+
+        /* Hero */
+        .hero { padding: 80px 0; text-align: center; }
+        .hero .eyebrow { color: var(--ice); font-family: var(--mono); font-weight: 700; letter-spacing: 1px; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        
+        .btn { 
+            display: inline-block; padding: 12px 30px; 
+            background: rgba(170, 221, 255, 0.1); color: var(--ice); 
+            border: 1px solid var(--ice); font-family: var(--mono); 
+            font-size: 0.85rem; font-weight: 700; text-decoration: none; 
+            transition: all 0.2s; 
+        }
+        .btn:hover { background: var(--ice); color: #000; box-shadow: 0 0 20px rgba(170, 221, 255, 0.4); }
+
+        /* --- CRYO SIMULATOR STYLES --- */
+        .sim-container {
+            background: var(--bg1); border: 1px solid var(--border); border-radius: 4px;
+            padding: 24px; margin: 40px 0; position: relative;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        .monitor-panel {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;
+        }
+
+        .scope {
+            background: #000; border: 1px solid #333; height: 150px; position: relative;
+            overflow: hidden; display: flex; align-items: flex-end;
+        }
+        .scope::after {
+            content: ''; position: absolute; top:0; left:0; width:100%; height:100%;
+            background: linear-gradient(90deg, transparent 50%, rgba(0,0,0,0.8));
+        }
+        .scope-label {
+            position: absolute; top: 10px; left: 10px; font-family: var(--mono); 
+            font-size: 0.7rem; color: #888; z-index: 10;
+        }
+        .signal-bar {
+            width: 5px; margin-right: 2px; background: #333; transition: height 0.1s;
+        }
+        .signal-bar.active-a { background: var(--warn); box-shadow: 0 0 5px var(--warn); }
+        .signal-bar.active-b { background: var(--ice); box-shadow: 0 0 5px var(--ice); }
+
+        /* Slider Control */
+        .temp-control {
+            background: #111; padding: 20px; border-radius: 6px; border: 1px solid #333;
+            text-align: center;
+        }
+        input[type=range] {
+            width: 100%; margin: 20px 0; accent-color: var(--ice); cursor: pointer;
+        }
+        
+        .temp-readout {
+            font-family: var(--mono); font-size: 2rem; color: #fff; font-weight: 700;
+        }
+        .temp-status {
+            font-family: var(--mono); font-size: 0.9rem; color: var(--muted); margin-top: 10px;
+        }
+
+        .warning-overlay {
+            position: absolute; top: 50%; left: 25%; transform: translate(-50%, -50%);
+            color: var(--fail); font-family: var(--mono); font-weight: 900; 
+            border: 2px solid var(--fail); padding: 5px 10px; background: rgba(0,0,0,0.8);
+            display: none; z-index: 20;
+        }
+
+        /* --- SECTION STYLES --- */
+        .grid-text { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin: 60px 0; }
+        .feature-card { border: 1px solid var(--border); padding: 24px; background: var(--panel); transition: transform 0.2s; }
+        .feature-card:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+        .feature-card h3 { color: var(--cyan); font-family: var(--mono); font-size: 1rem; margin-bottom: 12px; letter-spacing: 1px; }
+
+        footer { border-top: 1px solid rgba(255,255,255,0.1); padding: 40px 0; margin-top: 80px; text-align: center; font-size: 0.9rem; color: #666; }
+        
+        @media (max-width: 900px) {
+            h1 { font-size: 2.2rem; }
+            .monitor-panel { grid-template-columns: 1fr; }
+            .grid-text { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <nav>
+            <a href="../index.html" class="logo">DRIFT<span style="font-weight:300;">SYSTEMS</span></a>
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="#sim">Cryo Sim</a>
+                <a href="#specs">Specs</a>
+            </div>
+        </nav>
+
+        <section class="hero">
+            <span class="eyebrow">QUANTUM & CRYOGENIC</span>
+            <h1>Entropy at Absolute Zero</h1>
+            <p>Thermal noise fails in the milli-Kelvin range required for Quantum Computing. Drift Systems provides a pure-digital, cryo-stable entropy source that maintains high chaotic complexity even as the environment freezes.</p>
+            <br>
+            <a href="#sim" class="btn">TEST CRYO STABILITY</a>
+        </section>
+
+        <hr style="border: 0; border-top: 1px solid var(--border-color);">
+
+        <section id="sim">
+            <h2>1. The Cryo-Chamber Simulator</h2>
+            <p>Drag the temperature slider down. Observe how the <strong>Standard TRNG</strong> (dependent on thermal noise) flatlines as energy dissipates. The <strong>Drift Core</strong> (arithmetic dynamics) remains active because math does not freeze.</p>
+
+            <div class="sim-container">
+                
+                <div class="monitor-panel">
+                    <div class="scope" id="scope-a">
+                        <div class="scope-label">SYSTEM A: THERMAL TRNG</div>
+                        <div class="warning-overlay" id="fail-msg">ENTROPY FAILURE</div>
+                        </div>
+
+                    <div class="scope" id="scope-b">
+                        <div class="scope-label">SYSTEM B: DRIFT CORE</div>
+                        </div>
+                </div>
+
+                <div class="temp-control">
+                    <div class="temp-readout" id="temp-val">300 K</div>
+                    <div class="temp-status" id="temp-desc">Ambient Room Temperature</div>
+                    <input type="range" min="0" max="300" value="300" id="temp-slider" oninput="updateTemp(this.value)">
+                    <div style="display:flex; justify-content:space-between; color:#666; font-size:0.8rem; font-family:var(--mono);">
+                        <span>0.01 K (Quantum Base)</span>
+                        <span>300 K (Room Temp)</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <p style="font-size: 0.95rem; border-left: 2px solid var(--border); padding-left: 15px; color: var(--muted2);">
+                <strong style="color:var(--text);">Observation:</strong> Below 10 Kelvin, thermal motion effectively stops. Analog circuits relying on resistor noise become predictable (constant 0 or 1). Drift Systems relies on the non-linearity of the $3x+1$ map, which operates flawlessly at any energy level.
+            </p>
+        </section>
+
+        <section id="specs">
+            <h2>2. Cryogenic Capabilities</h2>
+            <div class="grid-text">
+                <div class="feature-card">
+                    <h3>Sub-1K Operation</h3>
+                    <p>Designed for the dilution refrigerators of quantum computers. Drift Logic has been validated in simulation to maintain Hamming weight distribution and avalanche properties down to near absolute zero.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Low Thermal Dissipation</h3>
+                    <p>Every microwatt of heat in a cryostat is expensive to remove. Drift's "One-Cycle" efficiency minimizes switching activity, generating negligible heat compared to complex ring oscillators or amplification circuits.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Control Plane Security</h3>
+                    <p>Secure the classical control electronics (FPGAs) that drive Qubits. Drift provides local, high-speed authentication for pulse sequences without needing to round-trip to a room-temperature HSM.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Rad-Hard by Design</h3>
+                    <p>Quantum systems often face cosmic ray interference. As proven in our Aerospace vertical, Drift Cores are naturally resistant to Single Event Upsets, ensuring the control logic doesn't crash during long coherence times.</p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Drift Systems Inc. <br> Systems Architect: Lukas Cain</p>
+            <p style="font-size: 0.8rem; color: #444;">Export Controlled Technology (EAR99).</p>
+        </div>
+    </footer>
+
+    <script>
+    (function() {
+        const scopeA = document.getElementById('scope-a');
+        const scopeB = document.getElementById('scope-b');
+        const tempVal = document.getElementById('temp-val');
+        const tempDesc = document.getElementById('temp-desc');
+        const failMsg = document.getElementById('fail-msg');
+        
+        let currentTemp = 300;
+        let isRunning = true;
+
+        // Init Bars
+        for(let i=0; i<50; i++) {
+            let barA = document.createElement('div');
+            barA.className = 'signal-bar active-a';
+            scopeA.appendChild(barA);
+
+            let barB = document.createElement('div');
+            barB.className = 'signal-bar active-b';
+            scopeB.appendChild(barB);
+        }
+
+        window.updateTemp = function(val) {
+            currentTemp = parseInt(val);
+            
+            // Format Display
+            if(currentTemp < 10) {
+                tempVal.innerText = (currentTemp * 0.01).toFixed(2) + " K";
+                tempVal.style.color = "var(--ice)";
+            } else {
+                tempVal.innerText = currentTemp + " K";
+                tempVal.style.color = "#fff";
+            }
+
+            // Description
+            if(currentTemp > 250) tempDesc.innerText = "Ambient Room Temperature";
+            else if(currentTemp > 100) tempDesc.innerText = "Liquid Nitrogen Range";
+            else if(currentTemp > 20) tempDesc.innerText = "Deep Cryo";
+            else tempDesc.innerText = "QUANTUM BASE (Thermal Freeze)";
+        };
+
+        function loop() {
+            // Calculate Activity Levels
+            // Drift (B) is always high chaos (0.8 - 1.0)
+            let driftActivity = 0.5 + Math.random() * 0.5;
+            
+            // Thermal (A) depends on Temp. 
+            // At 300K -> High. At 0K -> Zero.
+            let thermalFactor = Math.max(0, (currentTemp - 10) / 290); 
+            let thermalActivity = (Math.random() * thermalFactor);
+
+            // Update UI Bars (Shift Left)
+            // A
+            let barsA = scopeA.getElementsByClassName('signal-bar');
+            for(let i=0; i<barsA.length-1; i++) {
+                barsA[i].style.height = barsA[i+1].style.height;
+            }
+            barsA[barsA.length-1].style.height = (thermalActivity * 100) + '%';
+
+            // B
+            let barsB = scopeB.getElementsByClassName('signal-bar');
+            for(let i=0; i<barsB.length-1; i++) {
+                barsB[i].style.height = barsB[i+1].style.height;
+            }
+            barsB[barsB.length-1].style.height = (driftActivity * 100) + '%';
+
+            // Warning State
+            if(currentTemp < 15) {
+                failMsg.style.display = 'block';
+                scopeA.style.borderColor = 'var(--fail)';
+            } else {
+                failMsg.style.display = 'none';
+                scopeA.style.borderColor = '#333';
+            }
+
+            requestAnimationFrame(loop);
+        }
+
+        loop();
+
+    })();
+    </script>
+</body>
+</html>
