@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Drift Systems | DOC-MIL Defense Solutions</title>
+  <meta name="description" content="DOC-MIL: Ultra-lightweight deterministic entropy for A2/AD, Munitions, and GPS-Denied Environments. TRL-6 Validated." />
+  <meta name="theme-color" content="#000000" />
+  
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💠</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+  <header role="banner">
+    <div class="container">
+      <div class="topbar">
+        <div class="brand" aria-label="Drift Systems">
+          <a href="index.html" style="text-decoration:none; border:none; background:none;">
+            <div class="wordmark">DRIFT<span class="light">SYSTEMS</span></div>
+          </a>
+        </div>
+
+        <nav aria-label="Primary">
+          <ul>
+            <li><a href="index.html">HOME</a></li>
+            <li><a href="#capabilities">CAPABILITIES</a></li>
+            <li><a href="#specs">SPECS</a></li>
+            <li><a href="#contact">CONTACT</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="hero">
+        <div class="status-badge" style="border-color:var(--warn); color:var(--warn); background:rgba(255,170,0,0.1);">CLASSIFICATION: COMMERCIAL EXPORTABLE (EAR99)</div>
+
+        <h1>DISPOSABLE STEALTH<br>FOR THE EDGE.</h1>
+        <p class="subtitle">
+          <strong>DOC-MIL™ (Drift Optimized Core)</strong> delivers cryptographic-grade entropy to SWaP-constrained munitions, micro-drones, and sensors where AES is too slow and TRNGs are too fragile.
+        </p>
+
+        <div class="cta-group">
+          <a href="mailto:defense@driftsystems.io?subject=DOC-MIL%20Evaluation%20Request" class="btn primary">REQUEST TEAMS BRIEF</a>
+          <a href="#specs" class="btn secondary">VIEW SPECS</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section-dark" id="specs">
+      <div class="container">
+        <div class="section-header" style="margin-top:0; padding-top:0; border:none;">
+          <h4>THE LATENCY GAP</h4>
+          <p class="lead" style="margin:0;">Legacy crypto was designed for the cloud, not the kinetic edge.</p>
+        </div>
+
+        <div class="table-responsive">
+          <table class="spec-table">
+            <thead>
+              <tr>
+                <th>PARAMETER</th>
+                <th class="highlight">DOC-MIL (Drift Core)</th>
+                <th>AES-128 GCM</th>
+                <th>OPERATIONAL ADVANTAGE</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Gate Count</strong> (LUTS)</td>
+                <td class="highlight">686</td>
+                <td>~3,500</td>
+                <td>Fits on Smart Dust & Disposable Sensors</td>
+              </tr>
+              <tr>
+                <td><strong>Latency</strong></td>
+                <td class="highlight">1 Cycle</td>
+                <td>10-14 Cycles</td>
+                <td>Instant IFF Response (Kinetic Interceptors)</td>
+              </tr>
+              <tr>
+                <td><strong>Power</strong> (Dynamic)</td>
+                <td class="highlight">&lt; 10μW</td>
+                <td>~ 300μW</td>
+                <td>Extends Loiter Time for Micro-UAVs</td>
+              </tr>
+              <tr>
+                <td><strong>Multipliers</strong></td>
+                <td class="highlight">Zero (0)</td>
+                <td>Required</td>
+                <td>Rad-Hard Friendly (Fewer SEUs)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-black" id="capabilities">
+      <div class="container">
+        <h2 class="section-title center">OPERATIONAL CAPABILITIES</h2>
+        <p class="lead center" style="margin-bottom: 50px;">
+          Built for Anti-Access/Area Denial (A2/AD) environments.
+        </p>
+
+        <div class="grid-2">
+          
+          <article class="card" style="text-align:left; align-items:flex-start;">
+            <h5 class="mint">01 // SWARM-SYNC</h5>
+            <h3>GPS-Denied Navigation</h3>
+            <p>
+              When GPS is jammed, swarms lose coherence. DOC-MIL provides a 
+              <strong>monotonically increasing arithmetic heartbeat</strong>. 
+              Drones synchronize maneuvers based on the "Drift Sequence Index" 
+              rather than external time, maintaining formation in full spectrum denial.
+            </p>
+          </article>
+
+          <article class="card" style="text-align:left; align-items:flex-start;">
+            <h5 class="mint">02 // DRIFT-HOP</h5>
+            <h3>Un-Jammable Comms (FHSS)</h3>
+            <p>
+              Standard PRNGs for frequency hopping are linear or slow. 
+              Drift Core generates non-linear FHSS sequences in <strong>&lt;5 nanoseconds</strong>. 
+              This provides "Look-through" capability faster than enemy jammer reaction times.
+            </p>
+          </article>
+
+          <article class="card" style="text-align:left; align-items:flex-start;">
+            <h5 class="mint">03 // KINETIC IFF</h5>
+            <h3>Zero-Latency Identification</h3>
+            <p>
+              Hyper-velocity interceptors have microseconds to identify a target. 
+              AES handshakes are too slow. DOC-MIL enables a <strong>1-Cycle Arithmetic Challenge-Response</strong>, 
+              securing the kill chain without latency penalties.
+            </p>
+          </article>
+
+          <article class="card" style="text-align:left; align-items:flex-start;">
+            <h5 class="mint">04 // SMART DUST</h5>
+            <h3>The Physics Limit</h3>
+            <p>
+              You cannot fit AES on a sensor the size of a grain of rice. 
+              By utilizing pure affine logic (Shift + Add), DOC-MIL scales down to 
+              <strong>~200 gates</strong> (Serialized Mode), enabling crypto on printed electronics and shell casings.
+            </p>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="section-dark" id="contact" style="text-align:center;">
+      <div class="container">
+        <h2 class="section-title">JOIN THE ALLIANCE</h2>
+        <p class="lead">
+          Drift Systems is a TRL-6 Non-Traditional Defense Contractor (NDC).<br>
+          We are actively seeking Prime partners for JADC2 and Swarm solicitations.
+        </p>
+        <br>
+        <a href="mailto:lukas@driftsystems.io" class="btn primary">CONTACT SYSTEMS ARCHITECT</a>
+        <br><br>
+        <span class="tiny" style="display:block; margin-top:20px;">
+          CAGE: [PENDING] &bull; DUNS: [PENDING] &bull; SOSSEC MEMBER (APPLICANT)
+        </span>
+      </div>
+    </section>
+  </main>
+
+  <footer role="contentinfo">
+    <div class="container">
+      <p style="margin:0;">
+        &copy; 2025 Drift Systems Inc. | DOC-MIL Defense Division<br />
+        <span class="tiny">Export Controlled Technology (EAR99). Distribution Statement A.</span>
+      </p>
+    </div>
+  </footer>
+</body>
+</html>
