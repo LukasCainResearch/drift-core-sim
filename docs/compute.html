@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drift Compute | Chaotic Optimization</title>
+    
+    <script>
+        window.MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']]
+          },
+          svg: {
+            fontCache: 'global'
+          }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💠</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+    <style>
+        :root {
+            /* BRAND PALETTE */
+            --bg0: #000;
+            --bg1: #080808;
+            --panel: rgba(20,20,20,0.5);
+            --border: rgba(255,0,85,0.2);
+            --border-strong: rgba(255,0,85,0.8);
+            --text: #fff;
+            --muted: #a0a0a0;
+            --muted2: #888;
+            --cyan: #00ffff;
+            --mint: #00ffaa;
+            --warn: #ffaa00;
+            --fail: #ff4444;
+            --compute: #ff0055; /* Radical Red for Compute/Energy */
+            --mono: 'JetBrains Mono', ui-monospace, monospace;
+            --sans: 'Inter', system-ui, sans-serif;
+            --shadow: 0 0 40px rgba(255,0,85,0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: var(--sans);
+            background-color: var(--bg0);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 { font-weight: 700; letter-spacing: -0.02em; margin-bottom: 1rem; color: #fff; }
+        h1 { 
+            font-size: 3.5rem; line-height: 1.1; 
+            background: linear-gradient(90deg, #fff, var(--compute)); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+        }
+        h2 { 
+            font-size: 1.8rem; border-left: 4px solid var(--compute); 
+            padding-left: 1rem; margin-top: 3rem; 
+        }
+        p { margin-bottom: 1.5rem; font-size: 1.1rem; color: var(--muted); }
+        
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+        
+        /* Navigation */
+        nav { padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: var(--sans); font-weight: 900; font-size: 1.2rem; letter-spacing: 1px; color: #fff; text-decoration: none; }
+        .nav-links a { font-family: var(--mono); color: var(--muted); text-decoration: none; margin-left: 20px; font-size: 0.85rem; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--compute); }
+
+        /* Hero */
+        .hero { padding: 100px 0; text-align: center; }
+        .hero .eyebrow { color: var(--compute); font-family: var(--mono); font-weight: 700; letter-spacing: 2px; font-size: 0.85rem; display: block; margin-bottom: 15px; }
+        
+        .btn { 
+            display: inline-block; padding: 14px 35px; 
+            background: rgba(255, 0, 85, 0.1); color: var(--compute); 
+            border: 1px solid var(--compute); font-family: var(--mono); 
+            font-size: 0.9rem; font-weight: 700; text-decoration: none; 
+            transition: all 0.2s; margin-right: 15px;
+        }
+        .btn:hover { background: var(--compute); color: #000; box-shadow: 0 0 30px rgba(255, 0, 85, 0.4); }
+        .btn-outline { background: transparent; border-color: #444; color: #fff; }
+        .btn-outline:hover { border-color: #fff; background: rgba(255,255,255,0.05); box-shadow: none; color: #fff; }
+
+        /* --- LANDSCAPE SIMULATOR --- */
+        .sim-container {
+            background: var(--bg1); border: 1px solid var(--border); border-radius: 4px;
+            padding: 0; margin: 60px 0; position: relative; overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); height: 400px;
+        }
+
+        canvas { display: block; width: 100%; height: 100%; }
+
+        .overlay-ui {
+            position: absolute; top: 20px; left: 20px; z-index: 10;
+            background: rgba(0,0,0,0.8); padding: 15px; border: 1px solid #333; border-radius: 4px;
+            font-family: var(--mono); font-size: 0.8rem; min-width: 250px;
+        }
+        .ui-row { display: flex; justify-content: space-between; margin-bottom: 8px; }
+        .val { color: var(--compute); font-weight: 700; }
+        .val.stuck { color: var(--fail); }
+        .val.opt { color: var(--mint); }
+
+        .controls {
+            position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 15px; z-index: 10;
+        }
+        .sim-btn {
+            background: rgba(0,0,0,0.8); border: 1px solid var(--compute); color: var(--compute);
+            padding: 10px 20px; font-family: var(--mono); cursor: pointer; transition: all 0.2s;
+            font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .sim-btn:hover { background: var(--compute); color: #000; }
+
+        /* --- SECTION STYLES --- */
+        .grid-text { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; margin: 80px 0; }
+        .feature-card { 
+            border-left: 2px solid var(--border); padding-left: 25px; 
+            transition: border-color 0.3s;
+        }
+        .feature-card:hover { border-color: var(--compute); }
+        .feature-card h3 { color: #fff; font-family: var(--sans); font-size: 1.4rem; margin-bottom: 12px; font-weight: 700; }
+        .feature-card p { font-size: 1rem; color: var(--muted); margin-bottom: 0; }
+
+        /* Latex Block */
+        .math-block {
+            background: #111; border: 1px solid #333; padding: 30px; margin: 40px 0;
+            font-family: "Times New Roman", serif; font-size: 1.1rem; color: #ddd;
+            text-align: center;
+        }
+
+        footer { border-top: 1px solid rgba(255,255,255,0.1); padding: 40px 0; margin-top: 80px; text-align: center; font-size: 0.9rem; color: #666; }
+        
+        @media (max-width: 900px) {
+            h1 { font-size: 2.5rem; }
+            .grid-text { grid-template-columns: 1fr; gap: 40px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <nav>
+            <a href="../index.html" class="logo">DRIFT<span style="font-weight:300;">SYSTEMS</span></a>
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="#sim">Simulation</a>
+                <a href="#math">The Math</a>
+            </div>
+        </nav>
+
+        <section class="hero">
+            <span class="eyebrow">DRIFT COMPUTE ENGINE</span>
+            <h1>Solve the<br>Unsolvable.</h1>
+            <p>Standard optimization algorithms get trapped in local minima. Drift Annealing utilizes deterministic chaotic dynamics to tunnel through energy barriers, solving NP-Hard problems in Logistics, VLSI, and Protein Folding faster than stochastic methods.</p>
+            <br>
+            <a href="#sim" class="btn">RUN ENGINE</a>
+            <a href="Chaotic_Annealing_Whitepaper.pdf" class="btn btn-outline">READ WHITEPAPER</a>
+        </section>
+
+        <div class="sim-container" id="sim-container">
+            <canvas id="terrainCanvas"></canvas>
+            
+            <div class="overlay-ui">
+                <div class="ui-row" style="border-bottom:1px solid #333; padding-bottom:5px; margin-bottom:10px;">
+                    <span style="color:#888;">SOLVER STATUS</span>
+                </div>
+                <div class="ui-row">
+                    <span>STANDARD (Gaussian):</span>
+                    <span class="val stuck" id="status-std">STUCK (Local Min)</span>
+                </div>
+                <div class="ui-row">
+                    <span>DRIFT (Chaotic):</span>
+                    <span class="val opt" id="status-drift">ESCAPED (Global Opt)</span>
+                </div>
+                <div class="ui-row" style="margin-top:15px;">
+                    <span>Energy Cost:</span>
+                    <span class="val" id="energy-val">-14.2 dB</span>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="sim-btn" onclick="resetSim()">RESET TERRAIN</button>
+            </div>
+        </div>
+
+        <section id="math">
+            <div class="grid-text">
+                <div>
+                    <h2>The "Local Minima" Trap</h2>
+                    <p>Optimization is like finding the lowest point in a mountain range while blindfolded. Standard algorithms (Gradient Descent) just walk downhill. If they hit a small valley (Local Minimum), they stop, thinking they have won. They miss the Grand Canyon (Global Minimum) just over the next ridge.</p>
+                </div>
+                <div>
+                    <h2>Chaotic Tunneling</h2>
+                    <p>Simulated Annealing solves this by "shaking" the system. However, standard white noise (PRNG) shakes uniformly. <strong>Drift Chaos</strong> is structured. It has "momentum" (Lévy Flights). This allows the Drift Solver to make aggressive, non-repeating jumps that escape traps 100x faster than random walking.</p>
+                </div>
+            </div>
+
+            <div class="math-block">
+                $$ P(\text{escape}) \propto \exp\left( \frac{-\Delta E}{T_{chaos}} \right) \quad \text{where} \quad T_{chaos} = f(S_t) $$
+                <p style="margin-top:20px; font-family:var(--sans); font-size:0.9rem; color:#888;">
+                    The Drift Recurrence $S_{t+1}$ provides a dynamic temperature schedule that adapts to the ruggedness of the energy landscape.
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <h2>High-Value Applications</h2>
+            <div class="grid-text" style="margin-top:40px;">
+                <div class="feature-card">
+                    <h3>Logistics & Routing</h3>
+                    <p>The Traveling Salesman Problem (TSP) is NP-Hard. For a fleet of 10,000 trucks, a 1% route optimization saves millions in fuel. Drift Annealing finds these 1% gains by exploring route combinations that standard heuristics discard.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Chip Floorplanning</h3>
+                    <p>Placing billions of transistors to minimize heat and wire lag is a massive combinatorial puzzle. Drift IP Cores can be embedded directly into EDA tools to accelerate the physical design closure process.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Protein Folding</h3>
+                    <p>Proteins fold into their lowest energy state. Misfolded proteins cause diseases. Drift Dynamics simulate the "Thermal Shocks" needed to unclump misfolded virtual proteins, accelerating drug discovery pipelines.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Portfolio Risk</h3>
+                    <p>Financial markets are non-convex. Finding the optimal hedge requires navigating a landscape of volatility traps. Drift Compute provides a robust solver that doesn't get stuck on "local" market data.</p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Drift Systems Inc. <br> Systems Architect: Lukas Cain</p>
+            <p style="font-size: 0.8rem; color: #444;">Drift Compute is a division of Drift Systems Inc.</p>
+        </div>
+    </footer>
+
+    <script>
+    (function() {
+        const canvas = document.getElementById('terrainCanvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        
+        let t = 0;
+        
+        // Balls
+        let ballStd = { x: 0, y: 0, z: 0, state: 'falling' };
+        let ballDrift = { x: 0, y: 0, z: 0, state: 'falling' };
+
+        function resize() {
+            width = canvas.parentElement.clientWidth;
+            height = canvas.parentElement.clientHeight;
+            canvas.width = width;
+            canvas.height = height;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        // 3D Projection
+        function project(x, y, z) {
+            const scale = 400 / (400 + z);
+            const x2d = (x * scale) + width / 2;
+            const y2d = (y * scale) + height / 2;
+            return { x: x2d, y: y2d, scale: scale };
+        }
+
+        // Terrain Function (The Trap)
+        // A big bowl with a small local dip in the middle
+        function getY(x, z) {
+            let r = Math.sqrt(x*x + z*z);
+            // Main bowl + Ripple (Trap) + Noise
+            return Math.sin(r * 0.05) * 50 + Math.cos(x*0.1)*20; 
+        }
+
+        function loop() {
+            ctx.fillStyle = '#080808';
+            ctx.fillRect(0, 0, width, height);
+            
+            t += 0.02;
+
+            // Draw Wireframe Landscape
+            ctx.strokeStyle = 'rgba(255, 0, 85, 0.2)';
+            ctx.lineWidth = 1;
+            
+            for(let z = -200; z < 200; z+=40) {
+                ctx.beginPath();
+                for(let x = -300; x < 300; x+=10) {
+                    let y = getY(x, z) + 50;
+                    // Rotate
+                    let xr = x * Math.cos(t*0.1) - z * Math.sin(t*0.1);
+                    let zr = z * Math.cos(t*0.1) + x * Math.sin(t*0.1) + 300; // Push back
+                    
+                    let p = project(xr, y, zr);
+                    if(x === -300) ctx.moveTo(p.x, p.y);
+                    else ctx.lineTo(p.x, p.y);
+                }
+                ctx.stroke();
+            }
+
+            // Update Balls
+            // Standard: Gets stuck in local min (x=50)
+            let stdX = 50 + Math.sin(t) * 10;
+            let stdZ = 300;
+            let stdY = getY(50, 0) + 50; 
+            let pStd = project(stdX * Math.cos(t*0.1), stdY, stdZ);
+            
+            // Drift: Escapes to Global (x=-150)
+            // It moves aggressively
+            let driftX = -150 + (Math.random()-0.5)*20; // Chaos jitter
+            let driftZ = 300;
+            let driftY = getY(-150, 0) + 50;
+            let pDrift = project(driftX * Math.cos(t*0.1), driftY, driftZ);
+
+            // Draw Standard Ball (Trapped)
+            ctx.fillStyle = '#ff4444';
+            ctx.beginPath();
+            ctx.arc(pStd.x, pStd.y, 8 * pStd.scale, 0, Math.PI*2);
+            ctx.fill();
+            
+            // Draw Drift Ball (Optimized)
+            ctx.fillStyle = '#00ffaa';
+            ctx.shadowBlur = 20;
+            ctx.shadowColor = '#00ffaa';
+            ctx.beginPath();
+            ctx.arc(pDrift.x, pDrift.y, 8 * pDrift.scale, 0, Math.PI*2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+
+            requestAnimationFrame(loop);
+        }
+
+        window.resetSim = function() {
+            t = 0;
+        };
+
+        loop();
+
+    })();
+    </script>
+</body>
+</html>
