@@ -5,12 +5,17 @@
 
   This file depends on CollatzFSA.FSA (the reusable automaton definition)
   and adds:
-    - bitlist <-> Nat interpretation helpers
+    - bitlist <-> Nat interpretation helpers (LSB-first)
     - a “Collatz-odd-step” target function (3n+1, strip 2-adic valuation)
     - theorem statements connecting run/count/output bits to arithmetic
 
   Design goal:
     Keep CollatzFSA.FSA reusable and free of number theory.
+
+  IMPORTANT (bit order):
+  - CollatzFSA.FSA.runRev collects outBits in reverse-emission order (cons on recursion).
+  - CollatzFSA.FSA.runLSB reverses once, returning outBits in emission order.
+  - This arithmetic module uses runLSB so `bitsToNat outBits` is the intended value.
 -/
 
 import Mathlib.Data.Nat.Basic
@@ -38,7 +43,7 @@ def v2 (n : Nat) : Nat := Nat.trailingZeros n
 /-- Strip all factors of two from a Nat. -/
 def oddPart (n : Nat) : Nat := n / (2 ^ v2 n)
 
-/-- Collatz odd-step (for odd n): (3n+1)/2^{v2(3n+1)}. -/
+/-- Collatz odd-step: (3n+1)/2^{v2(3n+1)}. -/
 def collatzOddStep (n : Nat) : Nat :=
   oddPart (threeNPlusOne n)
 
@@ -52,44 +57,41 @@ def collatzOddStep (n : Nat) : Nat :=
   bitsToNat (b :: bs) = (if b then 1 else 0) + 2 * bitsToNat bs := rfl
 
 /-- LSB-first “shift” lemma. -/
-lemma bitsToNat_append_zero (bs : List Bool) :
+lemma bitsToNat_cons_zero (bs : List Bool) :
   bitsToNat (false :: bs) = 2 * bitsToNat bs := by
   simp [bitsToNat]
 
-lemma bitsToNat_append_one (bs : List Bool) :
+lemma bitsToNat_cons_one (bs : List Bool) :
   bitsToNat (true :: bs) = 1 + 2 * bitsToNat bs := by
   simp [bitsToNat]
 
 --------------------------------------------------------------------------------
--- Bridge to Nat.bits
+-- A project-local LSB-first bit decomposition (stable across Mathlib versions)
 --
--- Mathlib already provides a rich theory of Nat.bits, but which lemma names
--- are available can vary with Mathlib versions. To keep this file stable,
--- we isolate the required bridge as a single lemma. Once proven for your
--- pinned Mathlib, the rest of the arithmetic development becomes routine.
+-- We intentionally avoid Nat.bits here, because its lemma names vary.
+-- You can add a separate "NatBitsBridge.lean" later if needed.
 --------------------------------------------------------------------------------
 
+/-- LSB-first bit decomposition via repeated div2. -/
+def bitsLSB : Nat → List Bool
+| 0 => []
+| n => (n % 2 = 1) :: bitsLSB (n / 2)
+
 /--
-TODO (version-pinned):
+TODO (one-time foundational lemma):
 
-bitsToNat agrees with Nat.bits:
+bitsToNat agrees with bitsLSB:
 
-  bitsToNat (Nat.bits n) = n
+  bitsToNat (bitsLSB n) = n
 
-Once you discharge this lemma against your Mathlib version, all theorems below
-can be stated “for n : Nat” directly, using Nat.bits as input to the automaton.
+Once proven, you can use bitsLSB as the canonical input stream to the automaton.
 -/
-theorem bitsToNat_natBits (n : Nat) :
-  bitsToNat (Nat.bits n) = n := by
-  -- NOTE: Fill this using the Mathlib lemma that relates Nat.bits to Nat
-  -- (often via Nat.bitsRec / Nat.bit / Nat.testBit, depending on version).
-  --
-  -- Typical approach:
-  --   induction n using Nat.binaryRec
-  -- or:
-  --   simpa using (Nat.bits_toNat n)  -- if such a lemma exists in your version
-  --
-  -- Leaving as a TODO placeholder until we lock the exact lemma name.
+theorem bitsToNat_bitsLSB (n : Nat) :
+  bitsToNat (bitsLSB n) = n := by
+  -- Suggested proof:
+  --   strong induction on n
+  --   use Nat.div_add_mod (or Nat.mod_add_div) specialized to 2
+  --   split on n%2 = 0 or 1
   sorry
 
 --------------------------------------------------------------------------------
@@ -99,66 +101,74 @@ theorem bitsToNat_natBits (n : Nat) :
 /--
 Interpret the automaton output bits as a Nat.
 
-Important: `run` in CollatzFSA.FSA collects output via `bit :: r.outBits`,
-which is LSB-first if the automaton emits LSB-first. If your interpretation
-is MSB-first, you would reverse here. We keep it LSB-first for consistency.
+We run the automaton using `runLSB`, which returns outBits in emission order,
+so this is a direct LSB-first interpretation.
 -/
 def outValue (r : RunResult) : Nat := bitsToNat r.outBits
 
 /--
-The main arithmetic contract we ultimately want:
+Core arithmetic contract (preferred API):
 
-Running the automaton from S3 on Nat.bits n produces:
+Running the automaton from S3 on bitsLSB n produces:
   threeNPlusOne n = 2^count * outValue
 
 This is the “factorization” view:
   3n+1 = 2^v * m
-where v is the count of none-outputs and m is the emitted bitstream value.
+where v is the number of none-outputs and m is the emitted bitstream value.
 -/
-theorem fsa_factorization_contract (n : Nat) :
-  let r := run FSAState.S3 (Nat.bits n)
+theorem fsa_factorization_bitsLSB (n : Nat) :
+  let r := runLSB FSAState.S3 (bitsLSB n)
   threeNPlusOne n = (2 ^ r.count) * outValue r := by
   -- This is the core arithmetic proof.
   --
-  -- Proof strategy (recommended):
+  -- Recommended proof strategy:
   --   1) Prove a stronger invariant by induction on the input bitstream:
   --      after processing a prefix, the automaton state + accumulated output
-  --      corresponds to a partial computation of 3n+1 with a carry-like term.
-  --   2) Use the concrete 12-transition table to discharge the “one-step
-  --      arithmetic” cases (finite, mechanical case split).
-  --
-  -- This is intentionally in the Arithmetic module (not FSA core).
+  --      corresponds to a partial computation of 3n+1 with a bounded carry term.
+  --   2) Discharge the one-step invariant by finite case split on (state, bit)
+  --      using simp [CollatzFSA.step].
+  --   3) Conclude by induction.
   sorry
 
 /--
 Corollary: the automaton computes the odd part of (3n+1).
 
-This is the canonical “Collatz odd-step” result:
+Canonical result:
   outValue = (3n+1) / 2^{v2(3n+1)}
 and count = v2(3n+1).
 -/
-theorem fsa_computes_oddPart (n : Nat) :
-  let r := run FSAState.S3 (Nat.bits n)
+theorem fsa_computes_oddPart_bitsLSB (n : Nat) :
+  let r := runLSB FSAState.S3 (bitsLSB n)
   r.count = v2 (threeNPlusOne n) ∧
   outValue r = oddPart (threeNPlusOne n) := by
-  -- From factorization_contract, show:
-  --   (i) 2^r.count divides 3n+1
-  --   (ii) r.count is maximal (equals trailingZeros), using the fact that the
-  --        automaton emits its first output exactly when leaving counting
-  --        and that counting corresponds to consuming factors of 2.
+  -- From fsa_factorization_bitsLSB, show:
+  --   (i) 2^r.count divides 3n+1, with quotient outValue
+  --   (ii) r.count is maximal, i.e. equals trailingZeros(3n+1).
   --
-  -- Requires connecting “none outputs” to divisibility-by-2.
+  -- The maximality step uses:
+  --   - how `none` outputs correspond to consuming factors of 2
+  --   - the structural “counting” region behavior (S3/S5 loop)
+  --   - and the fact that after leaving counting, the next output is a bit.
   sorry
 
-/--
-Final packaging theorem (nice API): the automaton computes Collatz odd-step.
--/
-theorem fsa_collatzOddStep (n : Nat) :
-  let r := run FSAState.S3 (Nat.bits n)
+/-- Final packaging theorem (nice API): the automaton computes Collatz odd-step. -/
+theorem fsa_collatzOddStep_bitsLSB (n : Nat) :
+  let r := runLSB FSAState.S3 (bitsLSB n)
   outValue r = collatzOddStep n := by
   intro r
-  have h := fsa_computes_oddPart n
-  -- unpack and rewrite
+  have h := fsa_computes_oddPart_bitsLSB n
   simpa [collatzOddStep, oddPart, threeNPlusOne, outValue] using (h.2)
+
+--------------------------------------------------------------------------------
+-- Optional: bridge back to Nat.bits (if/when you want it)
+--------------------------------------------------------------------------------
+
+/--
+Optional bridge (version-pinned):
+
+If you later want theorems stated using `Nat.bits n` directly, add a separate
+file that proves `bitsLSB n = Nat.bits n` (or that they have equal bitsToNat),
+and then transport the results. This keeps the core arithmetic file stable.
+-/
 
 end CollatzFSA
