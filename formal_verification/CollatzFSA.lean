@@ -71,7 +71,8 @@ def runState : FSAState → List Bit → FSAState
 
 /--
 Run the automaton over a finite bitstring, returning:
-- `outBits`: output bits (collected in the natural “cons” order of emission)
+- `outBits`: output bits (collected in the natural “cons” order of emission;
+            i.e. reverse-emission order due to recursion)
 - `count`: how many `none` outputs occurred
 -/
 structure RunResult where
@@ -79,6 +80,13 @@ structure RunResult where
   count   : Nat
 deriving Repr
 
+/--
+Core runner (efficient):
+
+`outBits` are accumulated by consing onto the recursive result,
+so they are in reverse-emission order (often MSB-first if the automaton
+emits LSB-first). If you want bits in emission order, use `runLSB`.
+-/
 def run : FSAState → List Bit → RunResult
 | s, [] =>
     { outBits := [], count := 0 }
@@ -86,8 +94,33 @@ def run : FSAState → List Bit → RunResult
     let (s', o) := step s b
     let r := run s' bs
     match o with
-    | none     => { outBits := r.outBits,     count := r.count + 1 }
+    | none     => { outBits := r.outBits,        count := r.count + 1 }
     | some bit => { outBits := bit :: r.outBits, count := r.count }
+
+/-- Alias emphasizing that `run` collects bits in reverse-emission order. -/
+abbrev runRev := run
+
+/--
+Return output bits in emission order.
+
+For LSB-first input streams (common for `bitsLSB`-style decompositions),
+this produces an output list that is LSB-first in the same sense as
+“push bits as they’re produced”, matching many reference implementations.
+
+Downstream arithmetic code should prefer `runLSB` to avoid carrying `reverse`
+everywhere.
+-/
+def runLSB (s : FSAState) (bs : List Bit) : RunResult :=
+  let r := runRev s bs
+  { r with outBits := r.outBits.reverse }
+
+@[simp] lemma runLSB_count (s : FSAState) (bs : List Bit) :
+  (runLSB s bs).count = (runRev s bs).count := by
+  simp [runLSB, runRev]
+
+@[simp] lemma runLSB_outBits (s : FSAState) (bs : List Bit) :
+  (runLSB s bs).outBits = (runRev s bs).outBits.reverse := by
+  simp [runLSB, runRev]
 
 /-!
   ----------------------------------------------------------------------
