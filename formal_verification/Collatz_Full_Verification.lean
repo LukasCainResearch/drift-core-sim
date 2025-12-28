@@ -163,12 +163,64 @@ def bitsLSB : Nat → List Bit
 The key round-trip theorem: bitsToNat (bitsLSB n) = n.
 This is the foundational lemma connecting bit representation to arithmetic.
 
-PROOF STRATEGY: Strong induction on n using Nat.mod_two_eq_zero_or_one
-and n = 2*(n/2) + n%2. This is standard but requires careful attention
-to Mathlib lemma names, which may vary between versions.
+Proof by strong induction using the division algorithm for base 2.
 -/
 theorem bitsToNat_bitsLSB (n : Nat) : bitsToNat (bitsLSB n) = n := by
-  sorry  -- Standard proof by strong induction; see file comments
+  induction n using Nat.strong_induction_on with
+  | _ n ih =>
+    cases n with
+    | zero =>
+      -- Base case: n = 0
+      simp [bitsLSB, bitsToNat]
+    | succ n' =>
+      -- Inductive case: n = n' + 1 > 0
+      simp only [bitsLSB]
+      
+      -- Split on whether n is even or odd
+      by_cases h : (n' + 1) % 2 = 1
+      · -- Case: n is odd (n % 2 = 1)
+        simp [h, bitsToNat]
+        
+        -- Use the induction hypothesis on n / 2
+        have ih_half : bitsToNat (bitsLSB ((n' + 1) / 2)) = (n' + 1) / 2 := by
+          apply ih
+          have : (n' + 1) / 2 < n' + 1 := Nat.div_lt_self (Nat.succ_pos n') (by norm_num)
+          exact this
+        
+        rw [ih_half]
+        
+        -- Now prove: 1 + 2 * ((n' + 1) / 2) = n' + 1
+        -- This follows from the division algorithm: n = 2*(n/2) + n%2
+        have div_algo : n' + 1 = 2 * ((n' + 1) / 2) + (n' + 1) % 2 := 
+          (Nat.div_add_mod (n' + 1) 2).symm
+        
+        rw [h] at div_algo
+        linarith
+        
+      · -- Case: n is even (n % 2 = 0)
+        have h_zero : (n' + 1) % 2 = 0 := by
+          have : (n' + 1) % 2 = 0 ∨ (n' + 1) % 2 = 1 := Nat.mod_two_eq_zero_or_one (n' + 1)
+          cases this with
+          | inl hz => exact hz
+          | inr ho => contradiction
+        
+        simp [h_zero, bitsToNat]
+        
+        -- Use the induction hypothesis on n / 2
+        have ih_half : bitsToNat (bitsLSB ((n' + 1) / 2)) = (n' + 1) / 2 := by
+          apply ih
+          have : (n' + 1) / 2 < n' + 1 := Nat.div_lt_self (Nat.succ_pos n') (by norm_num)
+          exact this
+        
+        rw [ih_half]
+        
+        -- Now prove: 0 + 2 * ((n' + 1) / 2) = n' + 1
+        -- This follows from the division algorithm with n%2 = 0
+        have div_algo : n' + 1 = 2 * ((n' + 1) / 2) + (n' + 1) % 2 := 
+          (Nat.div_add_mod (n' + 1) 2).symm
+        
+        rw [h_zero] at div_algo
+        linarith
 
 -- ============================================================================
 -- SECTION 4: ARITHMETIC INTERPRETATION
