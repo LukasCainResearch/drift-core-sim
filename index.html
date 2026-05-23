@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>Drift Systems | TRL-6 Prototype</title>
-  <meta name="description" content="Cryptographic-grade non-linearity at linear-grade speed. Native digital chaos for IoT, Defense, and Compute. TRL-6 prototype (Dec 2025)." />
+  <meta name="description" content="High-throughput non-linearity at single-cycle speed. Native digital chaos for IoT, Defense, and Compute. TRL-6 prototype (Dec 2025)." />
   <meta name="theme-color" content="#000000" />
 
   <meta property="og:title" content="Drift Systems | TRL-6 Prototype" />
-  <meta property="og:description" content="Cryptographic-grade non-linearity at linear-grade speed. Native digital chaos for IoT, Defense, and Compute." />
+  <meta property="og:description" content="High-throughput non-linearity at single-cycle speed. Native digital chaos for IoT, Defense, and Compute." />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="logo.png" />
   <meta name="twitter:card" content="summary_large_image" />
@@ -48,7 +48,7 @@
 
         <h1>THE STANDARD FOR<br>LOW-POWER ENTROPY.</h1>
         <p class="subtitle">
-          Cryptographic-grade non-linearity at linear-grade speed.<br>
+          High-throughput non-linearity at single-cycle speed.<br>
           Native silicon architecture for IoT, Defense, and Compute.
         </p>
 
@@ -79,7 +79,7 @@
           <div class="metric-card">
             <h2>0.00002</h2>
             <p>CORRELATION</p>
-            <span class="sub">NIST SP 800-22 Compliant</span>
+            <span class="sub">Passes NIST SP 800-22 (in-house)</span>
           </div>
         </div>
       </div>
@@ -92,7 +92,7 @@
         <p class="lead">
           Drift Systems replaces inefficient analog randomness with <strong>Deterministic Digital Chaos</strong>.
           By utilizing the non-linear properties of arithmetic drift recurrence,
-          we generate maximum entropy for security and optimization workloads.
+          we generate high-quality conditioned output for security and optimization workloads.
         </p>
         
         <div class="section-header" id="verticals">
@@ -206,10 +206,10 @@
               <svg class="icon" aria-hidden="true" style="width:48px; height:48px; fill:none; stroke:currentColor; stroke-width:1.1;" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
               </svg>
-              <h3>Radiation-Hardened Entropy</h3>
+              <h3>Radiation-Tolerant Sequence Generation</h3>
               <p>Fault-tolerant sequence generation for satellite constellations and deep-space telemetry.</p>
               <ul class="bullets">
-                <li>Resistant to Single Event Upsets (SEUs) via self-healing logic</li>
+                <li>Architectural single-event-upset (SEU) detection in 1 cycle, no TMR (not yet beam-tested)</li>
                 <li>Operates in cryogenic/thermal extremes where analog TRNGs fail</li>
                 <li>Low-gate count minimizes shielding requirements</li>
               </ul>
@@ -490,7 +490,7 @@
     <div class="container">
       <p style="margin:0;">
         &copy; 2025 Drift Systems Inc. All Rights Reserved.<br />
-        <span class="tiny">NIST SP 800-22 Compliant. Export Controlled Technology (EAR99).</span>
+        <span class="tiny">Passes NIST SP 800-22 (in-house). Export Controlled Technology (EAR99).</span>
       </p>
     </div>
   </footer>
@@ -619,7 +619,7 @@
             }
             // 5. SPACE
             else if (lower.includes('space') || lower.includes('sat') || lower.includes('orbit') || lower.includes('rad')) {
-                response = "Our architecture is Radiation-Hardened by design, self-healing from Single Event Upsets (SEUs) in 1 cycle.";
+                response = "Our architecture detects Single Event Upsets (SEUs) in 1 cycle without TMR (architectural; not yet beam-tested).";
                 url = "docs/space.html";
             }
             // 6. FINTECH / HFT
