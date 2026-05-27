@@ -180,15 +180,15 @@
                 <div class="metric-row">
                     <div class="metric">
                         <span class="metric-value">1 cycle</span>
-                        <span class="metric-label">Token Generation Latency</span>
+                        <span class="metric-label">Core Output Latency</span>
                     </div>
                     <div class="metric">
-                        <span class="metric-value">~686 LCs</span>
-                        <span class="metric-label">FPGA Footprint</span>
+                        <span class="metric-value">~600 LUT</span>
+                        <span class="metric-label">DAD Core (Gowin GW1N-9, synth)</span>
                     </div>
                     <div class="metric">
-                        <span class="metric-value">&lt;10 &micro;W</span>
-                        <span class="metric-label">Dynamic Power per Edge</span>
+                        <span class="metric-value">~900 LUT</span>
+                        <span class="metric-label">Full Rolling-Identity Demo (Bidirectional, HW-Validated)</span>
                     </div>
                 </div>
             </div>
@@ -211,7 +211,7 @@
                 </div>
                 <div class="feature-card">
                     <h3>Hardware-Friendly Line Rate</h3>
-                    <p>One-cycle latency and a ~686-logic-cell footprint mean the token/jitter primitive sits at the line card, not the host. No new crypto coprocessor required; same block serves entropy, identity, and timing.</p>
+                    <p>One-cycle latency and a compact footprint (DAD core ~600 LUT, full bidirectional rolling-identity demo ~900 LUT on Gowin GW1N-9) mean the token/jitter primitive sits at the line card, not the host. No new crypto coprocessor required.</p>
                 </div>
                 <div class="feature-card">
                     <h3>Tamper-Evident Continuity</h3>
@@ -222,7 +222,7 @@
 
         <section>
             <p class="callout" style="margin-top: 40px;">
-                <strong>Status:</strong> TRL-5 &mdash; FPGA-verified across &gt;24 billion cycles of hardware/software lockstep. Implementation-safety result machine-checked in Lean 4 (carry-bound theorem); cryptographic security pursued separately via independent cryptanalytic peer review.
+                <strong>Status &amp; honest framing:</strong> What is hardware-validated here is <em>deterministic synchronization and keystream/tag generation between two devices on real silicon</em> (Tang Nano 9K + Tang Primer 20K, bit-exact against the cycle-accurate model across &gt;62,000 words at zero divergence). Implementation-safety result machine-checked in Lean 4 (carry-bound theorem). What is <em>not</em> shown here: cryptographic-strength against cryptanalysis (DAD is a lightweight, non-vetted construction; passing NIST SP 800-22 is not a security proof), sub-10&nbsp;&micro;W ASIC power (FPGA estimates are relative only), and radiation tolerance (architectural property; beam test pending). Cryptographic security is pursued separately via independent cryptanalytic peer review.
             </p>
         </section>
 

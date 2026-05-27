@@ -171,21 +171,21 @@
                 </div>
                 <div class="stack-layer">
                     <div class="stack-label">SILICON</div>
-                    <div class="stack-body"><strong>~686 logic cells, &lt;10 &micro;W, 1-cycle.</strong> Same hardware block serves all four layers above.</div>
+                    <div class="stack-body"><strong>One core primitive, multiple wrappers.</strong> DAD core ~600 LUT (Gowin GW1N-9, synth). Line-Rate Integrity demo ~1.6k LUT bidirectional (hardware-validated). Secure-Link keystream demo ~2.4k LUT bidirectional (hardware-validated). Composite footprint depends on which wrapper layers you instantiate.</div>
                 </div>
 
                 <div class="metric-row">
                     <div class="metric">
                         <span class="metric-value">1 cycle</span>
-                        <span class="metric-label">Hash / Token Latency</span>
+                        <span class="metric-label">Core Output Latency</span>
                     </div>
                     <div class="metric">
                         <span class="metric-value">0 RTT</span>
                         <span class="metric-label">No Coordination Required</span>
                     </div>
                     <div class="metric">
-                        <span class="metric-value">~5&times;</span>
-                        <span class="metric-label">Smaller than AES-128 (FPGA)</span>
+                        <span class="metric-value">~1.6k LUT</span>
+                        <span class="metric-label">Line-Rate Integrity Demo (HW-Validated)</span>
                     </div>
                 </div>
             </div>
@@ -219,7 +219,7 @@
 
         <section>
             <p class="callout" style="margin-top: 40px;">
-                <strong>Status:</strong> TRL-5 &mdash; FPGA-verified across &gt;24 billion cycles of hardware/software lockstep. Implementation-safety result machine-checked in Lean 4 (carry-bound theorem); cryptographic security pursued separately via independent cryptanalytic peer review.
+                <strong>Status &amp; honest framing:</strong> What is hardware-validated here is <em>deterministic synchronization, keystream generation, and rolling integrity tags between two devices on real silicon</em> (Tang Nano 9K + Tang Primer 20K, bit-exact against the cycle-accurate model). Implementation-safety result machine-checked in Lean 4 (carry-bound theorem). What is <em>not</em> shown here: cryptographic-strength against cryptanalysis (DAD is a lightweight, non-vetted construction; passing NIST SP 800-22 is not a security proof), HashDoS resistance under adversarial collision search (architectural reasoning only; independent review pending), and sub-10&nbsp;&micro;W ASIC power (FPGA estimates are relative only).
             </p>
         </section>
 

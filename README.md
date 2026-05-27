@@ -13,14 +13,20 @@ The **Drift Core (DC-100)** is a compact cryptographic primitive designed for ul
 
 Based on **Discrete Arithmetic Dynamics (DAD)**, the core conditions and expands entropy (paired with a standard hardware noise source) and produces signatures using a constrained affine transformation ($qS+d$) combined with bitwise state folding.
 
-### Key Performance Metrics (Lattice iCE40)
+### Key Performance Metrics (Tang Primer 20K — Gowin GW2A-18)
 
-| Metric              | Specification                                          | Competitive Advantage           |
-| ------------------- | ----------------------------------------------------- | ------------------------------- |
-| **Logic Footprint** | **686 Logic Cells**                                   | ~5x smaller than AES-128        |
-| **Latency**         | **1 Clock Cycle**                                     | Instant "Zero-Wait" Wakeup      |
-| **Multipliers**     | **ZERO (0)**                                          | Negligible dynamic power / heat  |
-| **Statistical quality** | Passes **NIST SP 800-22** (in-house, all 15 families) | Conditioned output            |
+Measured via Gowin synthesis on the Tang Primer 20K (GW2A-18). Hardware-validated across the two-FPGA demo suite (Tang Nano 9K + Tang Primer 20K) at bit-exact lockstep against the cycle-accurate software model.
+
+| Metric                    | Specification                                            | Competitive Advantage                 |
+| ------------------------- | -------------------------------------------------------- | ------------------------------------- |
+| **LUT Count (bare core)** | **~580 LUT** (cipher_engine.v, single direction)         | ~6× smaller than AES-128 (~3,500 LUT) |
+| **Latency**               | **1 Clock Cycle**                                        | Instant "Zero-Wait" Wakeup            |
+| **Multipliers**           | **ZERO (0)**                                             | Negligible dynamic power / heat       |
+| **Statistical quality**   | Passes **NIST SP 800-22** (in-house, all 15 families)    | Conditioned output                    |
+
+**Note on deployed configurations.** The ~580 LUT figure is the bare DAD core. Real demonstrators wrap it in transport, framing, and tag logic; measured full-bidirectional demo footprints range from ~900 LUT (Rolling Identity RoT) to ~2,400 LUT (Secure Link). See `formal_verification/` and the two-FPGA demo suite for per-configuration synth reports.
+
+**What is and isn't shown here.** Hardware-validated: deterministic synchronization, keystream generation, and rolling integrity tags between two devices on real silicon. *Not* shown on this FPGA suite: sub-10 µW ASIC power (projection only), radiation tolerance (architectural property; beam test pending), and cryptographic-strength against cryptanalysis (DAD is a lightweight, non-vetted construction; passing NIST SP 800-22 is not a security proof — independent cryptanalytic review is pursued separately).
 
 ---
 
