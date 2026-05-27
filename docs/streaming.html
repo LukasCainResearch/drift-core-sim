@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drift Systems | Streaming &amp; Telecom</title>
+
+    <script>
+        window.MathJax = {
+          tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+          svg: { fontCache: 'global' }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💠</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+    <style>
+        :root {
+            --bg0: #000;
+            --bg1: #050505;
+            --panel: rgba(0,20,40,0.5);
+            --border: rgba(0,255,255,0.2);
+            --border-strong: rgba(0,255,255,0.8);
+            --text: #fff;
+            --muted: #a0a0a0;
+            --muted2: #888;
+            --cyan: #00ffff;
+            --mint: #00ffaa;
+            --warn: #ffaa00;
+            --fail: #ff4444;
+            --mono: 'JetBrains Mono', ui-monospace, monospace;
+            --sans: 'Inter', system-ui, sans-serif;
+            --shadow: 0 0 20px rgba(0,255,255,0.10);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: var(--sans);
+            background-color: var(--bg0);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 { font-weight: 700; letter-spacing: -0.02em; margin-bottom: 1rem; color: #fff; }
+        h1 {
+            font-size: 3rem; line-height: 1.1;
+            background: linear-gradient(90deg, #fff, var(--cyan));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        h2 {
+            font-size: 1.8rem; border-left: 4px solid var(--cyan);
+            padding-left: 1rem; margin-top: 3rem;
+        }
+        p { margin-bottom: 1.5rem; font-size: 1.05rem; color: var(--muted); }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+        nav { padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: var(--sans); font-weight: 900; font-size: 1.2rem; letter-spacing: 1px; color: #fff; text-decoration: none; }
+        .nav-links a { font-family: var(--mono); color: var(--muted); text-decoration: none; margin-left: 20px; font-size: 0.85rem; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--cyan); }
+
+        .hero { padding: 80px 0; text-align: center; }
+        .hero .eyebrow { color: var(--cyan); font-family: var(--mono); font-weight: 700; letter-spacing: 1px; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+
+        .btn {
+            display: inline-block; padding: 12px 30px;
+            background: rgba(0, 255, 255, 0.1); color: var(--cyan);
+            border: 1px solid var(--cyan); font-family: var(--mono);
+            font-size: 0.85rem; font-weight: 700; text-decoration: none;
+            transition: all 0.2s;
+        }
+        .btn:hover { background: var(--cyan); color: #000; box-shadow: 0 0 20px rgba(0,255,255,0.4); }
+
+        /* Diagram container */
+        .diagram {
+            background: var(--bg1); border: 1px solid var(--border); border-radius: 4px;
+            padding: 40px; margin: 40px 0;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+        .lane-row {
+            display: grid; grid-template-columns: 1fr 1fr 1fr;
+            gap: 24px; align-items: stretch;
+        }
+        .lane {
+            border: 1px dashed rgba(0,255,255,0.25);
+            padding: 20px; border-radius: 4px;
+            background: rgba(0,30,40,0.25);
+        }
+        .lane-label { font-family: var(--mono); font-size: 0.75rem; color: var(--cyan); letter-spacing: 1px; margin-bottom: 12px; }
+        .lane-title { font-family: var(--sans); font-weight: 700; font-size: 1.1rem; color: #fff; margin-bottom: 6px; }
+        .lane-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted2); }
+        .lane.accent { border: 1px solid var(--cyan); background: rgba(0,255,255,0.06); }
+
+        .metric-row {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 24px; margin-top: 28px;
+        }
+        .metric {
+            text-align: center; padding: 14px 6px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+        .metric-value { font-family: var(--mono); font-size: 1.6rem; color: var(--cyan); font-weight: 700; display: block; }
+        .metric-label { font-family: var(--mono); font-size: 0.7rem; color: var(--muted2); letter-spacing: 1px; }
+
+        /* Capabilities */
+        .grid-text { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin: 60px 0; }
+        .feature-card { border: 1px solid var(--border); padding: 24px; background: var(--panel); transition: transform 0.2s; }
+        .feature-card:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+        .feature-card h3 { color: var(--cyan); font-family: var(--mono); font-size: 1rem; margin-bottom: 12px; letter-spacing: 1px; }
+
+        .callout {
+            font-size: 0.95rem; border-left: 2px solid var(--border);
+            padding-left: 15px; color: var(--muted2);
+        }
+        .callout strong { color: var(--text); }
+
+        footer { border-top: 1px solid rgba(255,255,255,0.1); padding: 40px 0; margin-top: 80px; text-align: center; font-size: 0.9rem; color: #666; }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2rem; }
+            .grid-text { grid-template-columns: 1fr; }
+            .lane-row { grid-template-columns: 1fr; }
+            .metric-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <nav>
+            <a href="../index.html" class="logo">DRIFT<span style="font-weight:300;">SYSTEMS</span></a>
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="#flow">Reconnect Flow</a>
+                <a href="#specs">Capabilities</a>
+            </div>
+        </nav>
+
+        <section class="hero">
+            <span class="eyebrow">STREAMING &amp; TELECOM</span>
+            <h1>Session Tokens &amp;<br>Reconnect Storms</h1>
+            <p>Streaming and telecom workloads need short-lived session tokens at line rate and predictable post-outage reconnect behavior. Drift Systems delivers high-entropy session identity and deterministic jitter from the same compact primitive &mdash; no per-request crypto, no thundering herd.</p>
+            <br>
+            <a href="#flow" class="btn">SEE THE FLOW</a>
+        </section>
+
+        <hr style="border: 0; border-top: 1px solid var(--border);">
+
+        <section id="flow">
+            <h2>1. Reconnect-Storm Control</h2>
+            <p>When a CDN edge, RAN cell, or VoIP region drops, every dependent client tries to reconnect at once. Conventional jitter is either a coarse random window (too lossy) or a server-side queue (too slow). Drift seeds each client with a deterministic spread derived from a shared drift state, smoothing reconnect arrivals without round-trip negotiation.</p>
+
+            <div class="diagram">
+                <div class="lane-row">
+                    <div class="lane">
+                        <div class="lane-label">UPSTREAM</div>
+                        <div class="lane-title">Outage Event</div>
+                        <div class="lane-note">Edge POP drops at t=0. N clients hold last session state $S_t$.</div>
+                    </div>
+                    <div class="lane accent">
+                        <div class="lane-label">DRIFT LAYER</div>
+                        <div class="lane-title">Deterministic Spread</div>
+                        <div class="lane-note">Each client derives a unique reconnect offset $\Delta_i = F^i(S_t) \bmod W$ from the shared drift state.</div>
+                    </div>
+                    <div class="lane">
+                        <div class="lane-label">DOWNSTREAM</div>
+                        <div class="lane-title">Smoothed Arrivals</div>
+                        <div class="lane-note">Reconnect rate stays under the regional cap; no thundering herd, no random reattempts.</div>
+                    </div>
+                </div>
+
+                <div class="metric-row">
+                    <div class="metric">
+                        <span class="metric-value">1 cycle</span>
+                        <span class="metric-label">Token Generation Latency</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value">~686 LCs</span>
+                        <span class="metric-label">FPGA Footprint</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value">&lt;10 &micro;W</span>
+                        <span class="metric-label">Dynamic Power per Edge</span>
+                    </div>
+                </div>
+            </div>
+
+            <p class="callout">
+                <strong>How it works:</strong> The same recurrence $S_{t+1} = \mathrm{Fold}(qS_t + d)$ that drives Drift's entropy block is reused as a deterministic spread function for reconnect timing. Because the recurrence is shared but the index $i$ is per-client, clients arrive at different offsets without any cross-talk &mdash; eliminating the random-window vs server-queue tradeoff.
+            </p>
+        </section>
+
+        <section id="specs">
+            <h2>2. Capabilities &amp; Integration</h2>
+            <div class="grid-text">
+                <div class="feature-card">
+                    <h3>Stateless Session Tokens</h3>
+                    <p>Generate per-session, short-lived tokens from a single seed at the network ingress. No per-request crypto load on the application servers, no token-database round-trip on the hot path.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Deterministic Reconnect Jitter</h3>
+                    <p>Replace random backoff with a per-client deterministic offset derived from the shared drift state. Smooths reconnect arrivals after an outage without negotiation or central coordination.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Hardware-Friendly Line Rate</h3>
+                    <p>One-cycle latency and a ~686-logic-cell footprint mean the token/jitter primitive sits at the line card, not the host. No new crypto coprocessor required; same block serves entropy, identity, and timing.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Tamper-Evident Continuity</h3>
+                    <p>Each session frame inherits the drift state of the previous frame. Splices, replays, or out-of-order injection break the continuity check at the protocol layer &mdash; useful for live broadcast integrity and RTP-style streams.</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <p class="callout" style="margin-top: 40px;">
+                <strong>Status:</strong> TRL-5 &mdash; FPGA-verified across &gt;24 billion cycles of hardware/software lockstep. Implementation-safety result machine-checked in Lean 4 (carry-bound theorem); cryptographic security pursued separately via independent cryptanalytic peer review.
+            </p>
+        </section>
+
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Drift Systems Inc. <br> Systems Architect: Lukas Cain</p>
+        </div>
+    </footer>
+
+</body>
+</html>

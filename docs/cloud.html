@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drift Systems | Cloud &amp; DevOps</title>
+
+    <script>
+        window.MathJax = {
+          tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+          svg: { fontCache: 'global' }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💠</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+    <style>
+        :root {
+            --bg0: #000;
+            --bg1: #050505;
+            --panel: rgba(0,20,40,0.5);
+            --border: rgba(0,255,255,0.2);
+            --border-strong: rgba(0,255,255,0.8);
+            --text: #fff;
+            --muted: #a0a0a0;
+            --muted2: #888;
+            --cyan: #00ffff;
+            --mint: #00ffaa;
+            --warn: #ffaa00;
+            --fail: #ff4444;
+            --mono: 'JetBrains Mono', ui-monospace, monospace;
+            --sans: 'Inter', system-ui, sans-serif;
+            --shadow: 0 0 20px rgba(0,255,255,0.10);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: var(--sans);
+            background-color: var(--bg0);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 { font-weight: 700; letter-spacing: -0.02em; margin-bottom: 1rem; color: #fff; }
+        h1 {
+            font-size: 3rem; line-height: 1.1;
+            background: linear-gradient(90deg, #fff, var(--cyan));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        h2 {
+            font-size: 1.8rem; border-left: 4px solid var(--cyan);
+            padding-left: 1rem; margin-top: 3rem;
+        }
+        p { margin-bottom: 1.5rem; font-size: 1.05rem; color: var(--muted); }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+        nav { padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: var(--sans); font-weight: 900; font-size: 1.2rem; letter-spacing: 1px; color: #fff; text-decoration: none; }
+        .nav-links a { font-family: var(--mono); color: var(--muted); text-decoration: none; margin-left: 20px; font-size: 0.85rem; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--cyan); }
+
+        .hero { padding: 80px 0; text-align: center; }
+        .hero .eyebrow { color: var(--cyan); font-family: var(--mono); font-weight: 700; letter-spacing: 1px; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+
+        .btn {
+            display: inline-block; padding: 12px 30px;
+            background: rgba(0, 255, 255, 0.1); color: var(--cyan);
+            border: 1px solid var(--cyan); font-family: var(--mono);
+            font-size: 0.85rem; font-weight: 700; text-decoration: none;
+            transition: all 0.2s;
+        }
+        .btn:hover { background: var(--cyan); color: #000; box-shadow: 0 0 20px rgba(0,255,255,0.4); }
+
+        /* Stack diagram */
+        .stack {
+            background: var(--bg1); border: 1px solid var(--border); border-radius: 4px;
+            padding: 30px; margin: 40px 0;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+        .stack-layer {
+            border: 1px dashed rgba(0,255,255,0.25);
+            padding: 16px 20px; border-radius: 4px;
+            background: rgba(0,30,40,0.25);
+            margin-bottom: 12px;
+            display: grid; grid-template-columns: 180px 1fr; gap: 24px;
+            align-items: center;
+        }
+        .stack-layer.accent { border: 1px solid var(--cyan); background: rgba(0,255,255,0.06); }
+        .stack-label { font-family: var(--mono); font-size: 0.75rem; color: var(--cyan); letter-spacing: 1px; }
+        .stack-body { font-family: var(--sans); font-size: 0.95rem; color: var(--muted); }
+        .stack-body strong { color: #fff; }
+
+        .metric-row {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 24px; margin-top: 24px;
+        }
+        .metric {
+            text-align: center; padding: 14px 6px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+        .metric-value { font-family: var(--mono); font-size: 1.6rem; color: var(--cyan); font-weight: 700; display: block; }
+        .metric-label { font-family: var(--mono); font-size: 0.7rem; color: var(--muted2); letter-spacing: 1px; }
+
+        .grid-text { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin: 60px 0; }
+        .feature-card { border: 1px solid var(--border); padding: 24px; background: var(--panel); transition: transform 0.2s; }
+        .feature-card:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+        .feature-card h3 { color: var(--cyan); font-family: var(--mono); font-size: 1rem; margin-bottom: 12px; letter-spacing: 1px; }
+
+        .callout {
+            font-size: 0.95rem; border-left: 2px solid var(--border);
+            padding-left: 15px; color: var(--muted2);
+        }
+        .callout strong { color: var(--text); }
+
+        footer { border-top: 1px solid rgba(255,255,255,0.1); padding: 40px 0; margin-top: 80px; text-align: center; font-size: 0.9rem; color: #666; }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2rem; }
+            .grid-text { grid-template-columns: 1fr; }
+            .stack-layer { grid-template-columns: 1fr; }
+            .metric-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <nav>
+            <a href="../index.html" class="logo">DRIFT<span style="font-weight:300;">SYSTEMS</span></a>
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="#stack">Stack View</a>
+                <a href="#specs">Capabilities</a>
+            </div>
+        </nav>
+
+        <section class="hero">
+            <span class="eyebrow">CLOUD &amp; DEVOPS</span>
+            <h1>Load Balancing &amp;<br>Deterministic Replay</h1>
+            <p>At cloud scale, the same primitive underwrites HashDoS-resistant load-balancer hashing, stateless seeding for VM boot storms, and seedable deterministic replay for distributed-system debugging &mdash; one block across the stack.</p>
+            <br>
+            <a href="#stack" class="btn">VIEW THE STACK</a>
+        </section>
+
+        <hr style="border: 0; border-top: 1px solid var(--border);">
+
+        <section id="stack">
+            <h2>1. One Primitive Across the Stack</h2>
+            <p>Cloud platforms typically stitch together separate components for entropy (kernel RNG), load-balancer hashing (xxHash, MurmurHash), session identity (Argon2/HKDF), and replay debugging (separate tracing infra). Drift collapses these into one shift-add-XOR block, deterministic by construction.</p>
+
+            <div class="stack">
+                <div class="stack-layer">
+                    <div class="stack-label">L7 &mdash; APP</div>
+                    <div class="stack-body"><strong>Deterministic Replay.</strong> Re-run distributed-system bug repros from a single seed; every component derives the same trajectory.</div>
+                </div>
+                <div class="stack-layer accent">
+                    <div class="stack-label">L4 &mdash; LB / EDGE</div>
+                    <div class="stack-body"><strong>HashDoS-Resistant Hashing.</strong> One-cycle keyed hash for load-balancer flow tables. No SipHash latency, no per-packet crypto cost.</div>
+                </div>
+                <div class="stack-layer">
+                    <div class="stack-label">VM / BOOT</div>
+                    <div class="stack-body"><strong>Stateless Seeding.</strong> Boot storms in confidential-computing fleets stop starving the kernel entropy pool &mdash; each VM derives high-quality entropy from its launch seed.</div>
+                </div>
+                <div class="stack-layer">
+                    <div class="stack-label">SILICON</div>
+                    <div class="stack-body"><strong>~686 logic cells, &lt;10 &micro;W, 1-cycle.</strong> Same hardware block serves all four layers above.</div>
+                </div>
+
+                <div class="metric-row">
+                    <div class="metric">
+                        <span class="metric-value">1 cycle</span>
+                        <span class="metric-label">Hash / Token Latency</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value">0 RTT</span>
+                        <span class="metric-label">No Coordination Required</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value">~5&times;</span>
+                        <span class="metric-label">Smaller than AES-128 (FPGA)</span>
+                    </div>
+                </div>
+            </div>
+
+            <p class="callout">
+                <strong>How it works:</strong> The recurrence $S_{t+1} = \mathrm{Fold}(qS_t + d)$ is reused with different inputs at each layer &mdash; the flow 5-tuple at L4, the boot seed at VM, the trace ID at L7. Because the underlying primitive is keyed and non-linear, a flooding adversary cannot pre-compute hash collisions (HashDoS); because it is deterministic given the seed, debug replay is exact.
+            </p>
+        </section>
+
+        <section id="specs">
+            <h2>2. Capabilities &amp; Integration</h2>
+            <div class="grid-text">
+                <div class="feature-card">
+                    <h3>HashDoS-Resistant Load Balancing</h3>
+                    <p>Replace SipHash on the LB hot path. Drift provides keyed, non-linear hashing at 1-cycle latency; an adversary spraying packets cannot induce collision storms because the key rotates per epoch off the same drift state.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Seedable Deterministic Replay</h3>
+                    <p>For distributed-system bug repro: store the launch seed, re-derive every random decision across services. No central recorder, no time-series capture &mdash; the seed reproduces the trajectory exactly.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Stateless Seeding for VM Boot Storms</h3>
+                    <p>Confidential-computing fleets and serverless platforms hit "entropy starvation" at wake-up. Drift provides each VM with a high-quality stream from a single launch seed &mdash; no /dev/random blocking, no boot-time hangs.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>One Block, Four Use Cases</h3>
+                    <p>The same logic block serves entropy, load-balancer hashing, session tokens, and replay. Fewer crypto subsystems to provision, audit, and key-rotate &mdash; a meaningful reduction in attack surface for platform teams.</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <p class="callout" style="margin-top: 40px;">
+                <strong>Status:</strong> TRL-5 &mdash; FPGA-verified across &gt;24 billion cycles of hardware/software lockstep. Implementation-safety result machine-checked in Lean 4 (carry-bound theorem); cryptographic security pursued separately via independent cryptanalytic peer review.
+            </p>
+        </section>
+
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Drift Systems Inc. <br> Systems Architect: Lukas Cain</p>
+        </div>
+    </footer>
+
+</body>
+</html>
