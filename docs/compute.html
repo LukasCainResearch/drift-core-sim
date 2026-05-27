@@ -107,6 +107,30 @@
 
         footer { border-top: 1px solid rgba(255,255,255,0.1); padding: 40px 0; margin-top: 80px; text-align: center; font-size: 0.9rem; color: #666; }
         @media (max-width: 900px) { h1 { font-size: 2.2rem; } .grid-display { grid-template-columns: 1fr; } .grid-text { grid-template-columns: 1fr; } }
+        /* Scrollable Lean code container */
+        .lean-scroll {
+            max-height: 380px;
+            overflow-y: auto;
+            overflow-x: auto;
+            border: 1px solid rgba(0,255,255,0.25);
+            border-radius: 4px;
+            background: #050505;
+            margin: 1.5rem 0;
+        }
+        .lean-scroll pre {
+            margin: 0;
+            padding: 16px;
+            background: transparent;
+            border: none;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            white-space: pre;
+        }
+        .lean-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
+        .lean-scroll::-webkit-scrollbar-track { background: #111; }
+        .lean-scroll::-webkit-scrollbar-thumb { background: rgba(0,255,255,0.3); border-radius: 4px; }
+        .lean-scroll::-webkit-scrollbar-thumb:hover { background: rgba(0,255,255,0.5); }
     </style>
 </head>
 <body>
@@ -191,7 +215,7 @@
             <p>To guarantee that our "Chaotic" core is safe for critical infrastructure, we formally verify its bounds.
             The <strong>Carry Uniformity Theorem</strong> proves that the core's internal state is governed by a finite automaton, preventing infinite loops or undefined behavior.</p>
             
-            <pre><code><span class="lean-comment">-- File: CarryUniformity.lean</span>
+            <div class="lean-scroll"><pre><code><span class="lean-comment">-- File: CarryUniformity.lean</span>
 <span class="lean-comment">-- Verified: Dec 17, 2025 (Lean 4.3.0)</span>
 <span class="lean-comment">-- Purpose: Proves the Drift Core carry propagation is bounded ≤ 2.</span>
 
@@ -223,7 +247,7 @@
     
   <span class="lean-keyword">exact</span> h_div
 
-<span class="lean-keyword">end</span> DriftCore</code></pre>
+<span class="lean-keyword">end</span> DriftCore</code></pre></div>
             <a href="https://github.com/LukasCainResearch/drift-core-sim" class="btn btn-outline" style="border-color:var(--cyan); color:var(--cyan);">
                 VIEW FULL SOURCE ON GITHUB &rarr;
             </a>

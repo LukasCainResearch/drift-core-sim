@@ -77,6 +77,30 @@
             h1 { font-size: 2.5rem; }
             .grid { grid-template-columns: 1fr; }
         }
+        /* Scrollable Lean code container */
+        .lean-scroll {
+            max-height: 380px;
+            overflow-y: auto;
+            overflow-x: auto;
+            border: 1px solid rgba(0,255,255,0.25);
+            border-radius: 4px;
+            background: #050505;
+            margin: 1.5rem 0;
+        }
+        .lean-scroll pre {
+            margin: 0;
+            padding: 16px;
+            background: transparent;
+            border: none;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            white-space: pre;
+        }
+        .lean-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
+        .lean-scroll::-webkit-scrollbar-track { background: #111; }
+        .lean-scroll::-webkit-scrollbar-thumb { background: rgba(0,255,255,0.3); border-radius: 4px; }
+        .lean-scroll::-webkit-scrollbar-thumb:hover { background: rgba(0,255,255,0.5); }
     </style>
 </head>
 <body>
@@ -143,7 +167,7 @@
             <h2>3. Formal Verification: Laminar State Detection</h2>
             <p>We define "Laminar" (insecure) states formally in <strong>Lean 4</strong>. This definition allows us to mathematically prove that our architecture detects and rejects low-entropy inputs.</p>
             
-            <pre><code><span class="lean-comment">-- Verified File: ABCproject.lean</span>
+            <div class="lean-scroll"><pre><code><span class="lean-comment">-- Verified File: ABCproject.lean</span>
 <span class="lean-comment">-- Defines the relationship between bit-disjointness and binomial parity (Kummer's Theorem).</span>
 
 <span class="lean-keyword">import</span> Mathlib
@@ -167,7 +191,7 @@ Mathematically, this is the base-2 Lucas/Kummer statement.
 <span class="lean-keyword">axiom</span> <span class="lean-def">laminar_implies_odd_binomial</span> (a b : ℕ) :
   isLaminar a b ↔ ¬ (2 ∣ Nat.choose (a + b) a)
 
-<span class="lean-keyword">end</span> AbcProject</code></pre>
+<span class="lean-keyword">end</span> AbcProject</code></pre></div>
             <p style="font-size: 0.9rem; color: #666;">This axiom formally links the "Bitwise" world of silicon to the "Combinatorial" world of Number Theory, providing a rigorous definition for entropy quality.</p>
         </section>
 
