@@ -171,7 +171,7 @@
         <section class="hero">
             <span class="eyebrow">AEROSPACE & LEO</span>
             <h1>Radiation-Hardened<br>Entropy Sources</h1>
-            <p>Space is hostile to analog electronics. Drift Systems provides a pure-digital entropy source that resists Single Event Upsets (SEUs) and operates reliably from -270°C to +125°C without shielding.</p>
+            <p>Space is hostile to analog electronics. Drift Systems provides a pure-digital entropy source whose architecture detects Single Event Upsets in 1 cycle without TMR (architectural; not yet beam-tested), and whose digital logic operates across the -270°C to +125°C ambient range without analog drift. Total radiation tolerance still depends on the host FPGA process (we target rad-hard Xilinx/Microsemi parts); this page is about the entropy block itself.</p>
             <br>
             <a href="#sim" class="btn">TEST RADIATION RESILIENCE</a>
         </section>
@@ -219,7 +219,7 @@
             </div>
 
             <p style="font-size: 0.95rem; border-left: 2px solid var(--border); padding-left: 15px; color: var(--muted2);">
-                <strong style="color:var(--text);">Observation:</strong> When you inject a fault, the <strong>Standard System</strong> detects the corruption and forces a "Safety Reset" (Downtime). The <strong>Drift Core</strong> absorbs the bit flip. Because the mapping $f(x)$ is strongly mixing, the error is diffused into valid noise in 1 cycle. No reboot required.
+                <strong style="color:var(--text);">Observation:</strong> When you inject a fault, the <strong>Standard System</strong> detects the corruption and forces a "Safety Reset" (Downtime). The <strong>Drift Core</strong> absorbs the bit flip: the recurrence is empirically well-mixing within a small number of cycles (the formal mixing-rate / spectral-gap bound is Phase 4 research-level; see <a href="compute.html#proof" style="color: var(--cyan);">compute.html §3.6, §3.10</a>). No reboot required.
             </p>
         </section>
 
@@ -231,16 +231,16 @@
                     <p>Analog TRNGs (Thermal Noise) fail in the vacuum of space due to extreme temperature swings (-270°C to +125°C).  Drift is <strong>Pure Digital Logic</strong>, ensuring consistent entropy output regardless of ambient temperature.</p>
                 </div>
                 <div class="feature-card">
-                    <h3>Self-Healing Logic</h3>
-                    <p>As demonstrated, Drift does not require a "Watchdog Timer" to recover from SEUs. The chaotic attractor naturally pulls any perturbed state back into the high-entropy orbital path within nanoseconds.</p>
+                    <h3>Graceful SEU Recovery</h3>
+                    <p>Drift does not require a "Watchdog Timer" to recover from a single-bit upset: the perturbed state is absorbed into the recurrent set within a small number of iterations (architectural property; beam test pending). This is an availability property, not a fault-mask: TMR is still recommended for safety-critical control paths.</p>
                 </div>
                 <div class="feature-card">
                     <h3>Low SWaP (Size, Weight, Power)</h3>
-                    <p>With < 1000 Logic Cells and zero external components (no resistors/diodes), Drift integrates directly into existing FPGAs (Rad-Hard Xilinx/Microsemi), saving board space and weight.</p>
+                    <p>~580 LUT on Tang Primer 20K (DAD core, hardware-validated), with zero external analog components (no resistors/diodes). Drift drops into existing FPGAs &mdash; including rad-hard Xilinx/Microsemi parts &mdash; for total radiation tolerance via the host process.</p>
                 </div>
                 <div class="feature-card">
-                    <h3>Deep Space Telemetry</h3>
-                    <p>Secure the link to Voyager-class distances. Drift's deterministic nature allows for "Late Binding" key generation, ensuring that probes can re-sync with ground stations even after decades of silence.</p>
+                    <h3>Long-Loss Re-Sync</h3>
+                    <p>Drift's deterministic nature supports "Late Binding" key generation: with a stored seed and step count, a downlink can re-derive the expected state after extended communication blackout. (Practical re-sync window depends on mission protocol design; this is a property of the recurrence, not a turnkey product.)</p>
                 </div>
             </div>
         </section>

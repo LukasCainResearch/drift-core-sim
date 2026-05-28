@@ -195,7 +195,7 @@
         <section class="hero">
             <span class="eyebrow">BIO-TELEMETRY & IMPLANTS</span>
             <h1>Denial-of-Sleep<br>Protection</h1>
-            <p>Implantable devices are vulnerable to "Battery Drain" attacks. Drift Systems utilizes ultra-low power logic (nanowatts) to filter incoming commands, ensuring the main CPU only wakes for cryptographically valid requests.</p>
+            <p>Implantable devices are vulnerable to "Battery Drain" attacks. Drift Systems uses a compact combinatorial gate (architectural target: microwatts on FPGA, nanowatt range on ASIC implementation; precise power numbers are device-dependent) to filter incoming commands, so the main CPU only wakes for valid drift-sequenced requests.</p>
             <br>
             <a href="#sim" class="btn">TEST BATTERY RESILIENCE</a>
         </section>
@@ -264,7 +264,7 @@
             <div class="grid-text">
                 <div class="feature-card">
                     <h3>Zero-Power Wake-Up </h3>
-                    <p>Our combinatorial logic gate operates on nanowatts. It verifies the incoming "Drift Sequence" before enabling the main power rail. This physically prevents attackers from exhausting the battery via RF flooding.</p>
+                    <p>The combinatorial filter gate verifies the incoming "Drift Sequence" before enabling the main power rail (architectural target: nanowatt range on ASIC; FPGA-validated path is microwatt-range). This decouples valid-packet processing from invalid-packet rejection, blocking the wake-storm vector that drains the main rail in standard RF-front-end IMDs.</p>
                 </div>
                 <div class="feature-card">
                     <h3>Programmer Binding </h3>

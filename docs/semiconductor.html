@@ -201,7 +201,7 @@
                 </div>
                 <div class="feature-card">
                     <h3>Trojan Activation</h3>
-                    <p>Hardware Trojans often hide behind "rare trigger" logic (e.g., "activate only if A, B, and C are high"). Drift's <strong>Complete-Coverage Architecture</strong> &mdash; formally verified to route every input through one of three transition gates &mdash; exercises the state space far more uniformly than a deterministic or biased test pattern, raising the probability of triggering rare-state payloads during pre-silicon and post-silicon test.</p>
+                    <p>Hardware Trojans often hide behind "rare trigger" logic (e.g., "activate only if A, B, and C are high"). Drift's <strong>Complete-Coverage Architecture</strong> &mdash; formally verified to route every input through one of three transition gates &mdash; exercises the state space far more uniformly than a deterministic or biased test pattern, raising the probability of triggering rare-state payloads during pre-silicon and post-silicon test. Trojan triggers in unvisited recurrent-set states are not exposed by a single trajectory; chip-test runs deliberately use many seeds so that the union of trajectories covers a broad portion of the state space.</p>
                 </div>
                 <div class="feature-card">
                     <h3>Secure Scan Chains</h3>

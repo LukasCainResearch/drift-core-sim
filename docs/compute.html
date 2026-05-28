@@ -148,7 +148,7 @@
         <section class="hero">
             <span class="eyebrow">LOW-RESOURCE COMPUTE</span>
             <h1>Perfect Uniformity<br>at the Edge.</h1>
-            <p>Standard edge processors rely on Linear Feedback Shift Registers (LFSRs) for entropy, creating "Blind Spots" in optimization tasks. Drift Systems delivers <strong>CPU-Grade Uniformity (0.999)</strong> using &lt;700 Logic Gates.</p>
+            <p>Standard edge processors rely on Linear Feedback Shift Registers (LFSRs) for entropy, creating "Blind Spots" in optimization tasks. Drift Systems delivers <strong>CPU-Grade Uniformity (0.999)</strong> using <strong>~580 LUT</strong> on Tang Primer 20K (DAD core, hardware-validated).</p>
             <br>
             <a href="#sim" class="btn">RUN ANALYSIS</a>
             <a href="Uniformity_Whitepaper.pdf" class="btn btn-outline" target="_blank">READ WHITEPAPER</a>
@@ -587,6 +587,55 @@
 
 <span class="lean-keyword">end</span> DriftCore</code></pre></div>
             <p style="font-size: 0.9rem; color: #999;">First formal *cryptographic-flavor* property in the verification chain. <strong>Bound is tight</strong> — for unit vectors <code style="font-family: var(--mono); font-size: 0.85rem;">e_0, …, e_19</code> the whitening output has exactly 2 set bits. A cryptographically meaningful avalanche bound would be <code style="font-family: var(--mono); font-size: 0.85rem;">≥ ~W/2</code>; the whitening alone does not achieve this. The driftStep arithmetic plus iteration is what produces the observed empirical diffusion; that remains research-level (Phase 4-B.3 full).</p>
+
+            <h3 style="margin-top: 2.5rem; font-size: 1.1rem; color: var(--cyan);">3.11 &mdash; Bijection on the Recurrent Set (RecurrentSet.lean)</h3>
+            <p>The <em>positive complement</em> to &sect;&nbsp;3.8 (Noninjectivity). The chain of iterated images <code style="font-family: var(--mono); font-size: 0.85rem;">Finset.univ ⊇ image(driftStep) ⊇ image(driftStep²) ⊇ …</code> is decreasing on a finite set, so it stabilizes within <code style="font-family: var(--mono); font-size: 0.85rem;">2^W</code> steps. Define the <strong>recurrent set</strong> <code style="font-family: var(--mono); font-size: 0.85rem;">R</code> as the stable value. Then <code style="font-family: var(--mono); font-size: 0.85rem;">driftStep|R</code> is a bijection of <code style="font-family: var(--mono); font-size: 0.85rem;">R</code>, and uniform measure on <code style="font-family: var(--mono); font-size: 0.85rem;">R</code> <em>is</em> preserved by the recurrence — with <code style="font-family: var(--mono); font-size: 0.85rem;">|R| ≤ 2^(W-1)</code>.</p>
+
+            <div class="lean-scroll"><pre><code><span class="lean-comment">-- File: RecurrentSet.lean (excerpt)</span>
+
+<span class="lean-keyword">namespace</span> DriftCore
+
+<span class="lean-comment">/-- Image of `driftStep` iterated `k` times on `Finset.univ`. -/</span>
+<span class="lean-keyword">def</span> <span class="lean-def">driftImage</span> (W : ℕ) : ℕ → Finset (Fin (2 ^ W))
+  | 0     =&gt; Finset.univ
+  | k + 1 =&gt; (driftImage W k).image (driftStep W)
+
+<span class="lean-comment">/-- Chain decreasing on a finite set ⇒ stabilizes within 2^W steps. -/</span>
+<span class="lean-keyword">theorem</span> <span class="lean-def">driftImage_stabilizes</span> :
+    ∃ N : ℕ, N ≤ 2 ^ W ∧ driftImage W N = driftImage W (N + 1)
+
+<span class="lean-comment">/-- The recurrent set: eventual image of the iteration. -/</span>
+<span class="lean-keyword">def</span> <span class="lean-def">recurrentSet</span> (W : ℕ) : Finset (Fin (2 ^ W)) := driftImage W (2 ^ W)
+
+<span class="lean-comment">/-- driftStep is fixed by image-on-recurrentSet. -/</span>
+<span class="lean-keyword">theorem</span> <span class="lean-def">recurrentSet_image_eq</span> :
+    (recurrentSet W).image (driftStep W) = recurrentSet W
+
+<span class="lean-comment">/-- driftStep restricted to recurrentSet is BIJECTIVE. -/</span>
+<span class="lean-keyword">theorem</span> <span class="lean-def">driftStep_bijOn_recurrentSet</span> :
+    Set.BijOn (driftStep W) ↑(recurrentSet W) ↑(recurrentSet W)
+
+<span class="lean-comment">/-- As an Equiv.Perm — useful for downstream measure-preserving args. -/</span>
+<span class="lean-keyword">noncomputable def</span> <span class="lean-def">driftStepEquivRecurrent</span> (W : ℕ) :
+    Equiv.Perm ↥(recurrentSet W) :=
+  Equiv.ofBijective (driftStepRestrict W) driftStepRestrict_bijective
+
+<span class="lean-comment">/-- The recurrent set fits in at most half the state space. -/</span>
+<span class="lean-keyword">theorem</span> <span class="lean-def">recurrentSet_card_le</span> (hW : 1 ≤ W) :
+    (recurrentSet W).card ≤ 2 ^ (W - 1)
+
+<span class="lean-keyword">end</span> DriftCore</code></pre></div>
+            <p style="font-size: 0.9rem; color: #999;">Together with &sect;&nbsp;3.8 this gives a clean structural picture: the recurrence has a finite transient (≤ <code style="font-family: var(--mono); font-size: 0.85rem;">2^W</code> steps) during which it collapses pairs of states, after which it settles into a cyclic permutation of the recurrent subset <code style="font-family: var(--mono); font-size: 0.85rem;">R</code> (with <code style="font-family: var(--mono); font-size: 0.85rem;">|R| ≤ 2^(W-1)</code>). Uniform measure on <code style="font-family: var(--mono); font-size: 0.85rem;">R</code> is preserved (immediate from the bijection); uniform measure on <code style="font-family: var(--mono); font-size: 0.85rem;">Fin (2^W)</code> is <strong>not</strong> (&sect;&nbsp;3.8). Quantifying <code style="font-family: var(--mono); font-size: 0.85rem;">R</code> beyond the <code style="font-family: var(--mono); font-size: 0.85rem;">≤ 2^(W-1)</code> bound remains Phase 4 research-level.</p>
+
+            <h3 style="margin-top: 2.5rem; font-size: 1.1rem; color: var(--cyan);">3.12 &mdash; Known Structural Properties (disclosure)</h3>
+            <p>The structural analysis above surfaces three load-bearing facts that diligence reviewers will check. We document them here so the answer is on the page, not in a follow-up email.</p>
+
+            <div style="border: 1px solid var(--border); background: var(--panel); padding: 20px 24px; margin: 1.5rem 0; border-radius: 4px;">
+                <p style="margin-bottom: 0.75rem;"><strong style="color: var(--cyan); font-family: var(--mono); font-size: 0.9rem;">(1) Zero is a fixed point.</strong> <code style="font-family: var(--mono); font-size: 0.85rem;">driftStep(0) = ((3·0 + 1) mod 2^W) / 2 = 0</code> (integer division). An orbit reaching <code style="font-family: var(--mono); font-size: 0.85rem;">0</code> is absorbed and the keystream stalls.</p>
+                <p style="margin-bottom: 0.75rem;"><strong style="color: var(--cyan); font-family: var(--mono); font-size: 0.9rem;">(2) Sole non-trivial predecessor of 0.</strong> The unique <code style="font-family: var(--mono); font-size: 0.85rem;">s* ≠ 0</code> with <code style="font-family: var(--mono); font-size: 0.85rem;">driftStep(s*) = 0</code> is <code style="font-family: var(--mono); font-size: 0.85rem;">s* = (2^W − 1) / 3</code>. For <code style="font-family: var(--mono); font-size: 0.85rem;">W = 128</code>, this is the specific 128-bit value <code style="font-family: var(--mono); font-size: 0.85rem;">113427455640312821154458202477256070485</code>. <code style="font-family: var(--mono); font-size: 0.85rem;">s*</code> is odd.</p>
+                <p style="margin-bottom: 0.75rem;"><strong style="color: var(--cyan); font-family: var(--mono); font-size: 0.9rem;">(3) RTL mitigation.</strong> The production RTL applies <code style="font-family: var(--mono); font-size: 0.85rem;">seed_data | 1</code> at load, which rules out seeding directly from <code style="font-family: var(--mono); font-size: 0.85rem;">0</code>. <strong>It does not rule out</strong> seeding from <code style="font-family: var(--mono); font-size: 0.85rem;">s*</code> (the OR-with-1 mask passes <code style="font-family: var(--mono); font-size: 0.85rem;">s*</code> through unchanged, because <code style="font-family: var(--mono); font-size: 0.85rem;">s*</code> is odd).</p>
+                <p style="margin-bottom: 0;"><strong style="color: var(--cyan); font-family: var(--mono); font-size: 0.9rem;">(4) Practical exposure.</strong> The probability a random orbit transits <code style="font-family: var(--mono); font-size: 0.85rem;">s*</code> at any given step is ≈ <code style="font-family: var(--mono); font-size: 0.85rem;">2^-128</code>. The empirical &gt;62B-cycle FPGA lockstep run never approaches <code style="font-family: var(--mono); font-size: 0.85rem;">0</code> or <code style="font-family: var(--mono); font-size: 0.85rem;">s*</code>, meaning the cycle the seed lands on does not include them in its basin. For non-cryptographic deployments (IoT optimization, structural RNG, BIST), the OR-with-1 mask plus astronomical transit probability cover practical operation. For cryptographic-strength claims, the existence of short cycles is a standard cryptanalytic probe and is correctly routed to <a href="entropy_barriers.html#research" style="color: var(--mint);">independent peer review</a> rather than to Lean.</p>
+            </div>
 
             <a href="https://github.com/LukasCainResearch/drift-core-sim" class="btn btn-outline" style="border-color:var(--cyan); color:var(--cyan);">
                 VIEW FULL SOURCE ON GITHUB &rarr;

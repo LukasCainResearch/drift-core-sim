@@ -151,7 +151,7 @@
         <section class="hero">
             <span class="eyebrow">CORE ARCHITECTURE</span>
             <h1>The Arithmetic Sieve</h1>
-            <p>We do not use static look-up tables. We use a <strong>Dynamic Covering System</strong>. Watch how the Drift Core routes every possible input state through a deterministic chaos gate, ensuring 100% state space coverage.</p>
+            <p>We do not use static look-up tables. We use a <strong>Dynamic Covering System</strong>. Every possible input state is routed through one of three deterministic transition gates &mdash; a routing-completeness property formally verified in Lean 4. (See note below: covering is a property of the front-end routing logic, distinct from per-orbit trajectory coverage of the iterated recurrence; the latter is bounded above by the recurrent set <code>R</code>, <a href="compute.html#proof" style="color: var(--cyan);">compute.html §3.11</a>.)</p>
             <br>
             <a href="#sim" class="btn">VISUALIZE MIXING</a>
         </section>
@@ -228,6 +228,8 @@
 
 <span class="lean-keyword">end</span> DriftCoverage</code></pre></div>
             <p style="font-size: 0.9rem; color: #999;">Both theorems are fully discharged in <code style="font-family: var(--mono); font-size: 0.85rem;">formal_verification/Completeness.lean</code> with no <code style="font-family: var(--mono); font-size: 0.85rem;">sorry</code> and no axioms beyond Mathlib's standard library. <code style="font-family: var(--mono); font-size: 0.85rem;">interval_cases (n % 4)</code> dispatches the four residue classes, and <code style="font-family: var(--mono); font-size: 0.85rem;">omega</code> closes each case via linear arithmetic.</p>
+
+            <p style="font-size: 0.9rem; color: #999; border-left: 2px solid var(--border); padding-left: 15px; margin-top: 1rem;"><strong style="color: var(--cyan); font-family: var(--mono); font-size: 0.85rem;">SCOPE NOTE.</strong> What this theorem proves: the routing logic at the front of the core is a complete, exclusive partition of the integers (no undefined input states, no shadow triggers). What it does <em>not</em> prove: that the iterated recurrence visits every state on a single orbit. The latter is the stronger "ergodicity" claim and is provably <strong>false</strong> in the strict measure-preserving sense on <code style="font-family: var(--mono); font-size: 0.85rem;">Fin (2^W)</code> &mdash; <code style="font-family: var(--mono); font-size: 0.85rem;">driftStep</code> is exactly 2-to-1 (<a href="compute.html#proof" style="color: var(--cyan);">compute.html §3.8</a>), so each orbit is confined to the recurrent set <code style="font-family: var(--mono); font-size: 0.85rem;">R</code> with <code style="font-family: var(--mono); font-size: 0.85rem;">|R| ≤ 2^(W-1)</code> (<a href="compute.html#proof" style="color: var(--cyan);">§3.11</a>). The covering theorem above is about routing completeness; it does not by itself establish per-orbit trajectory coverage of the iterated map.</p>
         </section>
 
     </div>

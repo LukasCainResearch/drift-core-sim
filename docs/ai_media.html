@@ -223,7 +223,7 @@
                 </div>
                 <div class="feature-card">
                     <h3>Drift-Incompatibility Detection</h3>
-                    <p>Generative AI models create pixels, not arithmetic history. A diffusion model cannot guess the internal state of a hardware drift core. Therefore, AI-generated content is fundamentally "Drift Incompatible" and rejected by player software.</p>
+                    <p>Generative AI models create pixels, not arithmetic history. A diffusion model has no access to the seed key bound at capture time, so it cannot reproduce the per-frame drift state. AI-generated content inserted into a Drift-bound stream therefore fails the chain check at the decoder. (Security reduces to the secrecy of the per-stream seed; under seed compromise the chain can be forged.)</p>
                 </div>
                 <div class="feature-card">
                     <h3>C2PA / CAI Hardening</h3>
