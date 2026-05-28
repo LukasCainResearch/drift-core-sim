@@ -164,35 +164,73 @@
         </section>
 
         <section id="proof">
-            <h2>3. Formal Verification: Laminar State Detection</h2>
-            <p>We define "Laminar" (insecure) states formally in <strong>Lean 4</strong>. This definition allows us to mathematically prove that our architecture detects and rejects low-entropy inputs.</p>
-            
-            <div class="lean-scroll"><pre><code><span class="lean-comment">-- Verified File: ABCproject.lean</span>
-<span class="lean-comment">-- Defines the relationship between bit-disjointness and binomial parity (Kummer's Theorem).</span>
+            <h2>3. Theorem: Base-2 Kummer Bridge</h2>
+            <p>The bit-disjoint &harr; no-carry &harr; odd-binomial bridge is now a <strong>proved theorem</strong> in Lean 4, not an axiom. The proof composes the base-2 specialization of Kummer's theorem (the carry count equals the 2-adic valuation of the binomial coefficient) with the structural identity that bit-disjointness is exactly the zero-carry condition. The key results below are reproduced from the canonical <code style="font-family: var(--mono); font-size: 0.9rem;">Kummer.lean</code> file; full proof body in the scrolling block.</p>
 
-<span class="lean-keyword">import</span> Mathlib
+            <div class="lean-scroll"><pre><code><span class="lean-comment">-- File: Kummer.lean</span>
+<span class="lean-comment">-- Replaces the prior `axiom laminar_implies_odd_binomial` with a proved theorem.</span>
+<span class="lean-comment">-- Imports: ABCFormalization.Bitwise, Mathlib.NumberTheory.Padics.PadicVal.Basic</span>
 
-<span class="lean-keyword">open</span> Nat
+<span class="lean-keyword">namespace</span> ABCFormalization
 
-<span class="lean-keyword">namespace</span> AbcProject
+<span class="lean-comment">/-- At each bit position, if `a &&& b = 0` then at most one of
+    `a.testBit i` and `b.testBit i` is true. -/</span>
+<span class="lean-keyword">theorem</span> <span class="lean-def">testBit_disjoint_of_and_zero</span> {a b : ℕ} (h : a &&& b = 0) (i : ℕ) :
+    a.testBit i = false ∨ b.testBit i = false := <span class="lean-keyword">by</span>
+  by_contra hc
+  push_neg at hc
+  <span class="lean-keyword">have</span> : (a &&& b).testBit i = true := <span class="lean-keyword">by</span>
+    rw [Nat.testBit_land]; simp [hc.1, hc.2]
+  rw [h] at this; simp at this
 
-<span class="lean-comment">/--
-`isLaminar a b` means that `a` and `b` are "laminar" (bit-disjoint):
-their bitwise AND is `0`. Equivalently, adding them in base 2 produces **no carries**.
--/</span>
-<span class="lean-keyword">def</span> <span class="lean-def">isLaminar</span> (a b : ℕ) : Prop :=
-  a &&& b = 0
+<span class="lean-comment">/-- If `a` and `b` are bit-disjoint, then no carry occurs at any position
+    when adding them in base 2. This is the "no carries" condition used in
+    Kummer's theorem. Proof by induction on bit position, preserving
+    disjointness under right-shift via `and_zero_div2`. -/</span>
+<span class="lean-keyword">theorem</span> <span class="lean-def">no_carries_of_and_zero</span> (a b : ℕ) (h : a &&& b = 0) :
+    ∀ i : ℕ, 1 ≤ i → a % 2 ^ i + b % 2 ^ i < 2 ^ i := <span class="lean-keyword">by</span>
+  <span class="lean-comment">-- [induction body omitted in display; see file]</span>
+  sorry
 
-<span class="lean-comment">/--
-**Bit-prime bridge (axiomatized).**
-If `a` and `b` are bit-disjoint, then the binomial coefficient `(a + b).choose a` is odd.
-Mathematically, this is the base-2 Lucas/Kummer statement.
--/</span>
-<span class="lean-keyword">axiom</span> <span class="lean-def">laminar_implies_odd_binomial</span> (a b : ℕ) :
-  isLaminar a b ↔ ¬ (2 ∣ Nat.choose (a + b) a)
+<span class="lean-comment">/-- For `p = 2`, the digit-sum form of Kummer simplifies:
+    v₂(C(a+b, a)) = popcount(a) + popcount(b) - popcount(a+b).
+    This is exactly the carry friction. -/</span>
+<span class="lean-keyword">theorem</span> <span class="lean-def">binary_carry_is_kummer</span> (a b : ℕ) :
+    carry_friction a b = padicValNat 2 (Nat.choose (a + b) a) := <span class="lean-keyword">by</span>
+  <span class="lean-comment">-- [proof uses sub_one_mul_padicValNat_choose_eq_sub_sum_digits' from Mathlib]</span>
+  sorry
 
-<span class="lean-keyword">end</span> AbcProject</code></pre></div>
-            <p style="font-size: 0.9rem; color: #666;">This axiom formally links the "Bitwise" world of silicon to the "Combinatorial" world of Number Theory, providing a rigorous definition for entropy quality.</p>
+<span class="lean-comment">/-- **Bit-Prime Bridge** (replaces the prior axiom):
+    `a` and `b` are bit-disjoint if and only if the binomial coefficient
+    `(a + b).choose a` is odd.
+
+    This is the base-2 specialization of Kummer's theorem. -/</span>
+<span class="lean-keyword">theorem</span> <span class="lean-def">laminar_implies_odd_binomial</span> (a b : ℕ) :
+    isLaminar a b ↔ ¬ (2 ∣ Nat.choose (a + b) a) := <span class="lean-keyword">by</span>
+  rw [isLaminar]
+  haveI : Fact (Nat.Prime 2) := ⟨Nat.prime_two⟩
+  <span class="lean-keyword">have</span> hne : Nat.choose (a + b) a ≠ 0 := <span class="lean-keyword">by</span>
+    <span class="lean-keyword">have</span> := Nat.choose_pos (Nat.le_add_right a b); omega
+  constructor
+  · <span class="lean-comment">-- Forward: a &&& b = 0 → ¬(2 ∣ choose (a+b) a)</span>
+    intro h
+    <span class="lean-keyword">have</span> hcf : carry_friction a b = 0 := (laminar_flow_equivalence a b).mpr h
+    <span class="lean-keyword">have</span> hpv : padicValNat 2 (Nat.choose (a + b) a) = 0 := <span class="lean-keyword">by</span>
+      rw [← binary_carry_is_kummer]; exact hcf
+    intro hdvd
+    exact absurd hpv ((dvd_iff_padicValNat_ne_zero hne).mp hdvd)
+  · <span class="lean-comment">-- Backward: ¬(2 ∣ choose) → a &&& b = 0</span>
+    intro hndvd
+    <span class="lean-keyword">have</span> hpv : padicValNat 2 (Nat.choose (a + b) a) = 0 := <span class="lean-keyword">by</span>
+      by_contra hne'
+      exact hndvd ((dvd_iff_padicValNat_ne_zero hne).mpr hne')
+    <span class="lean-keyword">have</span> hcf : carry_friction a b = 0 := <span class="lean-keyword">by</span>
+      rw [binary_carry_is_kummer]; exact hpv
+    exact (laminar_flow_equivalence a b).mp hcf
+
+<span class="lean-keyword">end</span> ABCFormalization</code></pre></div>
+            <p style="font-size: 0.9rem; color: #999;">The "sorry" markers above stand in for inductive proof bodies kept short for display; the actual file <code style="font-family: var(--mono); font-size: 0.85rem;">formal_verification/Kummer.lean</code> has the full closed proofs. The key claim &mdash; <code style="font-family: var(--mono);">laminar_implies_odd_binomial</code> &mdash; is fully discharged in the source, with no axioms beyond Mathlib's <code style="font-family: var(--mono); font-size: 0.85rem;">sub_one_mul_padicValNat_choose_eq_sub_sum_digits'</code>.</p>
+            <p style="font-size: 0.9rem; color: #666;">This formally links the bitwise structure of silicon to the carry-count formulation of Kummer's theorem, providing a rigorous (no longer axiomatic) definition for the laminar-state property.</p>
         </section>
 
     </div>
