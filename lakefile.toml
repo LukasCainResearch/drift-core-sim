@@ -28,6 +28,11 @@ roots = [
   "WhiteningLinearity",
   "Avalanche",
   "Noninjectivity",
+  "RecurrentSet",
+  "NonceInjectivity",
+  "WhiteningWeakness",
+  "OutputChain",
+  "DriftRecurrenceSafe",
   # ABCFormalization-namespaced files (depend on the sibling closure below)
   "ABCFormalization.Kummer",
   "ABCFormalization.CarryTransducer",

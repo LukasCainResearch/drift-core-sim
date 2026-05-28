@@ -13,18 +13,21 @@ The **Drift Core (DC-100)** is a compact cryptographic primitive designed for ul
 
 Based on **Discrete Arithmetic Dynamics (DAD)**, the core conditions and expands entropy (paired with a standard hardware noise source) and produces signatures using a constrained affine transformation ($qS+d$) combined with bitwise state folding.
 
-### Key Performance Metrics (Tang Primer 20K — Gowin GW2A-18)
+### Key Performance Metrics
 
-Measured via Gowin synthesis on the Tang Primer 20K (GW2A-18). Hardware-validated across the two-FPGA demo suite (Tang Nano 9K + Tang Primer 20K) at bit-exact lockstep against the cycle-accurate software model.
+Hardware-validated on FPGA (Tang Primer 20K — Gowin GW2A-18) at bit-exact lockstep against the cycle-accurate software model across the two-FPGA demo suite. ASIC synthesis measured on the SKY130HD open-source PDK at the 13.56 MHz EPC Gen2 / ISO 14443 carrier (area-optimized).
 
-| Metric                    | Specification                                            | Competitive Advantage                 |
-| ------------------------- | -------------------------------------------------------- | ------------------------------------- |
-| **LUT Count (bare core)** | **~580 LUT** (cipher_engine.v, single direction)         | ~6× smaller than AES-128 (~3,500 LUT) |
-| **Latency**               | **1 Clock Cycle**                                        | Instant "Zero-Wait" Wakeup            |
-| **Multipliers**           | **ZERO (0)**                                             | Negligible dynamic power / heat       |
-| **Statistical quality**   | Passes **NIST SP 800-22** (in-house, all 15 families)    | Conditioned output                    |
+| Metric                    | Specification                                                                                | Competitive position                              |
+| ------------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| **Gate Count (bare core, ASIC)** | **2,828 GE** / 17,690.72 µm² (SKY130HD, area-opt, 13.56 MHz) — see [`ASIC_SYNTH_RESULTS.md`](ASIC_SYNTH_RESULTS.md) | Sub-AES (AES-128 ~3,000–3,500 GE); NIST-LWC class |
+| **LUT Count (bare core, FPGA)** | **~580 LUT** (cipher_engine.v, single direction, Tang Primer 20K)                       | ~6× smaller than AES-128 (~3,500 LUT)             |
+| **Latency**               | **1 Clock Cycle**                                                                            | Instant "Zero-Wait" Wakeup                        |
+| **Multipliers**           | **ZERO (0)**                                                                                 | Negligible dynamic power / heat                   |
+| **Statistical quality**   | Passes **NIST SP 800-22** (in-house, all 15 families)                                        | Conditioned output                                |
 
-**Note on deployed configurations.** The ~580 LUT figure is the bare DAD core. Real demonstrators wrap it in transport, framing, and tag logic; measured full-bidirectional demo footprints range from ~900 LUT (Rolling Identity RoT) to ~2,400 LUT (Secure Link). See `formal_verification/` and the two-FPGA demo suite for per-configuration synth reports.
+**Envelope verdict (Phase 0).** The 2,828 GE figure passes the NIST-LWC IoT envelope (<3,000 GE) and is comparable to Ascon (~2,300–3,000 GE) and smaller than AES-128 (~3,000–3,500 GE). It does *not* fit the passive-RFID smart-label envelope (<1,000 GE) or smart-dust envelope (<500 GE); a smart-label narrative is not available at this footprint. The honest positioning is **sub-AES, NIST-LWC class**.
+
+**Note on deployed configurations.** Both core figures (2,828 GE / ~580 LUT) are the bare DAD core. Real demonstrators wrap it in transport, framing, and tag logic; measured full-bidirectional demo footprints range from ~900 LUT (Rolling Identity RoT) to ~2,400 LUT (Secure Link) on the FPGA suite. See `formal_verification/` and the two-FPGA demo suite for per-configuration synth reports.
 
 **What is and isn't shown here.** Hardware-validated: deterministic synchronization, keystream generation, and rolling integrity tags between two devices on real silicon. *Not* shown on this FPGA suite: sub-10 µW ASIC power (projection only), radiation tolerance (architectural property; beam test pending), and cryptographic-strength against cryptanalysis (DAD is a lightweight, non-vetted construction; passing NIST SP 800-22 is not a security proof — independent cryptanalytic review is pursued separately).
 

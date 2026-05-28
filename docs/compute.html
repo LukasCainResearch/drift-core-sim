@@ -659,7 +659,129 @@
 
 <span class="lean-keyword">endmodule</span></code></pre></div>
 
-            <p style="font-size: 0.9rem; color: #999;"><strong>Lean correspondence.</strong> The two synthesis configurations correspond to two Lean definitions in <code style="font-family: var(--mono); font-size: 0.85rem;">DriftRecurrence.lean</code>: <code style="font-family: var(--mono); font-size: 0.85rem;">driftStep</code> (parameter off — bit-exact to the canonical recurrence, used by IoT variants) and <code style="font-family: var(--mono); font-size: 0.85rem;">driftStepSafe</code> (parameter on — equal to <code style="font-family: var(--mono); font-size: 0.85rem;">driftStep</code> off the singleton <code style="font-family: var(--mono); font-size: 0.85rem;">{s*}</code>, with <code style="font-family: var(--mono); font-size: 0.85rem;">driftStepSafe(s*) = driftStepSafe(0) = 1</code>). All downstream theorems (Fold, Whitening, Distribution, EventualPeriodicity, RecurrentSet) treat the step as an opaque deterministic function and flow through unchanged; <code style="font-family: var(--mono); font-size: 0.85rem;">Noninjectivity</code> requires a one-line adjustment to handle the <code style="font-family: var(--mono); font-size: 0.85rem;">{0, s*} → {1}</code> case but the 2-to-1 conclusion is preserved elsewhere.</p>
+            <p style="font-size: 0.9rem; color: #999;"><strong>Lean correspondence.</strong> The two synthesis configurations correspond to two Lean definitions: <code style="font-family: var(--mono); font-size: 0.85rem;">driftStep</code> in <code style="font-family: var(--mono); font-size: 0.85rem;">DriftRecurrence.lean</code> (parameter off — bit-exact to the canonical recurrence, used by IoT variants) and <code style="font-family: var(--mono); font-size: 0.85rem;">driftStepSafe</code> in <code style="font-family: var(--mono); font-size: 0.85rem;">DriftRecurrenceSafe.lean</code> (parameter on — equal to <code style="font-family: var(--mono); font-size: 0.85rem;">driftStep</code> off the trap inputs, with <code style="font-family: var(--mono); font-size: 0.85rem;">driftStepSafe(s*) = driftStepSafe(0) = 1</code>). The Lean file proves <code style="font-family: var(--mono); font-size: 0.85rem;">driftStepSafe_ne_zero</code> (every output is non-zero) and <code style="font-family: var(--mono); font-size: 0.85rem;">driftSafeOrbit_ne_zero</code> (the orbit-level extension: no iterate of <code style="font-family: var(--mono); font-size: 0.85rem;">driftStepSafe</code> from any seed reaches zero). All downstream theorems treat the step as an opaque deterministic function and flow through unchanged.</p>
+
+            <h3 style="margin-top: 2.5rem; font-size: 1.1rem; color: var(--cyan);">3.13 &mdash; End-to-End Output Chain (OutputChain.lean)</h3>
+            <p>The cipher's one-step output stage chains three operations: <code style="font-family: var(--mono); font-size: 0.85rem;">dataOut(state) = whiten(fold(driftStep(state)))</code> on <code style="font-family: var(--mono); font-size: 0.85rem;">BitVec 128 → BitVec 64</code>. Two compositional properties matter for honest framing of what one cycle reveals about the upstream state.</p>
+
+            <div class="lean-scroll"><pre><code><span class="lean-comment">-- File: OutputChain.lean (excerpt)</span>
+
+<span class="lean-keyword">namespace</span> DriftCore
+
+<span class="lean-comment">/-- `driftStep` on BitVec 128, matching dad_core.v lines 16-17 bit-for-bit. -/</span>
+<span class="lean-keyword">def</span> <span class="lean-def">driftStepBV</span> (s : BitVec 128) : BitVec 128 :=
+  ((s &lt;&lt;&lt; 1) + s + 1) &gt;&gt;&gt; 1
+
+<span class="lean-comment">/-- `fold` on BitVec 128 → BitVec 64, matching dad_core.v line 22. -/</span>
+<span class="lean-keyword">def</span> <span class="lean-def">foldBV</span> (x : BitVec 128) : BitVec 64 :=
+  x.setWidth 64 ^^^ (x &gt;&gt;&gt; 64).setWidth 64
+
+<span class="lean-comment">/-- The full one-step cipher output. -/</span>
+<span class="lean-keyword">def</span> <span class="lean-def">dataOut</span> (state : BitVec 128) : BitVec 64 :=
+  whiten (foldBV (driftStepBV state))
+
+<span class="lean-comment">/-- `fold` is GF(2)-linear. -/</span>
+<span class="lean-keyword">theorem</span> <span class="lean-def">foldBV_xor</span> (x y : BitVec 128) :
+    foldBV (x ^^^ y) = foldBV x ^^^ foldBV y := <span class="lean-keyword">by</span>
+  unfold foldBV; bv_decide
+
+<span class="lean-comment">/-- whiten ∘ fold is GF(2)-linear (composition of linear maps). -/</span>
+<span class="lean-keyword">theorem</span> <span class="lean-def">whiten_foldBV_xor</span> (x y : BitVec 128) :
+    whiten (foldBV (x ^^^ y)) = whiten (foldBV x) ^^^ whiten (foldBV y) := <span class="lean-keyword">by</span>
+  rw [foldBV_xor, whiten_xor]
+
+<span class="lean-comment">/-- **dataOut is *not* GF(2)-linear.** Concrete counterexample at (s, d) = (1, 2):
+    driftStep(1) = 2, driftStep(2) = 3, driftStep(3) = 5, but 2 ⊕ 3 = 1 ≠ 5. -/</span>
+<span class="lean-keyword">theorem</span> <span class="lean-def">dataOut_not_linear</span> :
+    dataOut (1 ^^^ 2) ≠ dataOut 1 ^^^ dataOut 2 := <span class="lean-keyword">by</span>
+  unfold dataOut driftStepBV foldBV whiten; bv_decide
+
+<span class="lean-comment">/-- **Linearity culprit.** driftStep_BV is the non-linear stage; whiten ∘ fold is linear. -/</span>
+<span class="lean-keyword">theorem</span> <span class="lean-def">driftStepBV_not_linear</span> :
+    driftStepBV (1 ^^^ 2) ≠ driftStepBV 1 ^^^ driftStepBV 2 := <span class="lean-keyword">by</span>
+  unfold driftStepBV; bv_decide
+
+<span class="lean-keyword">end</span> DriftCore</code></pre></div>
+            <p style="font-size: 0.9rem; color: #999;"><strong>Two consequences.</strong> (a) The output stage compresses 128 → 64 bits per step; <code style="font-family: var(--mono); font-size: 0.85rem;">whiten ∘ fold</code> factors through <code style="font-family: var(--mono); font-size: 0.85rem;">fold</code>, which is exactly <code style="font-family: var(--mono); font-size: 0.85rem;">2^64</code>-to-1 on <code style="font-family: var(--mono); font-size: 0.85rem;">BitVec 128</code>, so each one-cycle <code style="font-family: var(--mono); font-size: 0.85rem;">data_out</code> reveals at most 64 bits' worth of information about the upstream state regardless of what <code style="font-family: var(--mono); font-size: 0.85rem;">driftStep</code> does. The remaining 64 bits of state stay hidden per cycle. (b) Any non-trivial cryptographic property of the Drift Core must trace back to the carries in <code style="font-family: var(--mono); font-size: 0.85rem;">driftStep</code>, not to the output-stage cascade. Whether <code style="font-family: var(--mono); font-size: 0.85rem;">driftStep</code>'s non-linearity is <em>cryptographically</em> sufficient remains independent peer review.</p>
+
+            <h3 style="margin-top: 2.5rem; font-size: 1.1rem; color: var(--cyan);">3.14 &mdash; Nonce Injectivity (NonceInjectivity.lean)</h3>
+            <p>The Drift Cipher Engine (<code style="font-family: var(--mono); font-size: 0.85rem;">cipher_engine.v</code> line 57) computes the seed state as <code style="font-family: var(--mono); font-size: 0.85rem;">seed_state = SECRET ^ nonce</code>. We prove the elementary but load-bearing protocol property: this is a bijection in the nonce. Hence two distinct nonces produce two distinct seed-states.</p>
+
+            <div class="lean-scroll"><pre><code><span class="lean-comment">-- File: NonceInjectivity.lean (excerpt)</span>
+
+<span class="lean-keyword">namespace</span> DriftCore
+
+<span class="lean-comment">/-- seedState SECRET nonce = SECRET ⊕ nonce.
+    Matches cipher_engine.v line 57: seed_q ≤ SECRET ^ nonce. -/</span>
+<span class="lean-keyword">def</span> <span class="lean-def">seedState</span> (secret nonce : BitVec 128) : BitVec 128 :=
+  secret ^^^ nonce
+
+<span class="lean-comment">/-- XOR-is-its-own-inverse applied at the seed-state. -/</span>
+<span class="lean-keyword">theorem</span> <span class="lean-def">seedState_involutive</span> (secret nonce : BitVec 128) :
+    seedState secret (seedState secret nonce) = nonce := <span class="lean-keyword">by</span>
+  unfold seedState; bv_decide
+
+<span class="lean-comment">/-- For any fixed SECRET, seedState is a bijection on the nonce space. -/</span>
+<span class="lean-keyword">theorem</span> <span class="lean-def">seedState_bijective</span> (secret : BitVec 128) :
+    Function.Bijective (seedState secret) := <span class="lean-keyword">by</span>
+  refine ⟨?_, ?_⟩
+  · <span class="lean-keyword">intro</span> a b h
+    <span class="lean-keyword">have</span> : seedState secret (seedState secret a) = seedState secret (seedState secret b) := <span class="lean-keyword">by</span> rw [h]
+    rwa [seedState_involutive, seedState_involutive] <span class="lean-keyword">at</span> this
+  · <span class="lean-keyword">intro</span> y; exact ⟨seedState secret y, seedState_involutive secret y⟩
+
+<span class="lean-comment">/-- **Distinct nonces ⇒ distinct seed-states**, phrased for protocol use. -/</span>
+<span class="lean-keyword">theorem</span> <span class="lean-def">seedState_distinct_of_distinct</span> (secret : BitVec 128)
+    {n1 n2 : BitVec 128} (h : n1 ≠ n2) :
+    seedState secret n1 ≠ seedState secret n2 :=
+  fun heq =&gt; h ((seedState_bijective secret).injective heq)
+
+<span class="lean-comment">/-- **Protocol soundness (seed level).** For a fixed SECRET, the seed-state map
+    preserves cardinality on nonce sets — i.e. a nonce schedule of N distinct
+    nonces yields N distinct seed-states. -/</span>
+<span class="lean-keyword">theorem</span> <span class="lean-def">seedState_protocol_soundness</span>
+    (secret : BitVec 128) (nonces : Finset (BitVec 128)) :
+    (nonces.image (seedState secret)).card = nonces.card :=
+  Finset.card_image_of_injective _ (seedState_bijective secret).injective
+
+<span class="lean-keyword">end</span> DriftCore</code></pre></div>
+            <p style="font-size: 0.9rem; color: #999;"><strong>What this gives you.</strong> Nonce uniqueness ⇒ keystream uniqueness, at the seed-state level. Two sessions using distinct nonces under the same SECRET produce structurally distinct starting states, justifying the standard "nonce-as-IV" pattern. A uniform nonce distribution maps to a uniform seed-state distribution by bijection. <strong>What this does *not* establish.</strong> Because <code style="font-family: var(--mono); font-size: 0.85rem;">driftStep</code> is 2-to-1 (&sect;&nbsp;3.8), two distinct seed-states can in principle merge to the same orbit after one step — the protocol-level guarantee here ends at the seed-state. It also does not establish that SECRET is hidden from an observer of outputs; that's cryptographic security and remains gated on independent peer review.</p>
+
+            <h3 style="margin-top: 2.5rem; font-size: 1.1rem; color: var(--cyan);">3.15 &mdash; Honest Framing: Whitening Has Trivial Linear-Cryptanalysis Resistance (WhiteningWeakness.lean)</h3>
+            <p>The negative companion to &sect;&nbsp;3.9 (WhiteningLinearity) and &sect;&nbsp;3.10 (Avalanche). GF(2)-linearity is the worst possible property to have against linear cryptanalysis: for any GF(2)-linear map and any output bit, there exists a <em>deterministic</em> linear approximation in the inputs with bias 1. We exhibit it concretely.</p>
+
+            <div class="lean-scroll"><pre><code><span class="lean-comment">-- File: WhiteningWeakness.lean (excerpt)</span>
+
+<span class="lean-keyword">namespace</span> DriftCore
+
+<span class="lean-comment">/-- **Linear weakness, bit 0.** The lowest output bit of the whitening is the XOR
+    of six specific input bits. Holds for ALL 64-bit inputs — deterministic,
+    not statistical. An attacker observing whiten(x)[0] learns the value of
+    the 6-bit XOR with probability 1. -/</span>
+<span class="lean-keyword">theorem</span> <span class="lean-def">whiten_bit0_linear</span> (x : BitVec 64) :
+    (whiten x).getLsbD 0 =
+      x.getLsbD 0 ^^ x.getLsbD 20 ^^ x.getLsbD 24 ^^
+      x.getLsbD 34 ^^ x.getLsbD 44 ^^ x.getLsbD 58 := <span class="lean-keyword">by</span>
+  unfold whiten; bv_decide
+
+<span class="lean-comment">/-- **Linear weakness, bit 1.** Same 6-bit-XOR structure, shifted by one position. -/</span>
+<span class="lean-keyword">theorem</span> <span class="lean-def">whiten_bit1_linear</span> (x : BitVec 64) :
+    (whiten x).getLsbD 1 =
+      x.getLsbD 1 ^^ x.getLsbD 21 ^^ x.getLsbD 25 ^^
+      x.getLsbD 35 ^^ x.getLsbD 45 ^^ x.getLsbD 59 := <span class="lean-keyword">by</span>
+  unfold whiten; bv_decide
+
+<span class="lean-comment">/-- **Differential form.** The output-difference bit-0 is a deterministic XOR of
+    input-difference bits, by GF(2)-linearity. -/</span>
+<span class="lean-keyword">theorem</span> <span class="lean-def">whiten_diff_bit0</span> (x x' : BitVec 64) :
+    (whiten x ^^^ whiten x').getLsbD 0 =
+      (x ^^^ x').getLsbD 0 ^^ (x ^^^ x').getLsbD 20 ^^
+      (x ^^^ x').getLsbD 24 ^^ (x ^^^ x').getLsbD 34 ^^
+      (x ^^^ x').getLsbD 44 ^^ (x ^^^ x').getLsbD 58 := <span class="lean-keyword">by</span>
+  rw [whiten_diff]; exact whiten_bit0_linear (x ^^^ x')
+
+<span class="lean-keyword">end</span> DriftCore</code></pre></div>
+            <p style="font-size: 0.9rem; color: #999;"><strong>The honest claim.</strong> Every output bit of the whitening is a known, fixed, deterministic XOR of input bits — the absolute worst behavior against linear cryptanalysis. Combined with &sect;&nbsp;3.9 (GF(2)-linearity) and &sect;&nbsp;3.10 (avalanche bound tight at ≥ 2), this constrains the whitening's role: it provides structural shuffling and distribution-preservation (&sect;&nbsp;3.5, 3.6), but it cannot, on its own, provide any cryptographic strength in the Shannon sense. Any cryptographic strength of the full Drift Core must come from the non-linear carries in <code style="font-family: var(--mono); font-size: 0.85rem;">driftStep</code> (&sect;&nbsp;3.13, the <code style="font-family: var(--mono); font-size: 0.85rem;">driftStepBV_not_linear</code> counterexample). Whether that non-linearity is cryptographically sufficient is not a Lean question and remains <a href="entropy_barriers.html#research" style="color: var(--mint);">gated on independent peer review</a>.</p>
 
             <a href="https://github.com/LukasCainResearch/drift-core-sim" class="btn btn-outline" style="border-color:var(--cyan); color:var(--cyan);">
                 VIEW FULL SOURCE ON GITHUB &rarr;
