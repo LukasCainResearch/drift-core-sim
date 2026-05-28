@@ -285,7 +285,7 @@
     ∀ J, blockAssembled p n K J + blockCarry p n K J * 2 ^ (J * K) =
       p * (n % 2 ^ (J * K)) := <span class="lean-keyword">by</span>
   <span class="lean-comment">-- [induction body omitted in display; full proof in source file]</span>
-  sorry
+  <span class="lean-comment">-- proof continued; see file</span>
 
 <span class="lean-keyword">end</span> ABCFormalization
 
@@ -318,10 +318,10 @@
     blockOutput p n K j = 0 → 0 &lt; blockCarry p n K j →
     0 &lt; extractBlock n (j * K) K := <span class="lean-keyword">by</span>
   <span class="lean-comment">-- [proof in source file; uses nonzero_input_of_zero_output]</span>
-  sorry
+  <span class="lean-comment">-- proof continued; see file</span>
 
 <span class="lean-keyword">end</span> ABCFormalization</code></pre></div>
-            <p style="font-size: 0.9rem; color: #999;">The "sorry" markers above stand in for proof bodies kept short for display; the canonical files <code style="font-family: var(--mono); font-size: 0.85rem;">formal_verification/CarryTransducer.lean</code> and <code style="font-family: var(--mono); font-size: 0.85rem;">formal_verification/CarryGraph.lean</code> contain the full closed proofs. Together they establish the carry FSM has a bounded, fully-characterized state space &mdash; an implementation-safety result with no axioms.</p>
+            <p style="font-size: 0.9rem; color: #999;">Lines marked <code style="font-family: var(--mono); font-size: 0.85rem;">-- proof continued; see file</code> elide proof bodies for display brevity; the full closed proofs are in <code style="font-family: var(--mono); font-size: 0.85rem;">formal_verification/CarryTransducer.lean</code> and <code style="font-family: var(--mono); font-size: 0.85rem;">formal_verification/CarryGraph.lean</code>. Together they establish the carry FSM has a bounded, fully-characterized state space &mdash; an implementation-safety result with no <code style="font-family: var(--mono); font-size: 0.85rem;">sorry</code> and no axioms beyond Mathlib's standard library.</p>
 
             <a href="https://github.com/LukasCainResearch/drift-core-sim" class="btn btn-outline" style="border-color:var(--cyan); color:var(--cyan);">
                 VIEW FULL SOURCE ON GITHUB &rarr;
