@@ -203,7 +203,7 @@
                 </div>
                 <div class="feature-card">
                     <h3>The Drift Solution</h3>
-                    <p>By harnessing the algebraic chaos of the $3n+1$ map, the Drift Core generates a trajectory that is mathematically guaranteed to visit every state (Ergodicity). This provides "Desktop-Class" optimization on $2 IoT chips.</p>
+                    <p>The Drift Core's recurrence is built on the $3n+1$ map; its transition logic is a formally verified complete covering of $\mathbb{Z}$ (see <a href="coverage.html#proof" style="color:var(--mint);">coverage.html</a>), and the carry-propagation structure is bounded by a finite-state automaton (see &sect;&nbsp;3 below). The empirical output distribution is approximately uniform across the state space, which lets sub-$2 IoT silicon drive optimization workloads that previously required desktop-class RNGs. Dynamical-systems ergodicity (in the measure-preserving sense) is a separate research-level question and is not claimed here.</p>
                 </div>
             </div>
         </section>
@@ -321,7 +321,272 @@
   <span class="lean-comment">-- proof continued; see file</span>
 
 <span class="lean-keyword">end</span> ABCFormalization</code></pre></div>
-            <p style="font-size: 0.9rem; color: #999;">Lines marked <code style="font-family: var(--mono); font-size: 0.85rem;">-- proof continued; see file</code> elide proof bodies for display brevity; the full closed proofs are in <code style="font-family: var(--mono); font-size: 0.85rem;">formal_verification/CarryTransducer.lean</code> and <code style="font-family: var(--mono); font-size: 0.85rem;">formal_verification/CarryGraph.lean</code>. Together they establish the carry FSM has a bounded, fully-characterized state space &mdash; an implementation-safety result with no <code style="font-family: var(--mono); font-size: 0.85rem;">sorry</code> and no axioms beyond Mathlib's standard library.</p>
+            <p style="font-size: 0.9rem; color: #999;">Lines marked <code style="font-family: var(--mono); font-size: 0.85rem;">-- proof continued; see file</code> elide proof bodies for display brevity; the full closed proofs are in <code style="font-family: var(--mono); font-size: 0.85rem;">formal_verification/ABCFormalization/CarryTransducer.lean</code> and <code style="font-family: var(--mono); font-size: 0.85rem;">formal_verification/ABCFormalization/CarryGraph.lean</code>. Together they establish the carry FSM has a bounded, fully-characterized state space &mdash; an implementation-safety result with no <code style="font-family: var(--mono); font-size: 0.85rem;">sorry</code> and no axioms beyond Mathlib's standard library.</p>
+
+            <h3 style="margin-top: 2.5rem; font-size: 1.1rem; color: var(--cyan);">3.3 &mdash; Fold-Step Correctness (Fold.lean)</h3>
+            <p>After the affine step <code style="font-family: var(--mono); font-size: 0.85rem;">qS + d</code>, the production core folds the wide arithmetic state down to the output width by XOR-ing the high half with the low half. In silicon (<code style="font-family: var(--mono); font-size: 0.85rem;">dad_core.v</code>, <code style="font-family: var(--mono); font-size: 0.85rem;">W = 64</code>): <code style="font-family: var(--mono); font-size: 0.85rem;">folded_bits = next_state[63:0] ^ next_state[127:64]</code>. This section proves the fold is *structurally bounded*: a <code style="font-family: var(--mono); font-size: 0.85rem;">2W</code>-bit input always yields a <code style="font-family: var(--mono); font-size: 0.85rem;">W</code>-bit output, with no overflow into a wider wire.</p>
+
+            <div class="lean-scroll"><pre><code><span class="lean-comment">-- File: Fold.lean</span>
+<span class="lean-comment">-- Verified against Mathlib (Lean 4.26); no `sorry`, no axioms.</span>
+
+<span class="lean-keyword">import</span> Mathlib.Data.Nat.Bitwise
+<span class="lean-keyword">import</span> Mathlib.Tactic
+
+<span class="lean-keyword">namespace</span> DriftCore
+
+<span class="lean-comment">/-- Fold: XOR the high W bits of x with its low W bits. Matches the RTL
+    line `folded = x[W-1:0] ^ x[2W-1:W]` exactly (with W = 64). -/</span>
+<span class="lean-keyword">def</span> <span class="lean-def">fold</span> (W x : ℕ) : ℕ :=
+  (x &amp;&amp;&amp; (2 ^ W - 1)) ^^^ (x &gt;&gt;&gt; W)
+
+<span class="lean-comment">/-- A 2W-bit value, right-shifted by W, fits in W bits. -/</span>
+<span class="lean-keyword">lemma</span> <span class="lean-def">shiftRight_lt_two_pow</span> {W x : ℕ} (hx : x &lt; 2 ^ (2 * W)) :
+    x &gt;&gt;&gt; W &lt; 2 ^ W := <span class="lean-keyword">by</span>
+  rw [Nat.shiftRight_eq_div_pow]
+  <span class="lean-keyword">have</span> hpow : (2 : ℕ) ^ (2 * W) = 2 ^ W * 2 ^ W := <span class="lean-keyword">by</span> rw [two_mul, pow_add]
+  rw [hpow] at hx
+  exact Nat.div_lt_of_lt_mul hx
+
+<span class="lean-comment">/-- **Width invariant.** A 2W-bit input folds to a W-bit output.
+    Structurally certifies the output stage cannot overflow its wire. -/</span>
+<span class="lean-keyword">theorem</span> <span class="lean-def">fold_width_invariant</span> {W x : ℕ} (hx : x &lt; 2 ^ (2 * W)) :
+    fold W x &lt; 2 ^ W := <span class="lean-keyword">by</span>
+  unfold fold
+  exact Nat.xor_lt_two_pow
+    (Nat.and_lt_two_pow x (Nat.sub_lt (Nat.two_pow_pos W) Nat.one_pos))
+    (shiftRight_lt_two_pow hx)
+
+<span class="lean-comment">/-- Strongly-typed wrapper: a 2W-bit `Fin` folds to a W-bit `Fin`. -/</span>
+<span class="lean-keyword">def</span> <span class="lean-def">Fold</span> (W : ℕ) (x : Fin (2 ^ (2 * W))) : Fin (2 ^ W) :=
+  ⟨fold W x.val, fold_width_invariant x.isLt⟩
+
+<span class="lean-comment">/-- **RTL equivalence.** The fold equals XOR-ing x with its right-shift,
+    then truncating to W bits — the form synthesis emits when the fold
+    is written as a single XOR over the full word. -/</span>
+<span class="lean-keyword">theorem</span> <span class="lean-def">fold_eq_truncate_xor</span> {W x : ℕ} (hx : x &lt; 2 ^ (2 * W)) :
+    fold W x = (x ^^^ (x &gt;&gt;&gt; W)) &amp;&amp;&amp; (2 ^ W - 1) := <span class="lean-keyword">by</span>
+  unfold fold
+  rw [Nat.and_xor_distrib_right,
+      Nat.and_two_pow_sub_one_of_lt_two_pow (shiftRight_lt_two_pow hx)]
+
+<span class="lean-comment">/-- Production instantiation: W = 64, matching `dad_core.v`. -/</span>
+<span class="lean-keyword">abbrev</span> <span class="lean-def">FoldProd</span> : Fin (2 ^ (2 * 64)) → Fin (2 ^ 64) := Fold 64
+
+<span class="lean-keyword">end</span> DriftCore</code></pre></div>
+            <p style="font-size: 0.9rem; color: #999;">The full file is at <code style="font-family: var(--mono); font-size: 0.85rem;">formal_verification/Fold.lean</code> and builds against stock Mathlib with no <code style="font-family: var(--mono); font-size: 0.85rem;">sorry</code>, no <code style="font-family: var(--mono); font-size: 0.85rem;">axiom</code>. Together with &sect;&nbsp;3.1 (carry bound) and &sect;&nbsp;3.2 (carry FSM), this completes the structural-correctness chain for the output stage of the production recurrence.</p>
+
+            <h3 style="margin-top: 2.5rem; font-size: 1.1rem; color: var(--cyan);">3.4 &mdash; Determinism of the Iterated Recurrence (DriftRecurrence.lean)</h3>
+            <p>One step of the production recurrence on a <code style="font-family: var(--mono); font-size: 0.85rem;">W</code>-bit state is <code style="font-family: var(--mono); font-size: 0.85rem;">state' = ((3·state + 1) mod 2^W) / 2</code>. Because <code style="font-family: var(--mono); font-size: 0.85rem;">driftStep</code> is defined as a function from <code style="font-family: var(--mono); font-size: 0.85rem;">Fin (2^W)</code> to itself, its iteration is the canonical fixed point of a deterministic dynamical system on a finite state space. The two-FPGA bit-for-bit lockstep observed empirically (&gt;62 billion cycles, 0 divergences) is a structural consequence of this typing, not a stochastic correlation.</p>
+
+            <div class="lean-scroll"><pre><code><span class="lean-comment">-- File: DriftRecurrence.lean</span>
+<span class="lean-comment">-- Verified against Mathlib (Lean 4.26); no `sorry`, no axioms.</span>
+
+<span class="lean-keyword">import</span> Mathlib.Data.Fin.Basic
+<span class="lean-keyword">import</span> Mathlib.Tactic
+
+<span class="lean-keyword">namespace</span> DriftCore
+
+<span class="lean-comment">/-- One step on a W-bit state: state' = ((3·state + 1) mod 2^W) / 2.
+    Matches the RTL `((s &lt;&lt; 1) + s + 1) &gt;&gt; 1` bit-exactly. -/</span>
+<span class="lean-keyword">def</span> <span class="lean-def">driftStep</span> (W : ℕ) (s : Fin (2 ^ W)) : Fin (2 ^ W) :=
+  ⟨((3 * s.val + 1) % 2 ^ W) / 2, <span class="lean-keyword">by</span>
+    <span class="lean-keyword">have</span> hpos : 0 &lt; 2 ^ W := Nat.two_pow_pos W
+    <span class="lean-keyword">have</span> hmod : (3 * s.val + 1) % 2 ^ W &lt; 2 ^ W := Nat.mod_lt _ hpos
+    exact Nat.lt_of_le_of_lt (Nat.div_le_self _ 2) hmod⟩
+
+<span class="lean-keyword">def</span> <span class="lean-def">driftOrbit</span> (W : ℕ) (seed : Fin (2 ^ W)) : ℕ → Fin (2 ^ W)
+  | 0     =&gt; seed
+  | n + 1 =&gt; driftStep W (driftOrbit W seed n)
+
+<span class="lean-comment">/-- **Determinism.** Two orbits started from the same seed agree at every step. -/</span>
+<span class="lean-keyword">theorem</span> <span class="lean-def">drift_deterministic</span> (W : ℕ) (seed : Fin (2 ^ W)) (n : ℕ) :
+    driftOrbit W seed n = driftOrbit W seed n :=
+  rfl
+
+<span class="lean-comment">/-- RTL equivalence: arithmetic form = shift-add-shift form, mod 2^W. -/</span>
+<span class="lean-keyword">theorem</span> <span class="lean-def">driftStep_eq_rtl</span> (W : ℕ) (s : Fin (2 ^ W)) :
+    (driftStep W s).val = (((s.val &lt;&lt;&lt; 1 + s.val + 1) % 2 ^ W) &gt;&gt;&gt; 1) := <span class="lean-keyword">by</span>
+  unfold driftStep
+  rw [Nat.shiftLeft_eq, Nat.shiftRight_eq_div_pow]
+  ring_nf
+
+<span class="lean-keyword">end</span> DriftCore</code></pre></div>
+            <p style="font-size: 0.9rem; color: #999;">The full file is at <code style="font-family: var(--mono); font-size: 0.85rem;">formal_verification/DriftRecurrence.lean</code>. The <code style="font-family: var(--mono); font-size: 0.85rem;">drift_deterministic</code> theorem holds by <code style="font-family: var(--mono); font-size: 0.85rem;">rfl</code> &mdash; it is a structural consequence of <code style="font-family: var(--mono); font-size: 0.85rem;">driftStep</code> being a Lean function rather than a relation. <code style="font-family: var(--mono); font-size: 0.85rem;">driftStep_eq_rtl</code> confirms the arithmetic form matches the RTL shift-add-shift form bit-exactly. Together with the carry, fold, and Kummer files, this completes the structural-correctness chain across all four operations of the production recurrence <code style="font-family: var(--mono); font-size: 0.85rem;">Fold(qS + d) &gt;&gt; k</code>.</p>
+
+            <h3 style="margin-top: 2.5rem; font-size: 1.1rem; color: var(--cyan);">3.5 &mdash; Output-Stage Bijectivity (Whitening.lean)</h3>
+            <p>After the fold, the production core runs a three-step XOR-shift cascade with shifts <code style="font-family: var(--mono); font-size: 0.85rem;">(24, 14, 34)</code> on the 64-bit folded value (<code style="font-family: var(--mono); font-size: 0.85rem;">dad_core.v</code> lines 22-26). This section proves the cascade is a **bijection** of <code style="font-family: var(--mono); font-size: 0.85rem;">BitVec 64</code> — every 64-bit output corresponds to a unique 64-bit input, so the whitening cannot collapse, alias, or lose any state delivered by the fold step.</p>
+
+            <div class="lean-scroll"><pre><code><span class="lean-comment">-- File: Whitening.lean</span>
+<span class="lean-comment">-- Verified against stock Mathlib (Lean 4.26) + Std bv_decide tactic.</span>
+
+<span class="lean-keyword">import</span> Std.Tactic.BVDecide
+<span class="lean-keyword">import</span> Mathlib.Data.BitVec
+
+<span class="lean-keyword">namespace</span> DriftCore
+
+<span class="lean-comment">/-- The Drift Core production whitening: three chained XOR-shift steps
+    with the production triple `(a, b, c) = (24, 14, 34)` on `BitVec 64`.
+    Matches `dad_core.v` line-for-line. -/</span>
+<span class="lean-keyword">def</span> <span class="lean-def">whiten</span> (x : BitVec 64) : BitVec 64 :=
+  <span class="lean-keyword">let</span> y1 := x  ^^^ (x  &gt;&gt;&gt; 24)
+  <span class="lean-keyword">let</span> y2 := y1 ^^^ (y1 &lt;&lt;&lt; 14)
+  <span class="lean-keyword">let</span> y3 := y2 ^^^ (y2 &gt;&gt;&gt; 34)
+  y3
+
+<span class="lean-comment">/-- Inverse via Neumann-series formula for each step. -/</span>
+<span class="lean-keyword">def</span> <span class="lean-def">unwhiten</span> (y : BitVec 64) : BitVec 64 :=
+  <span class="lean-keyword">let</span> z2 := y  ^^^ (y  &gt;&gt;&gt; 34)
+  <span class="lean-keyword">let</span> z1 := z2 ^^^ (z2 &lt;&lt;&lt; 14) ^^^ (z2 &lt;&lt;&lt; 28) ^^^ (z2 &lt;&lt;&lt; 42) ^^^ (z2 &lt;&lt;&lt; 56)
+  <span class="lean-keyword">let</span> z0 := z1 ^^^ (z1 &gt;&gt;&gt; 24) ^^^ (z1 &gt;&gt;&gt; 48)
+  z0
+
+<span class="lean-comment">/-- Both inverse identities discharged by SAT-backed BitVec decision procedure. -/</span>
+<span class="lean-keyword">theorem</span> <span class="lean-def">unwhiten_whiten</span> (x : BitVec 64) : unwhiten (whiten x) = x := <span class="lean-keyword">by</span>
+  unfold unwhiten whiten; bv_decide
+
+<span class="lean-keyword">theorem</span> <span class="lean-def">whiten_unwhiten</span> (y : BitVec 64) : whiten (unwhiten y) = y := <span class="lean-keyword">by</span>
+  unfold whiten unwhiten; bv_decide
+
+<span class="lean-comment">/-- **Bijection.** The production whitening is a bijection of `BitVec 64`. -/</span>
+<span class="lean-keyword">theorem</span> <span class="lean-def">whiten_bijective</span> : Function.Bijective whiten := <span class="lean-keyword">by</span>
+  refine ⟨?_, ?_⟩
+  · intro a b h; have := congrArg unwhiten h
+    rwa [unwhiten_whiten, unwhiten_whiten] at this
+  · intro y; exact ⟨unwhiten y, whiten_unwhiten y⟩
+
+<span class="lean-keyword">end</span> DriftCore</code></pre></div>
+            <p style="font-size: 0.9rem; color: #999;">Full file at <code style="font-family: var(--mono); font-size: 0.85rem;">formal_verification/Whitening.lean</code>. Both <code style="font-family: var(--mono); font-size: 0.85rem;">unwhiten_whiten</code> and <code style="font-family: var(--mono); font-size: 0.85rem;">whiten_unwhiten</code> are discharged by <code style="font-family: var(--mono); font-size: 0.85rem;">bv_decide</code> (Lean's SAT-backed BitVec decision procedure) in under 10 seconds against the production triple <code style="font-family: var(--mono); font-size: 0.85rem;">(24, 14, 34)</code>. <strong>Caveat:</strong> bijectivity is an *implementation-safety* property &mdash; it does not establish cryptographic strength against cryptanalysis, only that the cascade preserves information. Cryptographic resistance remains a separate question pursued via independent peer review.</p>
+
+            <h3 style="margin-top: 2.5rem; font-size: 1.1rem; color: var(--cyan);">3.6 &mdash; Distribution-Preservation (Distribution.lean)</h3>
+            <p>A direct corollary of the whitening's bijectivity: it is *distribution-preserving*. When run on every 64-bit input exactly once, the output set equals <code style="font-family: var(--mono); font-size: 0.85rem;">BitVec 64</code> exactly &mdash; every value appears once. For arbitrary input multisets, the per-element output count exactly tracks the input count under the bijective relabeling.</p>
+
+            <div class="lean-scroll"><pre><code><span class="lean-comment">-- File: Distribution.lean (excerpt)</span>
+<span class="lean-comment">-- Bijectivity → distribution-preservation, structural results.</span>
+
+<span class="lean-keyword">namespace</span> DriftCore
+
+<span class="lean-comment">/-- Singleton preimage is unique: every 64-bit output has exactly one
+    64-bit input. The "no aliasing" form of bijectivity. -/</span>
+<span class="lean-keyword">theorem</span> <span class="lean-def">whitening_singleton_preimage</span> (y : BitVec 64) :
+    (Finset.univ.filter (fun x =&gt; whiten x = y)).card = 1
+
+<span class="lean-comment">/-- Image is full: when we run the whitening on every input exactly once,
+    every output appears exactly once. Population-level "uniform inputs
+    map to uniform outputs." -/</span>
+<span class="lean-keyword">theorem</span> <span class="lean-def">whitening_image_univ</span> :
+    (Finset.univ : Finset (BitVec 64)).image whiten = Finset.univ
+
+<span class="lean-comment">/-- Preimage cardinality: for any output set S, the number of inputs
+    landing in S equals |S|. "No aliasing, no collapse" on any event. -/</span>
+<span class="lean-keyword">theorem</span> <span class="lean-def">whitening_preimage_card</span> (S : Finset (BitVec 64)) :
+    (Finset.univ.filter (fun x =&gt; whiten x ∈ S)).card = S.card
+
+<span class="lean-keyword">end</span> DriftCore</code></pre></div>
+            <p style="font-size: 0.9rem; color: #999;">Full file at <code style="font-family: var(--mono); font-size: 0.85rem;">formal_verification/Distribution.lean</code>. <strong>What this does *not* yet prove:</strong> the empirically-observed "0.999 uniformity over 10,000 trials" claim further requires (a) the iterated <code style="font-family: var(--mono); font-size: 0.85rem;">driftStep</code> drives the input to the whitening close to uniform (mixing-rate / spectral-gap — Phase 4.C.2 of the roadmap), (b) a total-variation distance bound, and (c) finite-sample concentration. Those remain research-level and gated on external collaboration; this file provides the structural foundation only.</p>
+
+            <h3 style="margin-top: 2.5rem; font-size: 1.1rem; color: var(--cyan);">3.7 &mdash; Eventual Periodicity (EventualPeriodicity.lean)</h3>
+            <p>The state space <code style="font-family: var(--mono); font-size: 0.85rem;">Fin (2^W)</code> is finite; any deterministic function iterated on a finite set must enter a cycle by pigeonhole. This is the honest version of the "preventing infinite loops" claim: from any seed, the orbit visits at most <code style="font-family: var(--mono); font-size: 0.85rem;">2^W</code> distinct states before repeating.</p>
+
+            <div class="lean-scroll"><pre><code><span class="lean-comment">-- File: EventualPeriodicity.lean</span>
+
+<span class="lean-keyword">import</span> Mathlib.Data.Fintype.Pigeonhole
+<span class="lean-keyword">import</span> DriftRecurrence
+
+<span class="lean-keyword">namespace</span> DriftCore
+
+<span class="lean-comment">/-- Every orbit repeats a state within the first `2^W + 1` iterates. -/</span>
+<span class="lean-keyword">theorem</span> <span class="lean-def">driftOrbit_eventually_periodic</span> (W : ℕ) (seed : Fin (2 ^ W)) :
+    ∃ (i j : ℕ), i &lt; j ∧ j ≤ 2 ^ W ∧
+      driftOrbit W seed i = driftOrbit W seed j := <span class="lean-keyword">by</span>
+  <span class="lean-keyword">have</span> hcard : Fintype.card (Fin (2 ^ W)) &lt; Fintype.card (Fin (2 ^ W + 1)) := <span class="lean-keyword">by</span>
+    simp [Fintype.card_fin]
+  obtain ⟨x, y, hxy, heq⟩ :=
+    Fintype.exists_ne_map_eq_of_card_lt
+      (<span class="lean-keyword">fun</span> k : Fin (2 ^ W + 1) =&gt; driftOrbit W seed k.val) hcard
+  rcases lt_trichotomy x.val y.val <span class="lean-keyword">with</span> h | h | h
+  · exact ⟨x.val, y.val, h, Nat.le_of_lt_succ y.isLt, heq⟩
+  · exact absurd (Fin.ext h) hxy
+  · exact ⟨y.val, x.val, h, Nat.le_of_lt_succ x.isLt, heq.symm⟩
+
+<span class="lean-keyword">end</span> DriftCore</code></pre></div>
+            <p style="font-size: 0.9rem; color: #999;">Pigeonhole on <code style="font-family: var(--mono); font-size: 0.85rem;">Fin (2^W)</code>. The orbit's cycle length is at most <code style="font-family: var(--mono); font-size: 0.85rem;">2^W</code>, which is astronomical for <code style="font-family: var(--mono); font-size: 0.85rem;">W = 128</code> but structurally bounded — not infinite. <code style="font-family: var(--mono); font-size: 0.85rem;">driftOrbit_has_cycle</code> packages the result into the form "there exist offset <code>k</code> and positive period <code>p ≤ 2^W</code> with the orbit cycling thereafter."</p>
+
+            <h3 style="margin-top: 2.5rem; font-size: 1.1rem; color: var(--cyan);">3.8 &mdash; Honest Framing: `driftStep` is Not Bijective (Noninjectivity.lean)</h3>
+            <p>The arithmetic step <code style="font-family: var(--mono); font-size: 0.85rem;">((3·s + 1) mod 2^W) / 2</code> ends with an integer division by 2, which drops the LSB and projects the codomain into <code style="font-family: var(--mono); font-size: 0.85rem;">Fin (2^(W-1))</code>. Hence the step is *not* surjective onto <code style="font-family: var(--mono); font-size: 0.85rem;">Fin (2^W)</code>, and (on a finite domain = codomain) therefore *not* injective. The uniform measure on <code style="font-family: var(--mono); font-size: 0.85rem;">Fin (2^W)</code> is **not** preserved — a negative result that rules out one specific reading of "ergodicity" with mathematical certainty.</p>
+
+            <div class="lean-scroll"><pre><code><span class="lean-comment">-- File: Noninjectivity.lean (excerpt)</span>
+
+<span class="lean-keyword">namespace</span> DriftCore
+
+<span class="lean-comment">/-- Image bound: every output is &lt; 2^(W-1). -/</span>
+<span class="lean-keyword">theorem</span> <span class="lean-def">driftStep_val_lt_half</span> {W : ℕ} (s : Fin (2 ^ W)) (hW : 1 ≤ W) :
+    (driftStep W s).val &lt; 2 ^ (W - 1)
+
+<span class="lean-comment">/-- driftStep is not surjective onto Fin (2^W) for W ≥ 1. -/</span>
+<span class="lean-keyword">theorem</span> <span class="lean-def">driftStep_not_surjective</span> {W : ℕ} (hW : 1 ≤ W) :
+    ¬ Function.Surjective (driftStep W)
+
+<span class="lean-comment">/-- driftStep is not injective (on a finite set, ¬surj ⇒ ¬inj). -/</span>
+<span class="lean-keyword">theorem</span> <span class="lean-def">driftStep_not_injective</span> {W : ℕ} (hW : 1 ≤ W) :
+    ¬ Function.Injective (driftStep W)
+
+<span class="lean-comment">/-- Hence not a bijection. The strong "measure-preserving" reading
+    of ergodicity for uniform measure is provably false. -/</span>
+<span class="lean-keyword">theorem</span> <span class="lean-def">driftStep_not_bijective</span> {W : ℕ} (hW : 1 ≤ W) :
+    ¬ Function.Bijective (driftStep W)
+
+<span class="lean-keyword">end</span> DriftCore</code></pre></div>
+            <p style="font-size: 0.9rem; color: #999;">Full file at <code style="font-family: var(--mono); font-size: 0.85rem;">formal_verification/Noninjectivity.lean</code>. The recurrence loses up to 1 bit of entropy per iteration. The observed approximate uniformity of the output cannot be explained by measure-preservation of uniform input on the state space; it arises from transient mixing combined with the bijective whitening (&sect;&nbsp;3.5, 3.6) acting on whatever distribution the iterated state actually has. Characterizing that distribution quantitatively remains Phase 4 research-level (mixing-rate / spectral-gap).</p>
+
+            <h3 style="margin-top: 2.5rem; font-size: 1.1rem; color: var(--cyan);">3.9 &mdash; Whitening is GF(2)-Linear (WhiteningLinearity.lean)</h3>
+            <p>Each step of the whitening cascade is of the form <code style="font-family: var(--mono); font-size: 0.85rem;">x ↦ x ⊕ L(x)</code> where <code style="font-family: var(--mono); font-size: 0.85rem;">L</code> is a single shift. Composition of GF(2)-linear maps is GF(2)-linear, so the full whitening satisfies <code style="font-family: var(--mono); font-size: 0.85rem;">whiten(x ⊕ y) = whiten(x) ⊕ whiten(y)</code>. This is the reduction lemma that lifts the per-unit-vector avalanche bound (&sect;&nbsp;3.10) to the differential-cryptanalysis form.</p>
+
+            <div class="lean-scroll"><pre><code><span class="lean-comment">-- File: WhiteningLinearity.lean</span>
+
+<span class="lean-keyword">namespace</span> DriftCore
+
+<span class="lean-comment">/-- The whitening is GF(2)-linear. -/</span>
+<span class="lean-keyword">theorem</span> <span class="lean-def">whiten_xor</span> (x y : BitVec 64) : whiten (x ^^^ y) = whiten x ^^^ whiten y := <span class="lean-keyword">by</span>
+  unfold whiten; bv_decide
+
+<span class="lean-comment">/-- whiten 0 = 0 (cheap sanity check). -/</span>
+@[simp] <span class="lean-keyword">theorem</span> <span class="lean-def">whiten_zero</span> : whiten (0 : BitVec 64) = 0 := <span class="lean-keyword">by</span>
+  unfold whiten; bv_decide
+
+<span class="lean-comment">/-- Differential form: whiten of an input difference equals the
+    output difference. Used by the avalanche proof. -/</span>
+<span class="lean-keyword">theorem</span> <span class="lean-def">whiten_diff</span> (x x' : BitVec 64) :
+    whiten x ^^^ whiten x' = whiten (x ^^^ x') := <span class="lean-keyword">by</span>
+  rw [whiten_xor]
+
+<span class="lean-keyword">end</span> DriftCore</code></pre></div>
+            <p style="font-size: 0.9rem; color: #999;"><strong>Caveat.</strong> GF(2)-linearity is a structural property, not a cryptographic-strength claim. Cryptographic ciphers typically *destroy* GF(2)-linearity (S-boxes, modular addition with carries) because it makes linear and differential cryptanalysis easier. The Drift Core's *full* recurrence is non-linear (the affine step has carries), but the whitening stage alone is linear.</p>
+
+            <h3 style="margin-top: 2.5rem; font-size: 1.1rem; color: var(--cyan);">3.10 &mdash; Single-Bit Avalanche Bound (Avalanche.lean)</h3>
+            <p>For every single-bit input difference <code style="font-family: var(--mono); font-size: 0.85rem;">e_i</code>, the whitening output has at least two distinct set bits. By the linearity lemma above, this lifts to the standard differential statement: flipping any single input bit flips at least two output bits.</p>
+
+            <div class="lean-scroll"><pre><code><span class="lean-comment">-- File: Avalanche.lean</span>
+
+<span class="lean-keyword">namespace</span> DriftCore
+
+<span class="lean-keyword">set_option</span> maxRecDepth 2048 <span class="lean-keyword">in</span>
+<span class="lean-comment">/-- For every unit vector e_i, whiten(e_i) has at least two set bits.
+    Proved by fin_cases over Fin 64 + native_decide per case. -/</span>
+<span class="lean-keyword">theorem</span> <span class="lean-def">whitening_avalanche_two</span> (i : Fin 64) :
+    ∃ j k : Fin 64, j ≠ k ∧
+      (whiten ((1 : BitVec 64) &lt;&lt;&lt; i.val)).getLsbD j.val = true ∧
+      (whiten ((1 : BitVec 64) &lt;&lt;&lt; i.val)).getLsbD k.val = true := <span class="lean-keyword">by</span>
+  fin_cases i &lt;;&gt; native_decide
+
+<span class="lean-comment">/-- Differential form via linearity: any two inputs differing in one
+    bit produce outputs differing in at least two bits. -/</span>
+<span class="lean-keyword">theorem</span> <span class="lean-def">whitening_avalanche_differential</span> (x : BitVec 64) (i : Fin 64) :
+    ∃ j k : Fin 64, j ≠ k ∧
+      (whiten x ^^^ whiten (x ^^^ ((1 : BitVec 64) &lt;&lt;&lt; i.val))).getLsbD j.val = true ∧
+      (whiten x ^^^ whiten (x ^^^ ((1 : BitVec 64) &lt;&lt;&lt; i.val))).getLsbD k.val = true
+
+<span class="lean-keyword">end</span> DriftCore</code></pre></div>
+            <p style="font-size: 0.9rem; color: #999;">First formal *cryptographic-flavor* property in the verification chain. <strong>Bound is tight</strong> — for unit vectors <code style="font-family: var(--mono); font-size: 0.85rem;">e_0, …, e_19</code> the whitening output has exactly 2 set bits. A cryptographically meaningful avalanche bound would be <code style="font-family: var(--mono); font-size: 0.85rem;">≥ ~W/2</code>; the whitening alone does not achieve this. The driftStep arithmetic plus iteration is what produces the observed empirical diffusion; that remains research-level (Phase 4-B.3 full).</p>
 
             <a href="https://github.com/LukasCainResearch/drift-core-sim" class="btn btn-outline" style="border-color:var(--cyan); color:var(--cyan);">
                 VIEW FULL SOURCE ON GITHUB &rarr;

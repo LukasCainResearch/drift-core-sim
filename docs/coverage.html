@@ -192,37 +192,42 @@
 
         <section id="proof">
             <h2>2. Formal Verification: Completeness</h2>
-            <p>We prove the completeness of this Covering System in <strong>Lean 4</strong>. This theorem verifies that the transition logic covers every integer, eliminating the possibility of "Shadow States" or backdoors.</p>
-            
-            <div class="lean-scroll"><pre><code><span class="lean-comment">-- Verified File: Ergodicity.lean</span>
-<span class="lean-comment">-- Proves that the transition conditions form a Complete Covering System.</span>
+            <p>We prove the completeness of this Covering System in <strong>Lean 4</strong>. Two theorems are established: every integer satisfies at least one transition (no "Idle" or "Shadow" states), and every integer satisfies <em>exactly</em> one (no simultaneous routing into multiple gates).</p>
+
+            <div class="lean-scroll"><pre><code><span class="lean-comment">-- Verified File: Completeness.lean</span>
+<span class="lean-comment">-- Proves the transition conditions form a complete, exclusive cover of ℤ.</span>
 
 <span class="lean-keyword">import</span> Mathlib.Data.Int.ModEq
 <span class="lean-keyword">import</span> Mathlib.Tactic
 
 <span class="lean-keyword">namespace</span> DriftCoverage
 
-<span class="lean-comment">/-- Transition definitions omitted for brevity... -/</span>
+<span class="lean-keyword">def</span> <span class="lean-def">T1_condition</span> (n : ℤ) : Prop := n % 2 = 0
+<span class="lean-keyword">def</span> <span class="lean-def">T2_condition</span> (n : ℤ) : Prop := n % 4 = 1
+<span class="lean-keyword">def</span> <span class="lean-def">T3_condition</span> (n : ℤ) : Prop := n % 4 = 3
 
-<span class="lean-comment">/--
-Theorem: Complete Covering System
-Proves that every integer n falls into exactly one of the transition buckets.
-This guarantees that the Drift Core has no "Undefined" or "Idle" states.
--/</span>
+<span class="lean-comment">/-- **Completeness**: every integer satisfies at least one transition. -/</span>
 <span class="lean-keyword">theorem</span> <span class="lean-def">complete_coverage</span> (n : ℤ) :
-  T1_condition n ∨ T2_condition n ∨ T3_condition n := <span class="lean-keyword">by</span>
+    T1_condition n ∨ T2_condition n ∨ T3_condition n := <span class="lean-keyword">by</span>
   dsimp [T1_condition, T2_condition, T3_condition]
-  <span class="lean-comment">-- We perform case analysis on the residue modulo 4</span>
-  <span class="lean-keyword">have</span> h_mod : n % 4 < 4 := Int.emod_lt_of_pos n (<span class="lean-keyword">by</span> norm_num)
-  interval_cases n % 4
-  · <span class="lean-comment">-- Case 0: n % 4 = 0 implies n is even (T1)</span>
-    left; exact Int.dvd_of_emod_eq_zero (<span class="lean-keyword">by</span> assumption)
-  · <span class="lean-comment">-- Case 1: n % 4 = 1 is T2</span>
-    right; left; assumption
-  · <span class="lean-comment">-- Case 2: n % 4 = 2 implies n is even (T1)</span>
-    left; omega
-  · <span class="lean-comment">-- Case 3: n % 4 = 3 is T3</span>
-    right; right; assumption</code></pre></div>
+  <span class="lean-keyword">have</span> hlo : 0 ≤ n % 4 := Int.emod_nonneg n (<span class="lean-keyword">by</span> norm_num)
+  <span class="lean-keyword">have</span> hhi : n % 4 < 4 := Int.emod_lt_of_pos n (<span class="lean-keyword">by</span> norm_num)
+  interval_cases (n % 4) &lt;;&gt; omega
+
+<span class="lean-comment">/-- **Exclusivity**: every integer satisfies *exactly one* of T1/T2/T3.
+    Strengthens `complete_coverage` from a disjunction to a partition. -/</span>
+<span class="lean-keyword">theorem</span> <span class="lean-def">complete_coverage_exactly_one</span> (n : ℤ) :
+    ( T1_condition n ∧ ¬ T2_condition n ∧ ¬ T3_condition n) ∨
+    (¬T1_condition n ∧   T2_condition n ∧ ¬ T3_condition n) ∨
+    (¬T1_condition n ∧ ¬ T2_condition n ∧   T3_condition n) := <span class="lean-keyword">by</span>
+  dsimp [T1_condition, T2_condition, T3_condition]
+  <span class="lean-keyword">have</span> hlo : 0 ≤ n % 4 := Int.emod_nonneg n (<span class="lean-keyword">by</span> norm_num)
+  <span class="lean-keyword">have</span> hhi : n % 4 < 4 := Int.emod_lt_of_pos n (<span class="lean-keyword">by</span> norm_num)
+  <span class="lean-keyword">have</span> hmod2 : n % 2 = n % 4 % 2 := <span class="lean-keyword">by</span> omega
+  interval_cases (n % 4) &lt;;&gt; omega
+
+<span class="lean-keyword">end</span> DriftCoverage</code></pre></div>
+            <p style="font-size: 0.9rem; color: #999;">Both theorems are fully discharged in <code style="font-family: var(--mono); font-size: 0.85rem;">formal_verification/Completeness.lean</code> with no <code style="font-family: var(--mono); font-size: 0.85rem;">sorry</code> and no axioms beyond Mathlib's standard library. <code style="font-family: var(--mono); font-size: 0.85rem;">interval_cases (n % 4)</code> dispatches the four residue classes, and <code style="font-family: var(--mono); font-size: 0.85rem;">omega</code> closes each case via linear arithmetic.</p>
         </section>
 
     </div>

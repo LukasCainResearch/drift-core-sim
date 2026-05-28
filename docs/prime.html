@@ -340,32 +340,39 @@
             <p>We formally prove that the parallel "Split-Loop" architecture is mathematically equivalent to a standard population count, ensuring no arithmetic error in the gate.</p>
 
             <div class="lean-scroll"><pre><code><span class="lean-comment">-- Verified File: SplitLoopAdder.lean</span>
-<span class="lean-comment">-- Proves that the Split-Loop optimization yields the exact same result as a naive sum.</span>
+<span class="lean-comment">-- Proves the Split-Loop popcount optimization is lossless: the sum of</span>
+<span class="lean-comment">-- per-chunk popcounts equals the popcount of the flat (concatenated) input.</span>
 
 <span class="lean-keyword">import</span> Mathlib.Data.List.Basic
+<span class="lean-keyword">import</span> Mathlib.Data.List.Count
 <span class="lean-keyword">import</span> Mathlib.Data.Nat.Basic
 
 <span class="lean-keyword">namespace</span> DriftHardware
 
-<span class="lean-keyword">def</span> <span class="lean-def">naive_popcount</span> (bits : List Bool) : Nat :=
-  bits.foldl (<span class="lean-keyword">fun</span> sum b => sum + <span class="lean-keyword">if</span> b <span class="lean-keyword">then</span> 1 <span class="lean-keyword">else</span> 0) 0
+<span class="lean-comment">/-- Population count of a bit-list: count the `true` bits. -/</span>
+<span class="lean-keyword">def</span> <span class="lean-def">naivePopcount</span> (bits : List Bool) : Nat :=
+  bits.countP id
 
-<span class="lean-keyword">def</span> <span class="lean-def">split_popcount</span> (bits : List Bool) (chunk_size : Nat) : Nat :=
-  <span class="lean-keyword">let</span> chunks := bits.batched (chunk_size)
-  <span class="lean-keyword">let</span> partial_sums := chunks.map naive_popcount
-  partial_sums.foldl (· + ·) 0
+<span class="lean-comment">/-- Chunked popcount: sum the per-chunk popcount of a list of chunks. -/</span>
+<span class="lean-keyword">def</span> <span class="lean-def">splitPopcount</span> (chunks : List (List Bool)) : Nat :=
+  (chunks.map naivePopcount).sum
 
-<span class="lean-keyword">theorem</span> <span class="lean-def">split_loop_is_lossless</span> (bits : List Bool) (k : Nat) (hk : k > 0) :
-  split_popcount bits k = naive_popcount bits := <span class="lean-keyword">by</span>
-  dsimp [split_popcount, naive_popcount]
-  induction bits using List.induction_with_batched k
-  · case nil => rfl
-  · case batched_cons chunk rest h_chunk h_rest =>
-    simp [List.batched_cons_eq, h_chunk]
-    rw [List.sum_append]
-    exact h_rest
+<span class="lean-comment">/-- Popcount distributes over list concatenation. -/</span>
+<span class="lean-keyword">theorem</span> <span class="lean-def">naivePopcount_append</span> (xs ys : List Bool) :
+    naivePopcount (xs ++ ys) = naivePopcount xs + naivePopcount ys := <span class="lean-keyword">by</span>
+  unfold naivePopcount
+  exact List.countP_append
+
+<span class="lean-comment">/-- **Split-Loop Lossless.** For any partition of a bit-list into chunks,
+    the sum of per-chunk popcounts equals the popcount of the flat input.
+    Structurally certifies the split-loop adder tree introduces no error. -/</span>
+<span class="lean-keyword">theorem</span> <span class="lean-def">split_loop_lossless</span> (chunks : List (List Bool)) :
+    splitPopcount chunks = naivePopcount chunks.flatten := <span class="lean-keyword">by</span>
+  unfold splitPopcount naivePopcount
+  exact (List.countP_flatten).symm
 
 <span class="lean-keyword">end</span> DriftHardware</code></pre></div>
+            <p style="font-size: 0.9rem; color: #999;">The theorem is purely combinatorial — it does not depend on how the chunks were produced, so any RTL partition strategy (fixed-width chunks, log-tree decomposition, etc.) inherits the bound. Full proof in <code style="font-family: var(--mono); font-size: 0.85rem;">formal_verification/SplitLoopAdder.lean</code>; uses only Lean core's <code style="font-family: var(--mono); font-size: 0.85rem;">List.countP_flatten</code>, no <code style="font-family: var(--mono); font-size: 0.85rem;">sorry</code>, no axioms beyond Mathlib's standard library.</p>
         </section>
 
     </div>
