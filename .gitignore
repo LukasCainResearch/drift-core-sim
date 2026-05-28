@@ -11,3 +11,13 @@ dad_tool
 
 # Ignore System Files
 .DS_Store
+
+# Lean / Lake build artifacts
+/.lake/
+lake-packages/
+build/
+*.olean
+*.olean.private
+*.olean.server
+*.ilean
+*.ir

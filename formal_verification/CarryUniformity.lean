@@ -33,14 +33,12 @@ For any input bits (0 or 1) and a carry-in ≤ 1, the carry-out is ≤ 1.
 This ensures the system is a finite machine regardless of n's length.
 -/
 theorem carry_is_bounded (n_k n_prev c_k : ℕ)
-  (h_n_k : n_k ≤ 1) 
-  (h_n_prev : n_prev ≤ 1) 
-  (h_c_k : c_k ≤ 1) 
+  (h_n_k : n_k ≤ 1)
+  (h_n_prev : n_prev ≤ 1)
+  (h_c_k : c_k ≤ 1)
   : carry_next n_k n_prev c_k ≤ 1 := by
   unfold carry_next
-  have h_sum : n_k + n_prev + c_k ≤ 3 := by linarith [h_n_k, h_n_prev, h_c_k]
-  apply Nat.div_le_of_le_mul
-  linarith
+  omega
 
 -- ==============================================================================
 -- SECTION 2: 6-State Finite State Automaton (FSA)

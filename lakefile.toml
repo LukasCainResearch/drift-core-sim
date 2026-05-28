@@ -1,0 +1,39 @@
+name = "drift_core_sim"
+version = "0.1.0"
+keywords = ["math", "formal-verification", "cryptography", "fpga"]
+defaultTargets = ["FormalVerification"]
+
+[leanOptions]
+pp.unicode.fun = true
+relaxedAutoImplicit = false
+maxSynthPendingDepth = 3
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+
+[[lean_lib]]
+name = "FormalVerification"
+srcDir = "formal_verification"
+roots = [
+  # Self-contained Drift Core implementation-safety proofs
+  "CarryUniformity",
+  "Fold",
+  "DriftRecurrence",
+  "Completeness",
+  "SplitLoopAdder",
+  "Whitening",
+  "Distribution",
+  "EventualPeriodicity",
+  "WhiteningLinearity",
+  "Avalanche",
+  "Noninjectivity",
+  # ABCFormalization-namespaced files (depend on the sibling closure below)
+  "ABCFormalization.Kummer",
+  "ABCFormalization.CarryTransducer",
+  "ABCFormalization.CarryGraph",
+  # Sibling closure published with this repo for end-to-end reproducibility
+  "ABCFormalization.Basic",
+  "ABCFormalization.Bitwise",
+  "ABCFormalization.BlockDecomposition",
+]
