@@ -219,7 +219,7 @@
 
         <section>
             <p class="callout" style="margin-top: 40px;">
-                <strong>Status &amp; honest framing:</strong> What is hardware-validated here is <em>deterministic synchronization, keystream generation, and rolling integrity tags between two devices on real silicon</em> (Tang Nano 9K + Tang Primer 20K, bit-exact against the cycle-accurate model). Implementation-safety result machine-checked in Lean 4 (carry-bound theorem). What is <em>not</em> shown here: cryptographic-strength against cryptanalysis (DAD is a lightweight, non-vetted construction; passing NIST SP 800-22 is not a security proof), HashDoS resistance under adversarial collision search (architectural reasoning only; independent review pending), and sub-10&nbsp;&micro;W ASIC power (FPGA estimates are relative only).
+                <strong>Status &amp; honest framing:</strong> What is hardware-validated here is <em>deterministic synchronization, keystream generation, and rolling integrity tags between two devices on real silicon</em> (Tang Nano 9K + Tang Primer 20K, bit-exact against the cycle-accurate model). Implementation-safety results machine-checked in Lean 4 (carry-bound theorem; determinism of the iterated recurrence, see <code style="font-family: var(--mono); font-size: 0.85rem;">formal_verification/DriftRecurrence.lean</code>). What is <em>not</em> shown here: cryptographic-strength against cryptanalysis (DAD is a lightweight, non-vetted construction; passing NIST SP 800-22 is not a security proof), HashDoS resistance under adversarial collision search (architectural reasoning only; independent review pending), and sub-10&nbsp;&micro;W ASIC power (FPGA estimates are relative only).
             </p>
         </section>
 
