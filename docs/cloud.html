@@ -171,7 +171,7 @@
                 </div>
                 <div class="stack-layer">
                     <div class="stack-label">SILICON</div>
-                    <div class="stack-body"><strong>One core primitive, multiple wrappers.</strong> DAD core ~600 LUT (Gowin GW1N-9, synth). Line-Rate Integrity demo ~1.6k LUT bidirectional (hardware-validated). Secure-Link keystream demo ~2.4k LUT bidirectional (hardware-validated). Composite footprint depends on which wrapper layers you instantiate.</div>
+                    <div class="stack-body"><strong>One core primitive, multiple wrappers.</strong> Bare <code>dad_core</code>: 2,828 GE on SKY130HD (Phase 0, area-opt), ~580 LUT on Tang Primer 20K. <code>cipher_engine</code> (stream-cipher building block) scales linearly with the keystream-buffer size: 7,482 GE at MAXWORDS=8 (64-byte payload, IoT-class) up to 18,280 GE at MAXWORDS=32 (256-byte payload, full TLS-class). <code>rolling_mac</code> (single-cycle integrity-tag absorber): 4,717 GE. Line-Rate Integrity demo ~1.6k LUT bidirectional (FPGA, hardware-validated).</div>
                 </div>
 
                 <div class="metric-row">
@@ -180,12 +180,12 @@
                         <span class="metric-label">Core Output Latency</span>
                     </div>
                     <div class="metric">
-                        <span class="metric-value">0 RTT</span>
-                        <span class="metric-label">No Coordination Required</span>
+                        <span class="metric-value">7,482 GE</span>
+                        <span class="metric-label">cipher_engine MW=8 (SKY130HD, IoT-class)</span>
                     </div>
                     <div class="metric">
-                        <span class="metric-value">~1.6k LUT</span>
-                        <span class="metric-label">Line-Rate Integrity Demo (HW-Validated)</span>
+                        <span class="metric-value">4,717 GE</span>
+                        <span class="metric-label">rolling_mac (SKY130HD, integrity-tag primitive)</span>
                     </div>
                 </div>
             </div>

@@ -255,6 +255,30 @@
             </div>
         </section>
 
+        <section id="silicon">
+            <h2>3. Silicon Footprint (Phase 0, SKY130HD)</h2>
+            <p>Two defense-relevant cryptographic compositions in the Drift demo suite have been silicon-validated on FPGA (Tang Nano 9K + Tang Primer 20K, 2026-05-25) and synthesized for ASIC on the SKY130HD open-source PDK (Phase 0, area-optimized at 13.56 MHz). Both numbers below are measured for the complete board-level top module (including UART + framing + host-side printer), matching the bitstreams that ran on silicon during validation.</p>
+
+            <div class="grid-text">
+                <div class="feature-card">
+                    <h3>iff_top &mdash; Mutual Auth (Test 03)</h3>
+                    <p><strong>42,695 GE</strong> on SKY130HD (267,099 µm², all-standard-cell, MAXWORDS=32). Hardware-validated: paired Primer authenticated every challenge (all <code>AUTH PASS</code>); wrong-secret Primer correctly rejected (33 <code>AUTH FAIL</code>, 0 <code>AUTH PASS</code>). The cryptographic engine portion (2&times; <code>cipher_engine</code> + <code>dad_core</code> nonce generator + challenge-response FSM, without UART/framing/printer overhead) measures <strong>40,780 GE</strong> standalone, or <strong>19,308 GE</strong> at MAXWORDS=8 (64-byte payload, covers typical IoT/defense-comms message sizes).</p>
+                </div>
+                <div class="feature-card">
+                    <h3>freqhop_top &mdash; Anti-Jam Hop Sync (Test 02)</h3>
+                    <p><strong>23,202 GE</strong> on SKY130HD (145,149 µm², all-standard-cell, MAXWORDS=32). Hardware-validated: master/slave hop in lockstep, same secret-derived channel each dwell (59/59 = 100%). The cryptographic engine portion measures <strong>9,009 GE</strong> standalone (Yosys eliminated most of the keystream RAM because the hop derivation reads only 1 byte per dwell).</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Building Blocks</h3>
+                    <p>Both compositions rest on <code>cipher_engine</code> (stream cipher building block; <strong>7,482 GE at MAXWORDS=8</strong>, <strong>18,280 GE at MAXWORDS=32</strong> &mdash; linear scaling, ~446 GE per 64-bit keystream word) and the bare <code>dad_core</code> PRG (<strong>2,828 GE</strong>). See <a href="https://github.com/LukasCainResearch/drift-core-sim/blob/main/README.md" style="color: var(--cyan);">README</a> for the full Phase 0 measurement table.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Honest Framing</h3>
+                    <p>What's validated: paired-device authentication and shared-secret hop derivation on silicon. <em>Not</em> claimed: cryptographic-strength against transcript-attack cryptanalysis, measured RF jam-resistance (no antenna in this demo suite), or FIPS-validated procurement readiness. DAD is a lightweight non-vetted construction; independent cryptanalytic review is pursued separately.</p>
+                </div>
+            </div>
+        </section>
+
     </div>
 
     <footer>
