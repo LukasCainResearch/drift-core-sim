@@ -19,8 +19,8 @@ Hardware-validated on FPGA (Tang Primer 20K — Gowin GW2A-18) at bit-exact lock
 
 | Metric                    | Specification                                                                                | Competitive position                              |
 | ------------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------- |
-| **Gate Count (bare `dad_core`, ASIC)** | **2,828 GE** / 17,690.72 µm² (SKY130HD, area-opt, 13.56 MHz) — see [`ASIC_SYNTH_RESULTS.md`](ASIC_SYNTH_RESULTS.md) | Sub-AES (AES-128 ~3,000–3,500 GE); NIST-LWC class |
-| **LUT Count (bare `dad_core`, FPGA)** | **~580 LUT** (Tang Primer 20K, GW2A-18)                                              | ~6× smaller than AES-128 (~3,500 LUT)             |
+| **Gate Count (bare Drift Core, ASIC)** | **2,828 GE** / 17,690.72 µm² (SKY130HD, area-opt, 13.56 MHz) — see [`ASIC_SYNTH_RESULTS.md`](ASIC_SYNTH_RESULTS.md) | Sub-AES (AES-128 ~3,000–3,500 GE); NIST-LWC class |
+| **LUT Count (bare Drift Core, FPGA)** | **~580 LUT** (Tang Primer 20K, GW2A-18)                                              | ~6× smaller than AES-128 (~3,500 LUT)             |
 | **Latency**               | **1 Clock Cycle**                                                                            | Instant "Zero-Wait" Wakeup                        |
 | **Multipliers**           | **ZERO (0)**                                                                                 | Negligible dynamic power / heat                   |
 | **Statistical quality**   | Passes **NIST SP 800-22** (in-house, all 15 families)                                        | Conditioned output                                |
@@ -41,9 +41,9 @@ Hardware-validated on FPGA (Tang Primer 20K — Gowin GW2A-18) at bit-exact lock
 
 **Linear scaling model for `cipher_engine`**: `footprint ≈ 4,000 GE overhead + 446 GE per 64-bit keystream word`. The overhead is `dad_core` + FSM + read mux + nonce path; the per-word term is the flip-flop storage and read-mux growth. Sweep validated to within 0.65% against the composition-level `iff_top` measurement at MW=8.
 
-**Envelope verdict (Phase 0).** The bare `dad_core` (2,828 GE) passes the NIST-LWC IoT envelope (<3,000 GE) and is comparable to Ascon (~2,300–3,000 GE) and smaller than AES-128 (~3,000–3,500 GE). It does *not* fit the passive-RFID smart-label envelope (<1,000 GE) or smart-dust envelope (<500 GE). Honest positioning: **sub-AES, NIST-LWC class**.
+**Envelope verdict (Phase 0).** The bare Drift Core (2,828 GE) passes the NIST-LWC IoT envelope (<3,000 GE) and is comparable to Ascon (~2,300–3,000 GE) and smaller than AES-128 (~3,000–3,500 GE). It does *not* fit the passive-RFID smart-label envelope (<1,000 GE) or smart-dust envelope (<500 GE). Honest positioning: **sub-AES, NIST-LWC class**.
 
-**Width-parameterized scaling family (measured 2026-05-29).** The `dad_core` recurrence extends naturally to wider state widths. SKY130HD measurements at W=128/256/512/1024:
+**Width-parameterized scaling family (measured 2026-05-29).** The Drift Core recurrence extends naturally to wider state widths. SKY130HD measurements at W=128/256/512/1024:
 
 | State width W (bits) | GE | Area (µm²) | GE per state-bit |
 |---|---|---|---|
@@ -63,7 +63,7 @@ Per-bit variance is 1.8% across the 8× width range — clean linear scaling at 
 | `drift_flex_v3_p64_v512` | 512 bits | 17 | **6,799** | 13.3 | -40% vs 11,408 |
 | `drift_flex_v3_p64_v1024` | 1024 bits | 33 | **12,667** | 12.4 | -45% vs 23,021 |
 
-At W=1024 the per-virtual-bit cost is 12.4 GE — at the architectural floor for SKY130 standard-cell synthesis (bottom-up estimate: ~6 GE/bit state storage + ~3 GE/bit whitening cascade + ~2 GE/bit shift muxes + ~1 GE/bit control ≈ 12 GE/bit). At W=128 the per-virtual-bit cost is 16.1 GE; the variant undercuts the bare `dad_core` baseline (2,828 GE) at the same security tier by 27%, and lands below AES-128 (~3,000–3,500 GE) and Ascon (~2,300–3,000 GE) while competitive vs SIMON/SPECK (~1,500–2,500 GE at 128-bit). The chunked computation produces output bit-exactly equivalent to the native physical-width-W variant — validated via C oracle over 5×10⁶ consecutive virtual-step iterations (5 configurations × 10⁶ iterations each, all pass).
+At W=1024 the per-virtual-bit cost is 12.4 GE — at the architectural floor for SKY130 standard-cell synthesis (bottom-up estimate: ~6 GE/bit state storage + ~3 GE/bit whitening cascade + ~2 GE/bit shift muxes + ~1 GE/bit control ≈ 12 GE/bit). At W=128 the per-virtual-bit cost is 16.1 GE; the variant undercuts the bare Drift Core baseline (2,828 GE) at the same security tier by 27%, and lands below AES-128 (~3,000–3,500 GE) and Ascon (~2,300–3,000 GE) while competitive vs SIMON/SPECK (~1,500–2,500 GE at 128-bit). The chunked computation produces output bit-exactly equivalent to the native physical-width-W variant — validated via C oracle over 5×10⁶ consecutive virtual-step iterations (5 configurations × 10⁶ iterations each, all pass).
 
 **Honest framing on these silicon-data results.** We are not aware of a published symmetric-cryptographic primitive with a 256-bit state below 3,841 GE on SKY130 specifically, or a published 1024-bit symmetric cryptographic state silicon-measured below 12,667 GE on any open-source standard-cell PDK. Smaller GE figures for 256-bit-state primitives exist on commercial 130–180 nm processes (e.g., SPONGENT-256 ≈ 1,950 GE on UMC 0.13 µm, PHOTON-256 ≈ 2,177 GE on UMC 0.18 µm); direct GE-to-GE comparisons across PDKs are approximate due to cell-library normalization differences. Wider symmetric states are routine on commercial nodes (Keccak-f[1600], SHA-512 1024-bit message schedule); the open-PDK + silicon-measured + 1024-bit-symmetric-state combination is the specific novelty here.
 
