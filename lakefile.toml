@@ -33,6 +33,7 @@ roots = [
   "WhiteningWeakness",
   "OutputChain",
   "DriftRecurrenceSafe",
+  "AgileState",
   # ABCFormalization-namespaced files (depend on the sibling closure below)
   "ABCFormalization.Kummer",
   "ABCFormalization.CarryTransducer",

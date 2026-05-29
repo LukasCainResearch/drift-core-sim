@@ -43,6 +43,30 @@ Hardware-validated on FPGA (Tang Primer 20K — Gowin GW2A-18) at bit-exact lock
 
 **Envelope verdict (Phase 0).** The bare `dad_core` (2,828 GE) passes the NIST-LWC IoT envelope (<3,000 GE) and is comparable to Ascon (~2,300–3,000 GE) and smaller than AES-128 (~3,000–3,500 GE). It does *not* fit the passive-RFID smart-label envelope (<1,000 GE) or smart-dust envelope (<500 GE). Honest positioning: **sub-AES, NIST-LWC class**.
 
+**Width-parameterized scaling family (measured 2026-05-29).** The `dad_core` recurrence extends naturally to wider state widths. SKY130HD measurements at W=128/256/512/1024:
+
+| State width W (bits) | GE | Area (µm²) | GE per state-bit |
+|---|---|---|---|
+| 128 (baseline) | **2,828** | 17,690.72 | 22.10 |
+| 256 | **5,696** | 35,617.28 | 22.25 |
+| 512 | **11,408** | 71,322.50 | 22.28 |
+| 1024 | **23,021** | 144,021.88 | 22.49 |
+
+Per-bit variance is 1.8% across the 8× width range — clean linear scaling at ~22.3 GE per state bit. Wider state widths cover post-quantum-relevant security tiers (Grover-effective post-quantum security ≈ W/2 bits): W=256 covers CNSA 2.0 IoT minimums, W=512 covers high-classification deployments, W=1024 provides PQC future-reserve at extreme Shor-scenario margins.
+
+**Temporal state extension via narrow-physical-ALU iteration (measured 2026-05-29).** A second silicon-implementation embodiment of the same algorithm family — see US PPA 63/929,897, filed 2025-12-03 — places the same wide-W operation behind a narrower physical ALU that iterates over a wide virtual state stored in a register buffer, trading multi-cycle latency per virtual step for footprint. Production-variant measurements:
+
+| Variant | Virtual state | Cycles per step | GE | GE per virtual-bit | Savings vs single-cycle |
+|---|---|---|---|---|---|
+| `drift_flex_v3_p32_v128` | 128 bits | 9 | **2,064** | 16.1 | -27% vs 2,828 |
+| `drift_flex_v3_p64_v256` | 256 bits | 9 | **3,841** | 15.0 | -33% vs 5,696 |
+| `drift_flex_v3_p64_v512` | 512 bits | 17 | **6,799** | 13.3 | -40% vs 11,408 |
+| `drift_flex_v3_p64_v1024` | 1024 bits | 33 | **12,667** | 12.4 | -45% vs 23,021 |
+
+At W=1024 the per-virtual-bit cost is 12.4 GE — at the architectural floor for SKY130 standard-cell synthesis (bottom-up estimate: ~6 GE/bit state storage + ~3 GE/bit whitening cascade + ~2 GE/bit shift muxes + ~1 GE/bit control ≈ 12 GE/bit). At W=128 the per-virtual-bit cost is 16.1 GE; the variant undercuts the bare `dad_core` baseline (2,828 GE) at the same security tier by 27%, and lands below AES-128 (~3,000–3,500 GE) and Ascon (~2,300–3,000 GE) while competitive vs SIMON/SPECK (~1,500–2,500 GE at 128-bit). The chunked computation produces output bit-exactly equivalent to the native physical-width-W variant — validated via C oracle over 5×10⁶ consecutive virtual-step iterations (5 configurations × 10⁶ iterations each, all pass).
+
+**Honest framing on these silicon-data results.** We are not aware of a published symmetric-cryptographic primitive with a 256-bit state below 3,841 GE on SKY130 specifically, or a published 1024-bit symmetric cryptographic state silicon-measured below 12,667 GE on any open-source standard-cell PDK. Smaller GE figures for 256-bit-state primitives exist on commercial 130–180 nm processes (e.g., SPONGENT-256 ≈ 1,950 GE on UMC 0.13 µm, PHOTON-256 ≈ 2,177 GE on UMC 0.18 µm); direct GE-to-GE comparisons across PDKs are approximate due to cell-library normalization differences. Wider symmetric states are routine on commercial nodes (Keccak-f[1600], SHA-512 1024-bit message schedule); the open-PDK + silicon-measured + 1024-bit-symmetric-state combination is the specific novelty here.
+
 **Note on `cipher_engine` keystream buffer.** The `MAXWORDS` parameter sets the keystream-buffer size (32 by default; 4/8/16/32 measured). On SKY130HD with all-standard-cell synthesis the buffer maps to discrete flip-flops, so footprint scales linearly with the parameter. For typical IoT messaging (LoRaWAN, Zigbee, BLE), MAXWORDS=8 (64-byte payload per nonce, 7,482 GE) is the recommended deployment configuration. For full TLS-class 256-byte payloads, the canonical MAXWORDS=32 (18,280 GE) is used — this is the configuration validated in the FPGA bitstreams.
 
 **Note on deployed configurations.** Real demonstrators wrap the bare core in transport, framing, and tag logic; measured full-bidirectional FPGA footprints range from ~900 LUT (Rolling Identity RoT) to ~2,400 LUT (Secure Link). See `formal_verification/` and the two-FPGA demo suite for per-configuration synth reports.
@@ -106,6 +130,7 @@ This source code is provided for **Academic Peer Review and Non-Commercial Evalu
 - **US 63/926,563:** Space & Radiation Hardened Implementations
 - **US 63/926,586:** Legacy Retrofit & Sensor Fusion Systems
 - **US 63/922,200:** AI Content Attribution
+- **US 63/929,897:** Elastic State Extension of Arithmetic Entropy Sources via Temporal Carry Propagation (Drift-Flex)
 
 For commercial licensing (RTL IP, FPGA Bitstreams, or Source Code), please contact:
 

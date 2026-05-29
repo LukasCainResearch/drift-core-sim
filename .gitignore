@@ -21,3 +21,6 @@ build/
 *.olean.server
 *.ilean
 *.ir
+
+# INTERNAL — pre-PPA design parameters; never publish (see DRIFT_AGILE_STATE_design.md)
+formal_verification/AgileStateParams.lean

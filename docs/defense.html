@@ -273,6 +273,10 @@
                     <p>Both compositions rest on <code>cipher_engine</code> (stream cipher building block; <strong>7,482 GE at MAXWORDS=8</strong>, <strong>18,280 GE at MAXWORDS=32</strong> &mdash; linear scaling, ~446 GE per 64-bit keystream word) and the bare <code>dad_core</code> PRG (<strong>2,828 GE</strong>). See <a href="https://github.com/LukasCainResearch/drift-core-sim/blob/main/README.md" style="color: var(--cyan);">README</a> for the full Phase 0 measurement table.</p>
                 </div>
                 <div class="feature-card">
+                    <h3>Vault &amp; PQC-Reserve Tiers (2026-05-29)</h3>
+                    <p>The bare <code>dad_core</code> family extends to wider state widths at clean linear scaling (~22.3 GE per state bit): <strong>5,696 GE</strong> at W=256, <strong>11,408 GE</strong> at W=512, <strong>23,021 GE</strong> at W=1024. A temporal-extension variant (US PPA 63/929,897) places the same wide-W operation behind a narrower physical ALU iterating over a virtual state register, trading multi-cycle latency for footprint: <strong>3,841 GE</strong> at W=256 (9 cycles per step), <strong>6,799 GE</strong> at W=512 (17 cycles), <strong>12,667 GE</strong> at W=1024 (33 cycles). The W=1024 measurement provides 1024-bit cryptographic state with Grover-effective 512-bit post-quantum security at footprint smaller than the bare W=128 baseline &mdash; relevant for PQC future-reserve smallsat / hypersonic inventory through 2030s+. Bit-exact equivalence with the native physical-W variant validated via C oracle (5&times;10&#8310; iterations across 5 configurations).</p>
+                </div>
+                <div class="feature-card">
                     <h3>Honest Framing</h3>
                     <p>What's validated: paired-device authentication and shared-secret hop derivation on silicon. <em>Not</em> claimed: cryptographic-strength against transcript-attack cryptanalysis, measured RF jam-resistance (no antenna in this demo suite), or FIPS-validated procurement readiness. DAD is a lightweight non-vetted construction; independent cryptanalytic review is pursued separately.</p>
                 </div>
