@@ -52,7 +52,7 @@ Hardware-validated on FPGA (Tang Primer 20K — Gowin GW2A-18) at bit-exact lock
 | 512 | **11,408** | 71,322.50 | 22.28 |
 | 1024 | **23,021** | 144,021.88 | 22.49 |
 
-Per-bit variance is 1.8% across the 8× width range — clean linear scaling at ~22.3 GE per state bit. Wider state widths cover post-quantum-relevant security tiers (Grover-effective post-quantum security ≈ W/2 bits): W=256 covers CNSA 2.0 IoT minimums, W=512 covers high-classification deployments, W=1024 provides PQC future-reserve at extreme Shor-scenario margins.
+Per-bit variance is 1.8% across the 8× width range — clean linear scaling at ~22.3 GE per state bit. Wider state widths cover post-quantum-relevant security tiers via the Grover bound (Grover-effective post-quantum security ≈ W/2 bits): W=256 covers CNSA 2.0 IoT minimums (Grover-effective 128-bit, the standard PQC bar for symmetric primitives); W=512 covers high-classification deployments; W=1024 provides deep margin against potential future symmetric-cryptanalysis advances for buyers requiring headroom beyond the Grover-effective bar (not a quantum hedge — Shor's algorithm does not apply to symmetric crypto).
 
 **Temporal state extension via narrow-physical-ALU iteration (measured 2026-05-29).** A second silicon-implementation embodiment of the same algorithm family — see US PPA 63/929,897, filed 2025-12-03 — places the same wide-W operation behind a narrower physical ALU that iterates over a wide virtual state stored in a register buffer, trading multi-cycle latency per virtual step for footprint. Production-variant measurements:
 

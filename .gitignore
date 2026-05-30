@@ -24,3 +24,6 @@ build/
 
 # INTERNAL — pre-PPA design parameters; never publish (see DRIFT_AGILE_STATE_design.md)
 formal_verification/AgileStateParams.lean
+
+# Local PDF regeneration rollback artifacts (not for public history)
+*.pre-*-fix-*.pdf.bak
