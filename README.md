@@ -69,9 +69,26 @@ At W=1024 the per-virtual-bit cost is 12.4 GE — at the architectural floor for
 
 **Note on `cipher_engine` keystream buffer.** The `MAXWORDS` parameter sets the keystream-buffer size (32 by default; 4/8/16/32 measured). On SKY130HD with all-standard-cell synthesis the buffer maps to discrete flip-flops, so footprint scales linearly with the parameter. For typical IoT messaging (LoRaWAN, Zigbee, BLE), MAXWORDS=8 (64-byte payload per nonce, 7,482 GE) is the recommended deployment configuration. For full TLS-class 256-byte payloads, the canonical MAXWORDS=32 (18,280 GE) is used — this is the configuration validated in the FPGA bitstreams.
 
+**ASIC Phase 2/3 sign-off — completed 2026-05-30 (SKY130HD, OpenLane full flow, 100 MHz target).** Five designs taken through the complete OpenLane flow (synth → floorplan → placement → CTS → detailed route → multi-corner STA → power → GDSII), speed-optimized. **All five DRC-clean, LVS-clean, no setup/hold violations at the typical corner, with GDSII.**
+
+| Design | Cells | GE | Routed die | fmax (tt / ss) | Dynamic P @ 100 MHz | @ 13.56 MHz | Leakage |
+|---|---|---|---|---|---|---|---|
+| `dad_core` (bare PRG) | 2,081 | 3,557 | 0.072 mm² | 182 / 93 MHz | **4.72 mW** ◊ | ~640 µW | 14.7 nW |
+| `cipher_engine` (keystream) | 10,797 | 19,270 | 0.364 mm² | 113 / 76 MHz | **25.5 mW** ◊ | ~3.5 mW | 88.2 nW |
+| `secure_link_top` (full TX+RX) | 25,465 | 46,675 | 0.865 mm² | 161 / 82 MHz | **58.2 mW** ◊ | ~7.9 mW | 212 nW |
+| `lr_top_primer` (Test 04 verifier) | 6,453 | 11,113 | 0.213 mm² | 161 / 81 MHz | 51.6 mW † | ~7.0 mW | 46.4 nW |
+| `rt_top_primer` (Test 05 verifier) | 5,754 | 10,836 | 0.208 mm² | 177 / 91 MHz | 43.2 mW † | ~5.9 mW | 46.8 nW |
+
+**◊** = VCD-backannotated from a real gate-level simulation (true switching activity). **†** = default-activity `report_power` upper bound (verifier tops need framed-input stimulus for VCD; pending).
+
+- **Frequency:** ~80–90 MHz guaranteed across all PVT corners, ~160–200 MHz typical. `dad_core` is **delay-bound at the 128-bit adder** — fmax saturates at ~200 MHz typical / ~105 MHz worst-corner; spending more cell area buys < 20% more speed, then nothing.
+- **Power (VCD-backannotated, real workload):** the default-activity `report_power` upper bound overstates dynamic power by **3.9× / 2.7× / 2.8×** on the three core designs (largest on the pure datapath, smaller where activity-independent flip-flop clock power dominates). Leakage is identical under both methods — a clean cross-check. **Net: the bare PRG is sub-mW dynamic at carrier rates; the full TX+RX link is single-digit-mW.**
+
+**Phase 1 generic-cell Yosys cross-check** reproduces the Phase 0 area numbers within **+15–34%** with a **constant per-family delta across widths**, independently validating both the area figures and the linear-scaling claim.
+
 **Note on deployed configurations.** Real demonstrators wrap the bare core in transport, framing, and tag logic; measured full-bidirectional FPGA footprints range from ~900 LUT (Rolling Identity RoT) to ~2,400 LUT (Secure Link). See `formal_verification/` and the two-FPGA demo suite for per-configuration synth reports.
 
-**What is and isn't shown here.** Hardware-validated: deterministic synchronization, keystream generation, and rolling integrity tags between two devices on real silicon. *Not* shown on this FPGA suite: sub-10 µW ASIC power (projection only), radiation tolerance (architectural property; beam test pending), and cryptographic-strength against cryptanalysis (DAD is a lightweight, non-vetted construction; passing NIST SP 800-22 is not a security proof — independent cryptanalytic review is pursued separately).
+**What is and isn't shown here.** Hardware-validated: deterministic synchronization, keystream generation, and rolling integrity tags between two devices on real silicon. ASIC power characterized through Phase 2/3 SKY130HD post-route sign-off (2026-05-30): bare `dad_core` draws **~640 µW at 13.56 MHz** (4.72 mW @ 100 MHz, VCD-backannotated from a real gate-level workload) with **14.7 nW leakage** — **sub-mW dynamic / nW leakage** for the bare core. *Not* shown on this FPGA suite: radiation tolerance (architectural property; beam test pending), and cryptographic-strength against cryptanalysis (DAD is a lightweight, non-vetted construction; passing NIST SP 800-22 is not a security proof — independent cryptanalytic review is pursued separately).
 
 ---
 
@@ -111,7 +128,33 @@ The Drift architecture addresses critical bottlenecks in three primary sectors:
 
 ## 4. Validation status
 
-SP 800-22 results are **in-house statistical testing of the conditioned output** (12 of 15 families via a public library + custom control-validated implementations for the rest; all pass). SP 800-22 is a statistical test suite, **not** a certification. The Drift recurrence is a *conditioning component* that pairs with a standard physical noise source; a formal **SP 800-90B** entropy-source validation (which assesses the physical source) and any **FIPS 140-3 / CAVP** validation are handled at module integration.
+**Two-FPGA demonstration suite — 6 of 6 tests silicon-validated (completed 2026-05-30):**
+
+| # | Test | Claim shown on silicon | Hardware result |
+|---|------|------------------------|-----------------|
+| 01 | **Secure Link** | cross-device keystream sync + nonce-seeded stream cipher | bidirectional link + eavesdrop + wrong-key reject |
+| 02 | **Freq-Hop / Anti-Jam** | both ends derive the same hop sequence from the seed | master/slave hop in lockstep, **59/59 dwells (100%)** |
+| 03 | **IFF / Mutual Auth** | paired devices prove a shared secret; non-paired cannot | **all AUTH PASS** paired; **33 FAIL / 0 PASS** wrong-secret |
+| 04 | **Line-Rate Integrity** | rolling-MAC tamper-evidence at one word per cycle | **8 clean PASS lines, fail = 0** |
+| 05 | **Rolling Identity (RoT)** | continuously rotating per-device token | verifier **all-PASS**; observer (secret off by 1 bit) **all-FAIL**, captured simultaneously |
+| 06 | **Clock / Phase Sync** | lockstep as a distributed time/phase reference | shared clock → `off=000000` cycle-exact; free-run → offset drifts **~0.1–0.6 ppm** |
+
+Hardware: Tang Nano 9K (Gowin GW1N-9; Tests 01–04 TX side, since retired IO-dead), Tang Primer 20K (GW2A-18C), 2× Tang Primer 25K (GW5A-25A / MG121). The digital synchronization / keystream / identity-tag layer works deterministically across independent silicon devices. **Test 06 explicitly demonstrates the independent-crystal drift limit** — the honest boundary of clock-only sync.
+
+**ASIC characterization — open-source PDK, EDA sign-off (no tapeout):**
+- **Phase 0** area-optimized synthesis: ~30 designs characterized; 2,828 GE bare `dad_core` baseline; linear width-scaling at ~22.3 GE/bit across W=128 / 256 / 512 / 1024 (per-bit variance 1.8%).
+- **Phase 1** generic-cell Yosys cross-check: reproduces Phase 0 numbers within +15–34% with constant per-family delta — independently validates the area figures and the linear-scaling claim.
+- **Phase 2/3** full place-and-route sign-off (2026-05-30): 5 designs through complete OpenLane flow with **DRC-clean / LVS-clean GDSII**; no setup/hold violations at the typical corner; VCD-backannotated dynamic power.
+- **RTL equivalence:** all 13 Drift-Flex width / temporal-extension variants verified bit-exact to a native wide-W reference via iverilog testbenches (1,000 virtual steps each) — closes PPA 63/929,897 Claim 2 ("global bitwise diffusion") obligation at RTL.
+
+**Statistical testing — SP 800-22:** results are **in-house statistical testing of the conditioned output** (12 of 15 families via a public library + custom control-validated implementations for the rest; all pass). SP 800-22 is a statistical test suite, **not** a certification.
+
+**Out of scope of this work:**
+- Cryptanalytic strength against differential / linear / algebraic cryptanalysis — pursued separately (DAD is a lightweight non-vetted construction; passing NIST SP 800-22 is not a security proof).
+- **SP 800-90B** entropy-source validation (assesses the physical source; the Drift recurrence is a conditioning component that pairs with a standard hardware noise source) and any **FIPS 140-3 / CAVP** module validation — handled at module integration.
+- Fabricated-silicon ASIC results — no tapeout; SKY130 sign-off is EDA characterization, not a measured die.
+- Radiation tolerance — architectural property; beam test pending.
+- RF performance / over-the-air range / measured jam-resistance — the FPGAs are a functional vehicle; no radio in this work.
 
 ---
 
